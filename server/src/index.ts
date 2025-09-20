@@ -25,15 +25,31 @@ const PORT = process.env.PORT || 3001;
 // Security middleware
 app.use(helmet());
 
-// CORS configuration
+// Improved CORS configuration to explicitly allow the deployed client URL and handle Vercel preview domains
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'https://sukhsanchaar.vercel.app',
+  'https://sukhsanchaar.vercel.app',
+  'https://sukh-sanchaar-client.vercel.app', // Add the new client URL
+];
+
+if (process.env.NODE_ENV !== 'production') {
+  allowedOrigins.push('http://localhost:3000', 'http://localhost:5173');
+}
+
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? [
-        process.env.FRONTEND_URL || 'https://sukhsanchaar.vercel.app',
-        'https://sukhsanchaar.vercel.app'
-      ] 
-    : ['http://localhost:3000', 'http://localhost:5173'],
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    // Allow Vercel preview deployments (subdomains of vercel.app)
+    if (/^https:\/\/sukh-sanchaar-client\.vercel\.app$/.test(origin)) {
+      return callback(null, true);
+    }
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
 }));
 
 // Rate limiting
