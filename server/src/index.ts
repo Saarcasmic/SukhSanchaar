@@ -25,25 +25,17 @@ const PORT = process.env.PORT || 3001;
 // Security middleware
 app.use(helmet());
 
-// Improved CORS configuration to explicitly allow the deployed client URL and handle Vercel preview domains
+// CORS configuration: only allow specific client origins
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'https://sukhsanchaar.vercel.app',
-  'https://sukhsanchaar.vercel.app',
-  'https://sukh-sanchaar-client.vercel.app', // Add the new client URL
+  'http://localhost:5173',
+  'https://sukh-sanchaar-client.vercel.app',
+  'https://sukh-sanchaar-client-dharmawarriors-projects.vercel.app',
 ];
-
-if (process.env.NODE_ENV !== 'production') {
-  allowedOrigins.push('http://localhost:3000', 'http://localhost:5173');
-}
 
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
-    // Allow Vercel preview deployments (subdomains of vercel.app)
-    if (/^https:\/\/sukh-sanchaar-client\.vercel\.app$/.test(origin)) {
-      return callback(null, true);
-    }
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
