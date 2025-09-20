@@ -3,11 +3,29 @@ import { ArrowRight, Leaf } from 'lucide-react';
 
 const HeroSection: React.FC = () => {
   const scrollToProducts = () => {
-    document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+    const productsElement = document.getElementById('products');
+    if (productsElement) {
+      const elementPosition = productsElement.offsetTop;
+      const offsetPosition = elementPosition - 5; // 100px offset from the top
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   };
 
   const scrollToAbout = () => {
-    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+    const aboutElement = document.getElementById('about');
+    if (aboutElement) {
+      const elementPosition = aboutElement.offsetTop;
+      const offsetPosition = elementPosition - 5; // 100px offset from the top
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, CreditCard } from 'lucide-react';
+import { X, CreditCard, Loader2 } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useAdmin } from '../contexts/AdminContext';
 import { useNavigate } from 'react-router-dom';
@@ -31,6 +31,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
     country: 'India'
   });
 
+  const [isProcessing, setIsProcessing] = useState(false);
+
   // Shipping charges based on state
   const getShippingCharges = (state: string) => {
     switch (state) {
@@ -48,10 +50,32 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
   const totalWithShipping = subtotal + shippingCharges;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+    const { name, value } = e.target;
+    
+    // Special handling for phone number
+    if (name === 'phone') {
+      // Remove any non-digit characters
+      const digitsOnly = value.replace(/\D/g, '');
+      
+      // If phone starts with 0 and has 11 digits total, remove the leading 0
+      let formattedPhone = digitsOnly;
+      if (digitsOnly.length === 11 && digitsOnly.startsWith('0')) {
+        formattedPhone = digitsOnly.substring(1);
+      }
+      
+      // Limit to 10 digits
+      formattedPhone = formattedPhone.substring(0, 10);
+      
+      setFormData(prev => ({
+        ...prev,
+        [name]: formattedPhone
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handlePayment = async () => {
@@ -60,10 +84,19 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
       return;
     }
 
+    // Validate phone number is exactly 10 digits
+    if (formData.phone.length !== 10) {
+      alert('Please enter a valid 10-digit phone number');
+      return;
+    }
+
     if (!RazorpayService.isAvailable()) {
       alert('Payment service is not available. Please try again later.');
       return;
     }
+
+    // Set loading state
+    setIsProcessing(true);
 
     try {
       // Clear any previous payment errors
@@ -211,6 +244,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
       if (error instanceof Error && error.message !== 'Payment cancelled by user') {
         alert(`Payment failed: ${error.message}`);
       }
+    } finally {
+      // Reset loading state
+      setIsProcessing(false);
     }
   };
 
@@ -271,7 +307,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
               value={formData.phone}
               onChange={handleInputChange}
               className="w-full p-3 border border-cream-200 rounded-lg focus:ring-2 focus:ring-ayur-red focus:border-transparent"
-              placeholder="Enter your phone number"
+              placeholder="Enter your 10 digit phone number"
             />
           </div>
 
@@ -329,8 +365,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
                 className="w-full p-3 border border-cream-200 rounded-lg focus:ring-2 focus:ring-ayur-red focus:border-transparent"
               >
                 <option value="">Select State</option>
-                <option value="Delhi">Delhi (₹50 shipping)</option>
-                <option value="Rajasthan">Rajasthan (₹100 shipping)</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Rajasthan">Rajasthan</option>
               </select>
             </div>
           </div>
@@ -346,6 +382,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
               onChange={handleInputChange}
               className="w-full p-3 border border-cream-200 rounded-lg focus:ring-2 focus:ring-ayur-red focus:border-transparent"
               placeholder="Country"
+              disabled={true}
             />
           </div>
 
@@ -367,7 +404,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
               </div>
               {shippingCharges > 0 && (
                 <div className="flex justify-between font-noto text-sm">
-                  <span>Shipping ({formData.state})</span>
+                  <span>Shipping Charges</span>
                   <span>₹{shippingCharges}</span>
                 </div>
               )}
@@ -402,10 +439,22 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
           {/* Payment Button */}
           <button
             onClick={handlePayment}
-            disabled={state.paymentLoading}
-            className="w-full bg-ayur-red text-white py-3 rounded-full font-noto font-semibold hover:bg-ayur-red/90 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isProcessing || state.paymentLoading}
+            className="w-full bg-ayur-red text-white py-3 rounded-full font-noto font-semibold hover:bg-ayur-red/90 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg flex items-center justify-center gap-2"
           >
-            {state.paymentLoading ? 'Processing...' : `Pay ₹${totalWithShipping} with Razorpay`}
+            {isProcessing ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Processing Payment...
+              </>
+            ) : state.paymentLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              `Pay ₹${totalWithShipping}`
+            )}
           </button>
         </div>
       </div>

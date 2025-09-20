@@ -166,9 +166,9 @@ export const ProductModal = ({
         </button>
 
         {/* Main Content */}
-        <div className="flex-1 flex overflow-hidden min-h-0">
+        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
           {/* Image Section */}
-          <div className="w-full lg:w-1/2 bg-[#e3e5fa] flex items-center justify-center p-4 lg:p-8">
+          <div className="w-full lg:w-1/2 bg-[#e3e5fa] flex items-center justify-center p-4 lg:p-8 h-64 lg:h-auto">
             <div className="relative w-full max-w-md lg:max-w-lg h-auto">
               <div className="absolute w-full h-full top-0 left-0 rounded-full rotate-[-5.00deg] bg-[linear-gradient(286deg,rgba(129,138,249,1)_0%,rgba(129,138,249,0)_100%)] opacity-10" />
 
@@ -178,7 +178,7 @@ export const ProductModal = ({
                 <div className="absolute w-1/2 h-4 bottom-0 left-1/2 transform -translate-x-1/2 bg-[#818af9] rounded-full blur-[50px]" />
 
                 <img
-                  className="w-full h-auto object-contain"
+                  className="w-full h-auto object-contain max-h-48 lg:max-h-none"
                   alt="Product Image"
                   src="src/Icons/proto1-removebg-preview.png"
                 />
@@ -337,17 +337,18 @@ export const ProductModal = ({
 <div 
   className="absolute bottom-4 left-1/2 transform -translate-x-1/2 
              w-[95%] max-w-5xl bg-white rounded-xl shadow-lg border border-gray-200 
-              lg:py-2 lg:px-4" 
+             py-3 px-4 lg:py-2 lg:px-4" 
 >
-      <div className="flex flex-col sm:flex-row items-center gap-4 lg:gap-8">
-        <div className="flex items-center gap-4 flex-1">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-8">
+        {/* Product Info Section */}
+        <div className="flex items-center gap-4 flex-1 w-full lg:w-auto">
           <img
             className="w-12 h-12 lg:w-16 lg:h-16 object-cover rounded-lg flex-shrink-0"
             alt="Product"
             src={product?.image_url || "src/Icons/Rectangle3764.png"}
           />
 
-          <div className="flex flex-col gap-1 min-w-0">
+          <div className="flex flex-col gap-1 min-w-0 flex-1">
             <p className="font-semibold text-black text-sm lg:text-base truncate">
               {product?.name || 'Product Name'}
             </p>
@@ -363,32 +364,33 @@ export const ProductModal = ({
           </div>
         </div>
 
-    <div className="flex items-center gap-4 lg:gap-8">
-      <div className="flex items-center gap-3">
-        <span className="font-semibold text-sm text-gray-800">Qty:</span>
-        <div className="flex items-center gap-2">
-          <button 
-            onClick={handleQuantityDecrease}
-            className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 rounded transition-colors"
-          >
-            <img className="w-4 h-4" alt="Minus" src="src/Icons/minus-square.svg" />
-          </button>
-          <div className="w-12 h-10 flex items-center justify-center bg-white rounded-md border border-gray-300">
-            <span className="font-normal text-gray-800">{quantity}</span>
+        {/* Quantity and Add to Cart Section */}
+        <div className="flex items-center gap-4 w-full lg:w-auto">
+          <div className="flex items-center gap-3">
+            <span className="font-semibold text-sm text-gray-800">Qty:</span>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={handleQuantityDecrease}
+                className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 rounded transition-colors"
+              >
+                <img className="w-4 h-4" alt="Minus" src="src/Icons/minus-square.svg" />
+              </button>
+              <div className="w-12 h-10 flex items-center justify-center bg-white rounded-md border border-gray-300">
+                <span className="font-normal text-gray-800">{quantity}</span>
+              </div>
+              <button 
+                onClick={handleQuantityIncrease}
+                className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 rounded transition-colors"
+              >
+                <img className="w-4 h-4" alt="Plus" src="src/Icons/plus-square.svg" />
+              </button>
+            </div>
           </div>
-          <button 
-            onClick={handleQuantityIncrease}
-            className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 rounded transition-colors"
-          >
-            <img className="w-4 h-4" alt="Plus" src="src/Icons/plus-square.svg" />
+
+          <button onClick={handleAddToCart} className="px-6 py-3 bg-indigo-500 rounded-md hover:bg-indigo-600 transition-colors whitespace-nowrap flex-1 lg:flex-none">
+            <span className="font-bold text-white text-sm">ADD TO CART</span>
           </button>
         </div>
-      </div>
-
-      <button onClick={handleAddToCart} className="px-6 py-3 bg-indigo-500 rounded-md hover:bg-indigo-600 transition-colors whitespace-nowrap">
-        <span className="font-bold text-white text-sm">ADD TO CART</span>
-      </button>
-    </div>
   </div>
 </div>
 

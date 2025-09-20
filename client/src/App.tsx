@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage';
 import AboutUsPage from './pages/AboutUsPage';
 import AdminDashboard from './pages/AdminDashboard';
 import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentFailed from './pages/PaymentFailed';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/about" element={<AboutUsPage />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/payment-success" element={<PaymentSuccess />} />
+                <Route path="/payment-failed" element={<PaymentFailed />} />
               </Routes>
               <Footer />
             </div>

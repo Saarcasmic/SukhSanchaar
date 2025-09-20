@@ -92,7 +92,7 @@ const CartSidebar: React.FC = () => {
             <div className="border-t border-cream-200 p-6 bg-white">
               <div className="flex justify-between items-center mb-4">
                 <span className="font-lora text-lg font-semibold text-antique-brown">Total:</span>
-                <span className="font-playfair text-2xl font-bold text-ayur-red">₹{state.total}</span>
+                <span className="font-noto text-2xl font-bold text-ayur-red">₹{state.total}</span>
               </div>
               <button
                 onClick={() => setShowCheckout(true)}

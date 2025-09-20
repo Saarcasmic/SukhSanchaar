@@ -121,17 +121,19 @@ const OrderModal: React.FC<OrderModalProps> = ({ order, onClose, onUpdate }) => 
 
         <div className="p-6 space-y-6">
           {/* Order Status and Payment Status */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Order Status</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Order Status Section */}
+            <div className="bg-white border border-gray-200 rounded-lg p-4">
+              <h4 className="text-sm font-semibold text-gray-900 mb-4">Order Status</h4>
               <div className="flex items-center gap-3">
                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusBadgeColor(order.order_status || 'pending')}`}>
                   {(order.order_status || 'pending').charAt(0).toUpperCase() + (order.order_status || 'pending').slice(1)}
                 </span>
+                <span className="text-gray-400 text-lg">→</span>
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value as any)}
-                  className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:ring-2 focus:ring-ayur-red focus:border-transparent"
+                  className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:ring-2 focus:ring-ayur-red focus:border-transparent bg-white"
                 >
                   <option value="pending">Pending</option>
                   <option value="confirmed">Processing</option>
@@ -140,12 +142,22 @@ const OrderModal: React.FC<OrderModalProps> = ({ order, onClose, onUpdate }) => 
                   <option value="cancelled">Cancelled</option>
                 </select>
               </div>
+              {selectedStatus !== order.order_status && (
+                <div className="mt-3 flex items-center gap-2 text-sm text-ayur-red">
+                  <div className="w-2 h-2 bg-ayur-red rounded-full"></div>
+                  <span>Status will be updated when you save changes</span>
+                </div>
+              )}
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Payment Status</label>
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getPaymentStatusBadgeColor(order.payment_status || 'pending')}`}>
-                {(order.payment_status || 'pending').charAt(0).toUpperCase() + (order.payment_status || 'pending').slice(1)}
-              </span>
+
+            {/* Payment Status Section */}
+            <div className="bg-white border border-gray-200 rounded-lg p-4">
+              <h4 className="text-sm font-semibold text-gray-900 mb-4">Payment Status</h4>
+              <div className="flex items-center gap-3">
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getPaymentStatusBadgeColor(order.payment_status || 'pending')}`}>
+                  {(order.payment_status || 'pending').charAt(0).toUpperCase() + (order.payment_status || 'pending').slice(1)}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -199,51 +211,53 @@ const OrderModal: React.FC<OrderModalProps> = ({ order, onClose, onUpdate }) => 
               Order Items
             </h3>
             <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {order.items && Array.isArray(order.items) && order.items.length > 0 ? (
-                    order.items.map((item, index) => (
-                      <tr key={index}>
-                        <td className="px-4 py-3">
-                          <div className="flex items-center">
-                            {item.product_image && (
-                              <img
-                                src={item.product_image}
-                                alt={item.product_name || 'Product'}
-                                className="w-10 h-10 rounded-lg object-cover mr-3"
-                              />
-                            )}
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">{item.product_name || 'Unknown Product'}</div>
-                              <div className="text-sm text-gray-500">ID: {item.product_id || 'N/A'}</div>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[600px]">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {order.items && Array.isArray(order.items) && order.items.length > 0 ? (
+                      order.items.map((item, index) => (
+                        <tr key={index}>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center">
+                              {item.product_image && (
+                                <img
+                                  src={item.product_image}
+                                  alt={item.product_name || 'Product'}
+                                  className="w-10 h-10 rounded-lg object-cover mr-3"
+                                />
+                              )}
+                              <div>
+                                <div className="text-sm font-medium text-gray-900">{item.product_name || 'Unknown Product'}</div>
+                                <div className="text-sm text-gray-500">ID: {item.product_id || 'N/A'}</div>
+                              </div>
                             </div>
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-900">{item.quantity || 0}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900">₹{item.unit_price || 0}</td>
+                          <td className="px-4 py-3 text-sm font-medium text-gray-900">₹{item.total_price || 0}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4} className="px-4 py-8 text-center text-gray-500">
+                          <div className="flex flex-col items-center">
+                            <Package className="w-8 h-8 text-gray-300 mb-2" />
+                            <p>No items found for this order</p>
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-900">{item.quantity || 0}</td>
-                        <td className="px-4 py-3 text-sm text-gray-900">₹{item.unit_price || 0}</td>
-                        <td className="px-4 py-3 text-sm font-medium text-gray-900">₹{item.total_price || 0}</td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={4} className="px-4 py-8 text-center text-gray-500">
-                        <div className="flex flex-col items-center">
-                          <Package className="w-8 h-8 text-gray-300 mb-2" />
-                          <p>No items found for this order</p>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 

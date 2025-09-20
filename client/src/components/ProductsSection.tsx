@@ -16,7 +16,7 @@ const ProductsSection: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-screen relative overflow-hidden">
+      <div id="products" className="min-h-screen relative overflow-hidden">
       {/* Background with parchment texture and botanical motifs */}
       <div 
         className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50"
