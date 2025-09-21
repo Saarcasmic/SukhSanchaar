@@ -6,6 +6,9 @@ const PaymentSuccess: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     // Auto redirect to home after 10 seconds
     const timer = setTimeout(() => {
       navigate('/');

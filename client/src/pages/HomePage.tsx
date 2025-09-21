@@ -2,7 +2,6 @@ import React from 'react';
 import HeroSection from '../components/HeroSection';
 import IntroductionSection from '../components/IntroductionSection';
 import ProductsSection from '../components/ProductsSection';
-import ContactSection from '../components/ContactSection';
 
 const HomePage: React.FC = () => {
   return (

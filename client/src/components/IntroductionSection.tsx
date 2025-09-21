@@ -1,7 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const IntroductionSection: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleReadMore = () => {
+    navigate('/about');
+    // Scroll to top after navigation
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  };
+
   return (
     <section id="about" className="py-24 bg-gradient-to-br from-white via-vintage-beige/20 to-aged-paper relative overflow-hidden bg-botanical">
       {/* Ornamental divider */}
@@ -52,12 +62,12 @@ const IntroductionSection: React.FC = () => {
         </p>
 
         {/* Read More button */}
-        <Link
-          to="/about"
+        <button
+          onClick={handleReadMore}
           className="inline-block border-2 border-heritage-gold text-heritage-gold px-10 py-4 rounded-full font-noto font-semibold text-lg hover:bg-gradient-to-r hover:from-heritage-gold hover:to-ayur-gold hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-2 bg-vintage-beige/20 backdrop-blur-sm"
         >
           Read More
-        </Link>
+        </button>
 
         {/* Bottom ornamental line */}
         <div className="flex items-center justify-center mt-12">
