@@ -65,14 +65,14 @@ const HeroSection: React.FC = () => {
         </p>
 
         {/* Ornamental divider */}
-        <div className="flex items-center justify-center mb-9">
+        <div className="flex items-center justify-center mb-8">
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent"></div>
           <div className="mx-4 w-3 h-3 bg-amber-300 rounded-full animate-glow shadow-lg"></div>
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent"></div>
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
           <button
             onClick={scrollToProducts}
             className="group bg-gradient-to-r from-amber-600 to-orange-700 text-white px-12 py-5 rounded-full font-noto font-semibold text-xl hover:from-amber-700 hover:to-orange-800 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:-translate-y-3 flex items-center gap-3 border border-amber-400/30 backdrop-blur-sm"
