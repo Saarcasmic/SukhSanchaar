@@ -34,7 +34,7 @@ const HeroSection: React.FC = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url("https://i.ibb.co/C3whC1pq/Gemini-Generated-Image-wnnaapwnnaapwnna.png")'
+          backgroundImage: 'url("/hero-background.png")'
         }}
       />
       
