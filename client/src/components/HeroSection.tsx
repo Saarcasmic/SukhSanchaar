@@ -65,7 +65,7 @@ const HeroSection: React.FC = () => {
         </p>
 
         {/* Ornamental divider */}
-        <div className="flex items-center justify-center mb-12">
+        <div className="flex items-center justify-center mb-9">
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent"></div>
           <div className="mx-4 w-3 h-3 bg-amber-300 rounded-full animate-glow shadow-lg"></div>
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent"></div>
