@@ -60,7 +60,7 @@ const HeroSection: React.FC = () => {
         </h1>
 
         {/* Subheading */}
-        <p className="font-lora text-xl sm:text-2xl lg:text-3xl text-amber-100 mb-12 max-w-4xl mx-auto leading-relaxed drop-shadow-lg">
+        <p className="font-lora text-xl sm:text-2xl lg:text-3xl text-amber-100 mb-9 max-w-4xl mx-auto leading-relaxed drop-shadow-lg">
           Traditional Ayurvedic Remedies from the Golden Era
         </p>
 
