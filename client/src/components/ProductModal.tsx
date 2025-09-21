@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
+import { Plus, Minus } from "lucide-react";
 import { IconComponentNode } from "./IconComponentNode";
 import { NineRatingStar } from "./NineRatingStar";
 import { NineRatingStar1 } from "./NineRatingStar1";
@@ -373,7 +374,7 @@ export const ProductModal = ({
                 onClick={handleQuantityDecrease}
                 className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 rounded transition-colors"
               >
-                <img className="w-4 h-4" alt="Minus" src="src/Icons/minus-square.svg" />
+                <Minus className="w-4 h-4 text-gray-600" />
               </button>
               <div className="w-12 h-10 flex items-center justify-center bg-white rounded-md border border-gray-300">
                 <span className="font-normal text-gray-800">{quantity}</span>
@@ -382,7 +383,7 @@ export const ProductModal = ({
                 onClick={handleQuantityIncrease}
                 className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 rounded transition-colors"
               >
-                <img className="w-4 h-4" alt="Plus" src="src/Icons/plus-square.svg" />
+                <Plus className="w-4 h-4 text-gray-600" />
               </button>
             </div>
           </div>
