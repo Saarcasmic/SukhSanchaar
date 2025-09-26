@@ -18,24 +18,18 @@ const ProductsSection: React.FC = () => {
     <>
       <div id="products" className="min-h-screen relative overflow-hidden pt-20">
       {/* Background with parchment texture and botanical motifs */}
-      <div 
-        className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50"
+      <div
+        className="absolute inset-0"
         style={{
-          backgroundImage: `
-            radial-gradient(circle at 20% 80%, rgba(255, 193, 7, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(255, 152, 0, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 40% 40%, rgba(139, 69, 19, 0.05) 0%, transparent 50%)
-          `
+          backgroundImage: 'url("/sanchaar_bg.png")',
+          backgroundSize: 'contain',
+          // backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
         }}
       ></div>
       
-      {/* Subtle botanical pattern overlay */}
-      <div 
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4a574' fill-opacity='1'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm-2 0c0 9.941-8.059 18-18 18s-18-8.059-18-18 8.059-18 18-18 18 8.059 18 18zM10 30c0-11.046 8.954-20 20-20s20 8.954 20 20-8.954 20-20 20-20-8.954-20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        }}
-      ></div>
+     
+      
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 py-12">
