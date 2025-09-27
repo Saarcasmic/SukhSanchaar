@@ -103,7 +103,7 @@ const Navbar: React.FC = () => {
               className={`relative p-3 text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 group ${
                 isScrolled
                   ? "bg-gradient-to-br from-ayur-red to-ayur-red-dark hover:from-ayur-red-dark hover:to-heritage-gold border border-heritage-gold/30"
-                  : "bg-gradient-to-br from-amber-600 to-orange-700 hover:from-amber-700 hover:to-orange-800 border border-amber-300/50 shadow-2xl"
+                  : "bg-gradient-to-br from-ayur-red to-ayur-red-dark hover:from-amber-700 hover:to-orange-800 border border-amber-300/50 shadow-2xl"
               }`}
             >
               <ShoppingCart className="w-6 h-6 group-hover:scale-105 transition-transform" />

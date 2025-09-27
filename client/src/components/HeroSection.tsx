@@ -81,7 +81,7 @@ const HeroSection: React.FC = () => {
         <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
           <button
             onClick={scrollToProducts}
-            className="group bg-gradient-to-r from-amber-600 to-orange-700 text-white px-12 py-5 rounded-full font-noto font-semibold text-xl hover:from-amber-700 hover:to-orange-800 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:-translate-y-3 flex items-center gap-3 border border-amber-400/30 backdrop-blur-sm"
+            className="group bg-ayur-red text-white px-12 py-5 rounded-full font-noto font-semibold text-xl hover:from-amber-700 hover:to-orange-800 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:-translate-y-3 flex items-center gap-3 border border-amber-400/30 backdrop-blur-sm"
           >
             Explore Products
             <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />

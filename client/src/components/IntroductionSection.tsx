@@ -16,8 +16,10 @@ const IntroductionSection: React.FC = () => {
     <section
       className="py-20   text-antique-brown-dark relative overflow-hidden"
       style={{
-        backgroundImage: "url('/sanchaar_bg.png')",
+        // backgroundImage: "url('/sanchaar_bg.png')",
         backgroundSize: "cover",
+        backgroundColor: "#efe1d3",
+        // opacity: 0.5,
         // backgroundPosition: "center",
         // backgroundRepeat: "no-repeat",
       }}
