@@ -1,34 +1,29 @@
-import React, { useState } from 'react';
-import { X, CreditCard, Loader2 } from 'lucide-react';
-import { useCart } from '../contexts/CartContext';
-import { useAdmin } from '../contexts/AdminContext';
-import { useNavigate } from 'react-router-dom';
-import { RazorpayService } from '../utils/razorpay';
+import React, { useState } from "react";
+import { X, CreditCard, Loader2 } from "lucide-react";
+import { useCart } from "../contexts/CartContext";
+import { useAdmin } from "../contexts/AdminContext";
+import { useNavigate } from "react-router-dom";
+import { RazorpayService } from "../utils/razorpay";
 
 interface CheckoutModalProps {
   onClose: () => void;
 }
 
 const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
-  const { 
-    state, 
-    clearCart, 
-    toggleCart, 
-    processPayment, 
-    clearPaymentError 
-  } = useCart();
+  const { state, clearCart, toggleCart, processPayment, clearPaymentError } =
+    useCart();
   const { addOrder } = useAdmin();
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
-    customerName: '',
-    email: '',
-    phone: '',
-    addressLine1: '',
-    addressLine2: '',
-    city: '',
-    state: '',
-    country: 'India'
+    customerName: "",
+    email: "",
+    phone: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    state: "",
+    country: "India",
   });
 
   const [isProcessing, setIsProcessing] = useState(false);
@@ -36,9 +31,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
   // Shipping charges based on state
   const getShippingCharges = (state: string) => {
     switch (state) {
-      case 'Delhi':
+      case "Delhi":
         return 50;
-      case 'Rajasthan':
+      case "Rajasthan":
         return 100;
       default:
         return 0;
@@ -49,49 +44,60 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
   const subtotal = state.total;
   const totalWithShipping = subtotal + shippingCharges;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     const { name, value } = e.target;
-    
+
     // Special handling for phone number
-    if (name === 'phone') {
+    if (name === "phone") {
       // Remove any non-digit characters
-      const digitsOnly = value.replace(/\D/g, '');
-      
+      const digitsOnly = value.replace(/\D/g, "");
+
       // If phone starts with 0 and has 11 digits total, remove the leading 0
       let formattedPhone = digitsOnly;
-      if (digitsOnly.length === 11 && digitsOnly.startsWith('0')) {
+      if (digitsOnly.length === 11 && digitsOnly.startsWith("0")) {
         formattedPhone = digitsOnly.substring(1);
       }
-      
+
       // Limit to 10 digits
       formattedPhone = formattedPhone.substring(0, 10);
-      
-      setFormData(prev => ({
+
+      setFormData((prev) => ({
         ...prev,
-        [name]: formattedPhone
+        [name]: formattedPhone,
       }));
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
     }
   };
 
   const handlePayment = async () => {
-    if (!formData.customerName || !formData.email || !formData.phone || !formData.addressLine1 || !formData.city || !formData.state) {
-      alert('Please fill in all required fields');
+    if (
+      !formData.customerName ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.addressLine1 ||
+      !formData.city ||
+      !formData.state
+    ) {
+      alert("Please fill in all required fields");
       return;
     }
 
     // Validate phone number is exactly 10 digits
     if (formData.phone.length !== 10) {
-      alert('Please enter a valid 10-digit phone number');
+      alert("Please enter a valid 10-digit phone number");
       return;
     }
 
     if (!RazorpayService.isAvailable()) {
-      alert('Payment service is not available. Please try again later.');
+      alert("Payment service is not available. Please try again later.");
       return;
     }
 
@@ -108,67 +114,80 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
         customer_email: formData.email,
         customer_phone: formData.phone,
         shipping_address: {
-          street: formData.addressLine1 + (formData.addressLine2 ? `, ${formData.addressLine2}` : ''),
+          street:
+            formData.addressLine1 +
+            (formData.addressLine2 ? `, ${formData.addressLine2}` : ""),
           city: formData.city,
           state: formData.state,
-          pincode: '', // You might want to add pincode field
-          country: formData.country
+          pincode: "", // You might want to add pincode field
+          country: formData.country,
         },
-        items: state.items.map(item => ({
+        items: state.items.map((item) => ({
           product_id: item.id,
-          quantity: item.quantity
+          quantity: item.quantity,
         })),
-        notes: `Order for ${state.items.length} item(s) - SukhSanchaar`
+        notes: `Order for ${state.items.length} item(s) - SukhSanchaar`,
       };
 
-      const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3001/api';
+      const API_BASE_URL =
+        (import.meta as any).env?.VITE_API_BASE_URL ||
+        "http://localhost:3001/api";
       const orderResponse = await fetch(`${API_BASE_URL}/orders`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(orderData),
       });
 
       if (!orderResponse.ok) {
-        throw new Error('Failed to create order');
+        throw new Error("Failed to create order");
       }
 
       const orderResult = await orderResponse.json();
       if (!orderResult.success) {
-        throw new Error(orderResult.error || 'Failed to create order');
+        throw new Error(orderResult.error || "Failed to create order");
       }
 
       const createdOrder = orderResult.data;
-      console.log('Order created in database:', createdOrder);
+      console.log("Order created in database:", createdOrder);
 
       // Step 2: Create Razorpay order with shipping included
-      const RAZORPAY_API_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3001/api';
-      const razorpayOrderResponse = await fetch(`${RAZORPAY_API_URL}/payment/create-order`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: totalWithShipping, // Include shipping charges
-          currency: 'INR',
-          receipt: `order_${Date.now()}`,
-          customer_details: {
-            name: formData.customerName,
-            email: formData.email,
-            phone: formData.phone,
-            address: formData.addressLine1 + (formData.addressLine2 ? `, ${formData.addressLine2}` : ''),
+      const RAZORPAY_API_URL =
+        (import.meta as any).env?.VITE_API_BASE_URL ||
+        "http://localhost:3001/api";
+      const razorpayOrderResponse = await fetch(
+        `${RAZORPAY_API_URL}/payment/create-order`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({
+            amount: totalWithShipping, // Include shipping charges
+            currency: "INR",
+            receipt: `order_${Date.now()}`,
+            customer_details: {
+              name: formData.customerName,
+              email: formData.email,
+              phone: formData.phone,
+              address:
+                formData.addressLine1 +
+                (formData.addressLine2 ? `, ${formData.addressLine2}` : ""),
+            },
+          }),
+        },
+      );
 
       if (!razorpayOrderResponse.ok) {
-        throw new Error('Failed to create Razorpay order');
+        throw new Error("Failed to create Razorpay order");
       }
 
       const razorpayOrderData = await razorpayOrderResponse.json();
       if (!razorpayOrderData.success) {
-        throw new Error(razorpayOrderData.error || 'Failed to create Razorpay order');
+        throw new Error(
+          razorpayOrderData.error || "Failed to create Razorpay order",
+        );
       }
 
       const paymentData = {
@@ -179,10 +198,12 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
       };
 
       // Step 3: Create Razorpay checkout options
-      const fullAddress = `${formData.addressLine1}${formData.addressLine2 ? ', ' + formData.addressLine2 : ''}, ${formData.city}, ${formData.state}, ${formData.country}`;
-      const orderItemsDescription = state.items.map(item => `${item.name} x${item.quantity}`).join(', ');
+      const fullAddress = `${formData.addressLine1}${formData.addressLine2 ? ", " + formData.addressLine2 : ""}, ${formData.city}, ${formData.state}, ${formData.country}`;
+      const orderItemsDescription = state.items
+        .map((item) => `${item.name} x${item.quantity}`)
+        .join(", ");
       const description = `SukhSanchaar Order - ${orderItemsDescription} | Address: ${fullAddress} | Total: ₹${totalWithShipping}`;
-      
+
       const checkoutOptions = RazorpayService.createCheckoutOptions(
         paymentData.order_id,
         totalWithShipping * 100, // Convert to paise for Razorpay
@@ -190,58 +211,70 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
         formData.customerName,
         formData.email,
         formData.phone,
-        description
+        description,
       );
 
       // Step 4: Open Razorpay checkout
-      const razorpayResponse = await RazorpayService.openCheckout(checkoutOptions);
+      const razorpayResponse =
+        await RazorpayService.openCheckout(checkoutOptions);
 
       // Step 5: Process payment verification with order ID
-      console.log('Processing payment verification with order_id:', createdOrder.id);
-      const verificationResult = await processPayment(razorpayResponse, createdOrder.id);
+      console.log(
+        "Processing payment verification with order_id:",
+        createdOrder.id,
+      );
+      const verificationResult = await processPayment(
+        razorpayResponse,
+        createdOrder.id,
+      );
 
-      if (verificationResult.status === 'captured') {
+      if (verificationResult.status === "captured") {
         // Add to admin context for display
         const adminOrderData = {
           customer_name: formData.customerName,
           customer_email: formData.email,
           customer_phone: formData.phone,
           shipping_address: {
-            street: formData.addressLine1 + (formData.addressLine2 ? `, ${formData.addressLine2}` : ''),
+            street:
+              formData.addressLine1 +
+              (formData.addressLine2 ? `, ${formData.addressLine2}` : ""),
             city: formData.city,
             state: formData.state,
-            pincode: '',
-            country: formData.country
+            pincode: "",
+            country: formData.country,
           },
-          items: state.items.map(item => ({
+          items: state.items.map((item) => ({
             product_id: item.id,
             product_name: item.name,
-            product_image: item.image || '',
+            product_image: item.image || "",
             quantity: item.quantity,
             unit_price: item.price,
-            total_price: item.price * item.quantity
+            total_price: item.price * item.quantity,
           })),
           subtotal: state.total,
           tax_amount: 0,
           shipping_amount: shippingCharges,
           total_amount: totalWithShipping,
-          payment_status: 'paid' as const,
-          order_status: 'confirmed' as const,
-          payment_method: 'razorpay',
-          notes: `Order for ${state.items.length} item(s) - SukhSanchaar`
+          payment_status: "paid" as const,
+          order_status: "confirmed" as const,
+          payment_method: "razorpay",
+          notes: `Order for ${state.items.length} item(s) - SukhSanchaar`,
         };
 
         addOrder(adminOrderData);
         clearCart();
         toggleCart();
         onClose();
-        navigate('/payment-success');
+        navigate("/payment-success");
       } else {
-        throw new Error('Payment not captured');
+        throw new Error("Payment not captured");
       }
     } catch (error) {
-      console.error('Payment error:', error);
-      if (error instanceof Error && error.message !== 'Payment cancelled by user') {
+      console.error("Payment error:", error);
+      if (
+        error instanceof Error &&
+        error.message !== "Payment cancelled by user"
+      ) {
         alert(`Payment failed: ${error.message}`);
       }
     } finally {
@@ -388,11 +421,18 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
 
           {/* Order Summary */}
           <div className="bg-cream-50 p-4 rounded-lg border border-cream-200">
-            <h3 className="font-lora font-semibold text-antique-brown mb-2">Order Summary</h3>
+            <h3 className="font-lora font-semibold text-antique-brown mb-2">
+              Order Summary
+            </h3>
             <div className="space-y-2">
-              {state.items.map(item => (
-                <div key={item.id} className="flex justify-between font-noto text-sm">
-                  <span>{item.name} x {item.quantity}</span>
+              {state.items.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex justify-between font-noto text-sm"
+                >
+                  <span>
+                    {item.name} x {item.quantity}
+                  </span>
                   <span>₹{item.price * item.quantity}</span>
                 </div>
               ))}
@@ -416,7 +456,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
           </div>
 
           <p className="text-xs text-gray-500 text-center font-noto">
-            Your payment is secured by Razorpay. Shipping details will be sent via WhatsApp.
+            Your payment is secured by Razorpay. Shipping details will be sent
+            via WhatsApp.
           </p>
         </div>
 

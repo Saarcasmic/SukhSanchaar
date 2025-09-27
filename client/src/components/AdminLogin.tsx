@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Lock, Eye, EyeOff } from 'lucide-react';
+import React, { useState } from "react";
+import { Lock, Eye, EyeOff } from "lucide-react";
 
 interface AdminLoginProps {
   onLogin: (password: string) => void;
@@ -7,8 +7,12 @@ interface AdminLoginProps {
   isLoading?: boolean;
 }
 
-const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, error, isLoading }) => {
-  const [password, setPassword] = useState('');
+const AdminLogin: React.FC<AdminLoginProps> = ({
+  onLogin,
+  error,
+  isLoading,
+}) => {
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -45,12 +49,15 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, error, isLoading }) =>
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="password" className="block font-noto font-semibold text-antique-brown mb-2 text-sm">
+              <label
+                htmlFor="password"
+                className="block font-noto font-semibold text-antique-brown mb-2 text-sm"
+              >
                 Password
               </label>
               <div className="relative">
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -85,7 +92,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, error, isLoading }) =>
                   Verifying...
                 </div>
               ) : (
-                'Access Dashboard'
+                "Access Dashboard"
               )}
             </button>
           </form>

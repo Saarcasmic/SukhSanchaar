@@ -1,7 +1,16 @@
-import React, { useState, useMemo } from 'react';
-import { Search, ChevronUp, ChevronDown, Eye, Calendar, User, CreditCard, RefreshCw } from 'lucide-react';
-import { useAdmin } from '../../../contexts/AdminContext';
-import { OrderModal } from './index';
+import React, { useState, useMemo } from "react";
+import {
+  Search,
+  ChevronUp,
+  ChevronDown,
+  Eye,
+  Calendar,
+  User,
+  CreditCard,
+  RefreshCw,
+} from "lucide-react";
+import { useAdmin } from "../../../contexts/AdminContext";
+import { OrderModal } from "./index";
 
 interface Order {
   id: string;
@@ -28,8 +37,8 @@ interface Order {
   tax_amount: number;
   shipping_amount: number;
   total_amount: number;
-  payment_status: 'pending' | 'paid' | 'failed' | 'refunded';
-  order_status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+  payment_status: "pending" | "paid" | "failed" | "refunded";
+  order_status: "pending" | "confirmed" | "shipped" | "delivered" | "cancelled";
   payment_method: string;
   razorpay_order_id?: string;
   razorpay_payment_id?: string;
@@ -39,21 +48,31 @@ interface Order {
   updated_at: string;
 }
 
-type SortField = 'customer_name' | 'created_at' | 'order_status' | 'payment_status';
-type SortDirection = 'asc' | 'desc';
-type StatusFilter = 'all' | 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+type SortField =
+  | "customer_name"
+  | "created_at"
+  | "order_status"
+  | "payment_status";
+type SortDirection = "asc" | "desc";
+type StatusFilter =
+  | "all"
+  | "pending"
+  | "confirmed"
+  | "shipped"
+  | "delivered"
+  | "cancelled";
 
 const OrdersPage: React.FC = () => {
   const { orders, loading, error, updateOrder, fetchOrders } = useAdmin();
-  
+
   // State for filtering and searching
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
-  const [sortField, setSortField] = useState<SortField>('created_at');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [sortField, setSortField] = useState<SortField>("created_at");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  
+
   // Modal state
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,7 +82,7 @@ const OrdersPage: React.FC = () => {
     try {
       await fetchOrders();
     } catch (error) {
-      console.error('Failed to refresh orders:', error);
+      console.error("Failed to refresh orders:", error);
     }
   };
 
@@ -74,16 +93,20 @@ const OrdersPage: React.FC = () => {
     // Search filter
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(order => 
-        order.order_number.toLowerCase().includes(term) ||
-        order.customer_name.toLowerCase().includes(term) ||
-        (order.razorpay_payment_id && order.razorpay_payment_id.toLowerCase().includes(term))
+      filtered = filtered.filter(
+        (order) =>
+          order.order_number.toLowerCase().includes(term) ||
+          order.customer_name.toLowerCase().includes(term) ||
+          (order.razorpay_payment_id &&
+            order.razorpay_payment_id.toLowerCase().includes(term)),
       );
     }
 
     // Status filter
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(order => order.order_status === statusFilter);
+    if (statusFilter !== "all") {
+      filtered = filtered.filter(
+        (order) => order.order_status === statusFilter,
+      );
     }
 
     return filtered;
@@ -95,15 +118,15 @@ const OrdersPage: React.FC = () => {
       let aValue: any = a[sortField];
       let bValue: any = b[sortField];
 
-      if (sortField === 'created_at') {
+      if (sortField === "created_at") {
         aValue = new Date(aValue).getTime();
         bValue = new Date(bValue).getTime();
-      } else if (typeof aValue === 'string') {
+      } else if (typeof aValue === "string") {
         aValue = aValue.toLowerCase();
         bValue = bValue.toLowerCase();
       }
 
-      if (sortDirection === 'asc') {
+      if (sortDirection === "asc") {
         return aValue > bValue ? 1 : -1;
       } else {
         return aValue < bValue ? 1 : -1;
@@ -121,10 +144,10 @@ const OrdersPage: React.FC = () => {
   // Handle sorting
   const handleSort = (field: SortField) => {
     if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
       setSortField(field);
-      setSortDirection('asc');
+      setSortDirection("asc");
     }
   };
 
@@ -135,55 +158,69 @@ const OrdersPage: React.FC = () => {
   };
 
   // Handle order update
-  const handleOrderUpdate = async (orderId: string, updates: Partial<Order>) => {
+  const handleOrderUpdate = async (
+    orderId: string,
+    updates: Partial<Order>,
+  ) => {
     try {
       await updateOrder(orderId, updates);
       setIsModalOpen(false);
       setSelectedOrder(null);
     } catch (error) {
-      console.error('Failed to update order:', error);
+      console.error("Failed to update order:", error);
     }
   };
 
   // Get status badge color
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'confirmed': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'shipped': return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'delivered': return 'bg-green-100 text-green-800 border-green-200';
-      case 'cancelled': return 'bg-red-100 text-red-800 border-red-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "confirmed":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "shipped":
+        return "bg-purple-100 text-purple-800 border-purple-200";
+      case "delivered":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "cancelled":
+        return "bg-red-100 text-red-800 border-red-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   // Get payment status badge color
   const getPaymentStatusBadgeColor = (status: string) => {
     switch (status) {
-      case 'paid': return 'bg-green-100 text-green-800 border-green-200';
-      case 'pending': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'failed': return 'bg-red-100 text-red-800 border-red-200';
-      case 'refunded': return 'bg-gray-100 text-gray-800 border-gray-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case "paid":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "failed":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "refunded":
+        return "bg-gray-100 text-gray-800 border-gray-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   // Format date
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     });
   };
 
   // Truncate payment ID
   const truncatePaymentId = (paymentId: string | undefined) => {
-    if (!paymentId) return 'N/A';
+    if (!paymentId) return "N/A";
     return paymentId.length > 6 ? `...${paymentId.slice(-6)}` : paymentId;
   };
 
@@ -216,8 +253,12 @@ const OrdersPage: React.FC = () => {
     <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Orders Management</h1>
-        <p className="text-gray-600 text-sm sm:text-base">Manage and track customer orders</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+          Orders Management
+        </h1>
+        <p className="text-gray-600 text-sm sm:text-base">
+          Manage and track customer orders
+        </p>
       </div>
 
       {/* Search and Filter Bar */}
@@ -240,23 +281,50 @@ const OrdersPage: React.FC = () => {
           {/* Status Filter Tabs */}
           <div className="flex flex-wrap gap-2">
             {[
-              { key: 'all', label: 'All', count: orders.length },
-              { key: 'pending', label: 'Pending', count: orders.filter(o => o.order_status === 'pending').length },
-              { key: 'confirmed', label: 'Processing', count: orders.filter(o => o.order_status === 'confirmed').length },
-              { key: 'shipped', label: 'Shipped', count: orders.filter(o => o.order_status === 'shipped').length },
-              { key: 'delivered', label: 'Delivered', count: orders.filter(o => o.order_status === 'delivered').length },
-              { key: 'cancelled', label: 'Cancelled', count: orders.filter(o => o.order_status === 'cancelled').length },
+              { key: "all", label: "All", count: orders.length },
+              {
+                key: "pending",
+                label: "Pending",
+                count: orders.filter((o) => o.order_status === "pending")
+                  .length,
+              },
+              {
+                key: "confirmed",
+                label: "Processing",
+                count: orders.filter((o) => o.order_status === "confirmed")
+                  .length,
+              },
+              {
+                key: "shipped",
+                label: "Shipped",
+                count: orders.filter((o) => o.order_status === "shipped")
+                  .length,
+              },
+              {
+                key: "delivered",
+                label: "Delivered",
+                count: orders.filter((o) => o.order_status === "delivered")
+                  .length,
+              },
+              {
+                key: "cancelled",
+                label: "Cancelled",
+                count: orders.filter((o) => o.order_status === "cancelled")
+                  .length,
+              },
             ].map(({ key, label, count }) => (
               <button
                 key={key}
                 onClick={() => setStatusFilter(key as StatusFilter)}
                 className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
                   statusFilter === key
-                    ? 'bg-ayur-red text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? "bg-ayur-red text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
-                <span className="hidden sm:inline">{label} ({count})</span>
+                <span className="hidden sm:inline">
+                  {label} ({count})
+                </span>
                 <span className="sm:hidden">{label}</span>
               </button>
             ))}
@@ -265,7 +333,9 @@ const OrdersPage: React.FC = () => {
               disabled={loading}
               className="px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
             >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw
+                className={`w-4 h-4 ${loading ? "animate-spin" : ""}`}
+              />
               <span className="hidden sm:inline">Refresh</span>
             </button>
           </div>
@@ -292,64 +362,82 @@ const OrdersPage: React.FC = () => {
       </div>
 
       {/* Orders Table */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" style={{ height: 'calc(100vh - 400px)', minHeight: '400px' }}>
+      <div
+        className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
+        style={{ height: "calc(100vh - 400px)", minHeight: "400px" }}
+      >
         <div className="overflow-auto h-full">
           <table className="w-full min-w-[1200px]">
             <thead className="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
               <tr>
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   <button
-                    onClick={() => handleSort('customer_name')}
+                    onClick={() => handleSort("customer_name")}
                     className="flex items-center gap-1 hover:text-gray-700"
                   >
                     Order ID
-                    {sortField === 'customer_name' && (
-                      sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
-                    )}
+                    {sortField === "customer_name" &&
+                      (sortDirection === "asc" ? (
+                        <ChevronUp className="w-4 h-4" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4" />
+                      ))}
                   </button>
                 </th>
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   <button
-                    onClick={() => handleSort('customer_name')}
+                    onClick={() => handleSort("customer_name")}
                     className="flex items-center gap-1 hover:text-gray-700"
                   >
                     Customer
-                    {sortField === 'customer_name' && (
-                      sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
-                    )}
+                    {sortField === "customer_name" &&
+                      (sortDirection === "asc" ? (
+                        <ChevronUp className="w-4 h-4" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4" />
+                      ))}
                   </button>
                 </th>
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   <button
-                    onClick={() => handleSort('created_at')}
+                    onClick={() => handleSort("created_at")}
                     className="flex items-center gap-1 hover:text-gray-700"
                   >
                     Order Date
-                    {sortField === 'created_at' && (
-                      sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
-                    )}
+                    {sortField === "created_at" &&
+                      (sortDirection === "asc" ? (
+                        <ChevronUp className="w-4 h-4" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4" />
+                      ))}
                   </button>
                 </th>
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   <button
-                    onClick={() => handleSort('order_status')}
+                    onClick={() => handleSort("order_status")}
                     className="flex items-center gap-1 hover:text-gray-700"
                   >
                     Order Status
-                    {sortField === 'order_status' && (
-                      sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
-                    )}
+                    {sortField === "order_status" &&
+                      (sortDirection === "asc" ? (
+                        <ChevronUp className="w-4 h-4" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4" />
+                      ))}
                   </button>
                 </th>
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   <button
-                    onClick={() => handleSort('payment_status')}
+                    onClick={() => handleSort("payment_status")}
                     className="flex items-center gap-1 hover:text-gray-700"
                   >
                     Payment Status
-                    {sortField === 'payment_status' && (
-                      sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
-                    )}
+                    {sortField === "payment_status" &&
+                      (sortDirection === "asc" ? (
+                        <ChevronUp className="w-4 h-4" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4" />
+                      ))}
                   </button>
                 </th>
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -365,7 +453,10 @@ const OrdersPage: React.FC = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {paginatedOrders.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50 transition-colors">
+                <tr
+                  key={order.id}
+                  className="hover:bg-gray-50 transition-colors"
+                >
                   <td className="px-4 sm:px-6 py-4">
                     <button
                       onClick={() => handleOrderClick(order)}
@@ -378,8 +469,12 @@ const OrdersPage: React.FC = () => {
                     <div className="flex items-center min-w-0">
                       <User className="w-4 h-4 text-gray-400 mr-2 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-sm font-medium text-gray-900 truncate">{order.customer_name || 'Unknown'}</div>
-                        <div className="text-sm text-gray-500 truncate">{order.customer_email}</div>
+                        <div className="text-sm font-medium text-gray-900 truncate">
+                          {order.customer_name || "Unknown"}
+                        </div>
+                        <div className="text-sm text-gray-500 truncate">
+                          {order.customer_email}
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -387,21 +482,49 @@ const OrdersPage: React.FC = () => {
                     <div className="flex items-center">
                       <Calendar className="w-4 h-4 text-gray-400 mr-2 flex-shrink-0" />
                       <div className="text-sm text-gray-900">
-                        <div className="hidden sm:block">{formatDate(order.created_at)}</div>
-                        <div className="sm:hidden text-xs">{new Date(order.created_at).toLocaleDateString('en-GB')}</div>
+                        <div className="hidden sm:block">
+                          {formatDate(order.created_at)}
+                        </div>
+                        <div className="sm:hidden text-xs">
+                          {new Date(order.created_at).toLocaleDateString(
+                            "en-GB",
+                          )}
+                        </div>
                       </div>
                     </div>
                   </td>
                   <td className="px-4 sm:px-6 py-4">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusBadgeColor(order.order_status || 'pending')}`}>
-                      <span className="hidden sm:inline">{(order.order_status || 'pending').charAt(0).toUpperCase() + (order.order_status || 'pending').slice(1)}</span>
-                      <span className="sm:hidden">{(order.order_status || 'pending').charAt(0).toUpperCase()}</span>
+                    <span
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusBadgeColor(order.order_status || "pending")}`}
+                    >
+                      <span className="hidden sm:inline">
+                        {(order.order_status || "pending")
+                          .charAt(0)
+                          .toUpperCase() +
+                          (order.order_status || "pending").slice(1)}
+                      </span>
+                      <span className="sm:hidden">
+                        {(order.order_status || "pending")
+                          .charAt(0)
+                          .toUpperCase()}
+                      </span>
                     </span>
                   </td>
                   <td className="px-4 sm:px-6 py-4">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getPaymentStatusBadgeColor(order.payment_status || 'pending')}`}>
-                      <span className="hidden sm:inline">{(order.payment_status || 'pending').charAt(0).toUpperCase() + (order.payment_status || 'pending').slice(1)}</span>
-                      <span className="sm:hidden">{(order.payment_status || 'pending').charAt(0).toUpperCase()}</span>
+                    <span
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getPaymentStatusBadgeColor(order.payment_status || "pending")}`}
+                    >
+                      <span className="hidden sm:inline">
+                        {(order.payment_status || "pending")
+                          .charAt(0)
+                          .toUpperCase() +
+                          (order.payment_status || "pending").slice(1)}
+                      </span>
+                      <span className="sm:hidden">
+                        {(order.payment_status || "pending")
+                          .charAt(0)
+                          .toUpperCase()}
+                      </span>
                     </span>
                   </td>
                   <td className="px-4 sm:px-6 py-4">
@@ -409,7 +532,7 @@ const OrdersPage: React.FC = () => {
                       <CreditCard className="w-4 h-4 text-gray-400 mr-2 flex-shrink-0" />
                       <span
                         className="text-sm text-gray-900 cursor-help truncate"
-                        title={order.razorpay_payment_id || 'N/A'}
+                        title={order.razorpay_payment_id || "N/A"}
                       >
                         {truncatePaymentId(order.razorpay_payment_id)}
                       </span>
@@ -450,7 +573,9 @@ const OrdersPage: React.FC = () => {
                 Page {currentPage} of {totalPages}
               </span>
               <button
-                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                onClick={() =>
+                  setCurrentPage(Math.min(totalPages, currentPage + 1))
+                }
                 disabled={currentPage === totalPages}
                 className="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -460,7 +585,8 @@ const OrdersPage: React.FC = () => {
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm text-gray-700">
-                  Showing page <span className="font-medium">{currentPage}</span> of{' '}
+                  Showing page{" "}
+                  <span className="font-medium">{currentPage}</span> of{" "}
                   <span className="font-medium">{totalPages}</span>
                 </p>
               </div>
@@ -474,7 +600,10 @@ const OrdersPage: React.FC = () => {
                     Previous
                   </button>
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                    const startPage = Math.max(1, Math.min(currentPage - 2, totalPages - 4));
+                    const startPage = Math.max(
+                      1,
+                      Math.min(currentPage - 2, totalPages - 4),
+                    );
                     const page = startPage + i;
                     if (page > totalPages) return null;
                     return (
@@ -483,8 +612,8 @@ const OrdersPage: React.FC = () => {
                         onClick={() => setCurrentPage(page)}
                         className={`relative inline-flex items-center px-3 py-2 border text-sm font-medium ${
                           page === currentPage
-                            ? 'z-10 bg-ayur-red border-ayur-red text-white'
-                            : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                            ? "z-10 bg-ayur-red border-ayur-red text-white"
+                            : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
                         }`}
                       >
                         {page}
@@ -492,7 +621,9 @@ const OrdersPage: React.FC = () => {
                     );
                   })}
                   <button
-                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                    onClick={() =>
+                      setCurrentPage(Math.min(totalPages, currentPage + 1))
+                    }
                     disabled={currentPage === totalPages}
                     className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >

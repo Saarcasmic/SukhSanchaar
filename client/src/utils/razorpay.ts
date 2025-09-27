@@ -1,16 +1,18 @@
-import { RazorpayOptions, RazorpayResponse } from '../types/razorpay';
+import { RazorpayOptions, RazorpayResponse } from "../types/razorpay";
 
 // Razorpay configuration
-const RAZORPAY_KEY_ID = 'rzp_test_RIfIBUXi654lRw'; // Replace with your actual key
+const RAZORPAY_KEY_ID = "rzp_test_RIfIBUXi654lRw"; // Replace with your actual key
 
 export class RazorpayService {
   /**
    * Initialize Razorpay checkout
    */
-  static async openCheckout(options: RazorpayOptions): Promise<RazorpayResponse> {
+  static async openCheckout(
+    options: RazorpayOptions,
+  ): Promise<RazorpayResponse> {
     return new Promise((resolve, reject) => {
       if (!window.Razorpay) {
-        reject(new Error('Razorpay SDK not loaded'));
+        reject(new Error("Razorpay SDK not loaded"));
         return;
       }
 
@@ -22,7 +24,7 @@ export class RazorpayService {
         },
         modal: {
           ondismiss: () => {
-            reject(new Error('Payment cancelled by user'));
+            reject(new Error("Payment cancelled by user"));
           },
         },
       };
@@ -42,13 +44,13 @@ export class RazorpayService {
     customerName: string,
     customerEmail: string,
     customerPhone: string,
-    description: string = 'SukhSanchaar Ayurvedic Products'
+    description: string = "SukhSanchaar Ayurvedic Products",
   ): RazorpayOptions {
     return {
       key: RAZORPAY_KEY_ID,
       amount: amount, // Amount is already in paise from CheckoutModal
       currency,
-      name: 'SukhSanchaar',
+      name: "SukhSanchaar",
       description,
       order_id: orderId,
       prefill: {
@@ -57,11 +59,11 @@ export class RazorpayService {
         contact: customerPhone,
       },
       notes: {
-        source: 'sukhsanchaar_web',
+        source: "sukhsanchaar_web",
         order_id: orderId,
       },
       theme: {
-        color: '#8B4513', // Antique brown color
+        color: "#8B4513", // Antique brown color
       },
       handler: () => {}, // Will be overridden in openCheckout
     };
@@ -71,6 +73,6 @@ export class RazorpayService {
    * Check if Razorpay is available
    */
   static isAvailable(): boolean {
-    return typeof window !== 'undefined' && !!window.Razorpay;
+    return typeof window !== "undefined" && !!window.Razorpay;
   }
 }

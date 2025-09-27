@@ -1,7 +1,7 @@
-import React from 'react';
-import HeroSection from '../components/HeroSection';
-import IntroductionSection from '../components/IntroductionSection';
-import ProductsSection from '../components/ProductsSection';
+import React from "react";
+import HeroSection from "../components/HeroSection";
+import IntroductionSection from "../components/IntroductionSection";
+import ProductsSection from "../components/ProductsSection";
 
 const HomePage: React.FC = () => {
   return (

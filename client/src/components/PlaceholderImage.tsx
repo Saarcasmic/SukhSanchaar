@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface PlaceholderImageProps {
   width?: number;
@@ -7,14 +7,14 @@ interface PlaceholderImageProps {
   className?: string;
 }
 
-export const PlaceholderImage: React.FC<PlaceholderImageProps> = ({ 
-  width = 200, 
-  height = 200, 
+export const PlaceholderImage: React.FC<PlaceholderImageProps> = ({
+  width = 200,
+  height = 200,
   alt = "Placeholder",
-  className = ""
+  className = "",
 }) => {
   return (
-    <div 
+    <div
       className={`bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-gray-500 ${className}`}
       style={{ width, height }}
     >
@@ -25,9 +25,23 @@ export const PlaceholderImage: React.FC<PlaceholderImageProps> = ({
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="2"/>
-        <path d="M21 15L16 10L5 21" stroke="currentColor" strokeWidth="2"/>
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="2"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+        <circle
+          cx="8.5"
+          cy="8.5"
+          r="1.5"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+        <path d="M21 15L16 10L5 21" stroke="currentColor" strokeWidth="2" />
       </svg>
     </div>
   );

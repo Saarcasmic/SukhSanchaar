@@ -1,84 +1,65 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const IntroductionSection: React.FC = () => {
   const navigate = useNavigate();
 
   const handleReadMore = () => {
-    navigate('/about');
+    navigate("/about");
     // Scroll to top after navigation
     setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }, 100);
   };
 
   return (
-    <section id="about" className="py-24 bg-gradient-to-br from-white via-vintage-beige/20 to-aged-paper relative overflow-hidden bg-botanical">
-      {/* Ornamental divider */}
-      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-80 h-1 bg-gradient-to-r from-transparent via-heritage-gold to-transparent shadow-lg"></div>
+    <section
+      className="py-20   text-antique-brown-dark relative overflow-hidden"
+      style={{
+        backgroundImage: "url('/sanchaar_bg.png')",
+        backgroundSize: "cover",
+        // backgroundPosition: "center",
+        // backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Background botanical elements */}
 
-      {/* Subtle botanical background */}
-      <div className="absolute inset-0 opacity-8">
-        <div className="absolute top-20 left-20 w-40 h-40">
-          <svg viewBox="0 0 100 100" className="w-full h-full text-botanical-green">
-            <g opacity="0.12">
-              <circle cx="50" cy="50" r="25" fill="none" stroke="currentColor" strokeWidth="1.5"/>
-              <path d="M25 50h50M50 25v50" stroke="currentColor" strokeWidth="0.8"/>
-              <circle cx="50" cy="50" r="10" fill="none" stroke="#D4AF37" strokeWidth="1" opacity="0.4"/>
-              <circle cx="50" cy="50" r="3" fill="#C9A66B" opacity="0.3"/>
-            </g>
-          </svg>
-        </div>
-        <div className="absolute bottom-20 right-20 w-48 h-48">
-          <svg viewBox="0 0 120 120" className="w-full h-full text-botanical-green">
-            <g opacity="0.12">
-              <path d="M60 20c-12 0-22 10-22 22 0 20 22 50 22 50s22-30 22-50c0-12-10-22-22-22z" fill="currentColor"/>
-              <circle cx="60" cy="42" r="8" fill="none" stroke="#D4AF37" strokeWidth="1.5" opacity="0.4"/>
-              <circle cx="60" cy="42" r="3" fill="#C9A66B" opacity="0.5"/>
-            </g>
-          </svg>
-        </div>
-      </div>
-
-      {/* Floating ornamental elements */}
-      <div className="absolute top-1/3 right-1/3 w-4 h-4 animate-float opacity-25">
-        <svg viewBox="0 0 16 16" className="w-full h-full text-heritage-gold">
-          <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" strokeWidth="1"/>
-          <circle cx="8" cy="8" r="2" fill="currentColor"/>
-        </svg>
-      </div>
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Golden ornamental line */}
-        <div className="flex items-center justify-center mb-8">
-          <div className="w-20 h-px bg-gradient-to-r from-transparent via-heritage-gold to-ayur-gold"></div>
-          <div className="mx-4 w-4 h-4 bg-gradient-to-br from-heritage-gold to-ayur-gold rounded-full animate-glow shadow-lg"></div>
-          <div className="w-20 h-px bg-gradient-to-r from-ayur-gold via-heritage-gold to-transparent"></div>
+        <h2 className="font-playfair text-4xl font-bold mb-8 text-antique-brown-dark">
+          Message from Our <span className="text-ayur-gold">CEO</span>
+        </h2>
+
+        <div className="bg-white/60 backdrop-blur-sm p-8 rounded-2xl border border-heritage-gold/30 shadow-sm mb-8">
+          <blockquote className="font-lora text-xl leading-relaxed italic mb-6 text-antique-brown">
+            "In a world of fleeting trends, we remain true to the principles
+            that have stood the test of time. Our commitment is to you—those who
+            believe in natural healing At Sukh Sancharak, Ayurveda is not just
+            medicine; it is a legacy of trust built over 135 years. Every
+            product reflects our relentless pursuit of purity, quality, and
+            authentic healing rooted in India’s timeless traditions. Thank you
+            for choosing Sukh Sancharak. We invite you to join us on this
+            journey of authentic healing and holistic well-being."
+          </blockquote>
+          <div className="text-center">
+            <p className="font-noto font-semibold text-ayur-gold text-lg">
+              Kushal Pal Sharma
+            </p>
+            {/* <p className="font-noto text-cream-200">Fourth Generation Heritage Keeper</p> */}
+          </div>
         </div>
-
-        {/* Introduction text */}
-        <p className="font-lora text-2xl sm:text-3xl text-antique-brown-dark leading-relaxed mb-12 animate-fade-in drop-shadow-sm">
-          <strong>Sanchaaar</strong> has been dedicated to authentic Ayurvedic formulations for over a century, 
-          carrying forward a legacy of wellness and trust.
-        </p>
-
-        {/* Read More button */}
         <button
           onClick={handleReadMore}
-          className="inline-block border-2 border-heritage-gold text-heritage-gold px-10 py-4 rounded-full font-noto font-semibold text-lg hover:bg-gradient-to-r hover:from-heritage-gold hover:to-ayur-gold hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-2 bg-vintage-beige/20 backdrop-blur-sm"
+          className="inline-block mb-2 border-2 border-heritage-gold/40 text-white px-10 py-4 rounded-full font-noto font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-2 bg-gradient-to-r from-ayur-red to-ayur-red-dark hover:from-ayur-red-dark hover:to-heritage-gold"
         >
           Read More
         </button>
 
-        {/* Bottom ornamental line */}
-        <div className="flex items-center justify-center mt-12">
-          <div className="w-20 h-px bg-gradient-to-r from-transparent via-heritage-gold to-ayur-gold"></div>
-          <div className="mx-4 w-4 h-4 bg-gradient-to-br from-heritage-gold to-ayur-gold rounded-full animate-glow shadow-lg"></div>
-          <div className="w-20 h-px bg-gradient-to-r from-ayur-gold via-heritage-gold to-transparent"></div>
+        <div className="flex items-center justify-center">
+          <div className="w-20 h-px bg-ayur-gold"></div>
+          <div className="mx-4 w-4 h-4 bg-ayur-gold rounded-full"></div>
+          <div className="w-20 h-px bg-ayur-gold"></div>
         </div>
       </div>
-
-      {/* Bottom ornamental divider */}
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-80 h-1 bg-gradient-to-r from-transparent via-heritage-gold to-transparent shadow-lg"></div>
     </section>
   );
 };

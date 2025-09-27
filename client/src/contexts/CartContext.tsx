@@ -1,5 +1,9 @@
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { RazorpayResponse, PaymentData, PaymentVerification } from '../types/razorpay';
+import React, { createContext, useContext, useReducer, ReactNode } from "react";
+import {
+  RazorpayResponse,
+  PaymentData,
+  PaymentVerification,
+} from "../types/razorpay";
 
 interface Product {
   id: string;
@@ -30,8 +34,13 @@ interface CartContextType {
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
   toggleCart: () => void;
-  createRazorpayOrder: (customerDetails: CustomerDetails) => Promise<PaymentData>;
-  processPayment: (paymentData: RazorpayResponse, orderId?: string) => Promise<PaymentVerification>;
+  createRazorpayOrder: (
+    customerDetails: CustomerDetails,
+  ) => Promise<PaymentData>;
+  processPayment: (
+    paymentData: RazorpayResponse,
+    orderId?: string,
+  ) => Promise<PaymentVerification>;
   clearPaymentError: () => void;
 }
 
@@ -45,55 +54,68 @@ interface CustomerDetails {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 type CartAction =
-  | { type: 'ADD_TO_CART'; payload: Product }
-  | { type: 'REMOVE_FROM_CART'; payload: string }
-  | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
-  | { type: 'CLEAR_CART' }
-  | { type: 'TOGGLE_CART' }
-  | { type: 'SET_PAYMENT_LOADING'; payload: boolean }
-  | { type: 'SET_PAYMENT_ERROR'; payload: string | null }
-  | { type: 'SET_CURRENT_ORDER'; payload: PaymentData | null };
+  | { type: "ADD_TO_CART"; payload: Product }
+  | { type: "REMOVE_FROM_CART"; payload: string }
+  | { type: "UPDATE_QUANTITY"; payload: { id: string; quantity: number } }
+  | { type: "CLEAR_CART" }
+  | { type: "TOGGLE_CART" }
+  | { type: "SET_PAYMENT_LOADING"; payload: boolean }
+  | { type: "SET_PAYMENT_ERROR"; payload: string | null }
+  | { type: "SET_CURRENT_ORDER"; payload: PaymentData | null };
 
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
-    case 'ADD_TO_CART': {
-      const existingItem = state.items.find(item => item.id === action.payload.id);
+    case "ADD_TO_CART": {
+      const existingItem = state.items.find(
+        (item) => item.id === action.payload.id,
+      );
       const newItems = existingItem
-        ? state.items.map(item =>
+        ? state.items.map((item) =>
             item.id === action.payload.id
               ? { ...item, quantity: item.quantity + 1 }
-              : item
+              : item,
           )
         : [...state.items, { ...action.payload, quantity: 1 }];
-      
-      const total = newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      
+
+      const total = newItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      );
+
       return { ...state, items: newItems, total };
     }
-    case 'REMOVE_FROM_CART': {
-      const newItems = state.items.filter(item => item.id !== action.payload);
-      const total = newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    case "REMOVE_FROM_CART": {
+      const newItems = state.items.filter((item) => item.id !== action.payload);
+      const total = newItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      );
       return { ...state, items: newItems, total };
     }
-    case 'UPDATE_QUANTITY': {
-      const newItems = state.items.map(item =>
-        item.id === action.payload.id
-          ? { ...item, quantity: action.payload.quantity }
-          : item
-      ).filter(item => item.quantity > 0);
-      
-      const total = newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    case "UPDATE_QUANTITY": {
+      const newItems = state.items
+        .map((item) =>
+          item.id === action.payload.id
+            ? { ...item, quantity: action.payload.quantity }
+            : item,
+        )
+        .filter((item) => item.quantity > 0);
+
+      const total = newItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      );
       return { ...state, items: newItems, total };
     }
-    case 'CLEAR_CART':
+    case "CLEAR_CART":
       return { ...state, items: [], total: 0 };
-    case 'TOGGLE_CART':
+    case "TOGGLE_CART":
       return { ...state, isOpen: !state.isOpen };
-    case 'SET_PAYMENT_LOADING':
+    case "SET_PAYMENT_LOADING":
       return { ...state, paymentLoading: action.payload };
-    case 'SET_PAYMENT_ERROR':
+    case "SET_PAYMENT_ERROR":
       return { ...state, paymentError: action.payload };
-    case 'SET_CURRENT_ORDER':
+    case "SET_CURRENT_ORDER":
       return { ...state, currentOrder: action.payload };
     default:
       return state;
@@ -109,56 +131,62 @@ const initialState: CartState = {
   currentOrder: null,
 };
 
-export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const CartProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
   const addToCart = (product: Product) => {
-    dispatch({ type: 'ADD_TO_CART', payload: product });
+    dispatch({ type: "ADD_TO_CART", payload: product });
   };
 
   const removeFromCart = (productId: string) => {
-    dispatch({ type: 'REMOVE_FROM_CART', payload: productId });
+    dispatch({ type: "REMOVE_FROM_CART", payload: productId });
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
-    dispatch({ type: 'UPDATE_QUANTITY', payload: { id: productId, quantity } });
+    dispatch({ type: "UPDATE_QUANTITY", payload: { id: productId, quantity } });
   };
 
   const clearCart = () => {
-    dispatch({ type: 'CLEAR_CART' });
+    dispatch({ type: "CLEAR_CART" });
   };
 
   const toggleCart = () => {
-    dispatch({ type: 'TOGGLE_CART' });
+    dispatch({ type: "TOGGLE_CART" });
   };
 
-  const createRazorpayOrder = async (customerDetails: CustomerDetails): Promise<PaymentData> => {
+  const createRazorpayOrder = async (
+    customerDetails: CustomerDetails,
+  ): Promise<PaymentData> => {
     try {
-      dispatch({ type: 'SET_PAYMENT_LOADING', payload: true });
-      dispatch({ type: 'SET_PAYMENT_ERROR', payload: null });
+      dispatch({ type: "SET_PAYMENT_LOADING", payload: true });
+      dispatch({ type: "SET_PAYMENT_ERROR", payload: null });
 
-      const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3001/api';
+      const API_BASE_URL =
+        (import.meta as any).env?.VITE_API_BASE_URL ||
+        "http://localhost:3001/api";
       const response = await fetch(`${API_BASE_URL}/payment/create-order`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           amount: state.total,
-          currency: 'INR',
+          currency: "INR",
           receipt: `order_${Date.now()}`,
           customer_details: customerDetails, // Include customer details for order tracking
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create order');
+        throw new Error("Failed to create order");
       }
 
       const data = await response.json();
-      
+
       if (!data.success) {
-        throw new Error(data.error || 'Failed to create order');
+        throw new Error(data.error || "Failed to create order");
       }
 
       const paymentData: PaymentData = {
@@ -168,29 +196,38 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         receipt: data.data.receipt,
       };
 
-      dispatch({ type: 'SET_CURRENT_ORDER', payload: paymentData });
-      dispatch({ type: 'SET_PAYMENT_LOADING', payload: false });
+      dispatch({ type: "SET_CURRENT_ORDER", payload: paymentData });
+      dispatch({ type: "SET_PAYMENT_LOADING", payload: false });
 
       return paymentData;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to create order';
-      dispatch({ type: 'SET_PAYMENT_ERROR', payload: errorMessage });
-      dispatch({ type: 'SET_PAYMENT_LOADING', payload: false });
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to create order";
+      dispatch({ type: "SET_PAYMENT_ERROR", payload: errorMessage });
+      dispatch({ type: "SET_PAYMENT_LOADING", payload: false });
       throw error;
     }
   };
 
-  const processPayment = async (paymentData: RazorpayResponse, orderId?: string): Promise<PaymentVerification> => {
+  const processPayment = async (
+    paymentData: RazorpayResponse,
+    orderId?: string,
+  ): Promise<PaymentVerification> => {
     try {
-      dispatch({ type: 'SET_PAYMENT_LOADING', payload: true });
-      dispatch({ type: 'SET_PAYMENT_ERROR', payload: null });
+      dispatch({ type: "SET_PAYMENT_LOADING", payload: true });
+      dispatch({ type: "SET_PAYMENT_ERROR", payload: null });
 
-      const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3001/api';
-      console.log('Sending payment verification request with order_id:', orderId);
+      const API_BASE_URL =
+        (import.meta as any).env?.VITE_API_BASE_URL ||
+        "http://localhost:3001/api";
+      console.log(
+        "Sending payment verification request with order_id:",
+        orderId,
+      );
       const response = await fetch(`${API_BASE_URL}/payment/verify`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           razorpay_order_id: paymentData.razorpay_order_id,
@@ -201,17 +238,17 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       });
 
       if (!response.ok) {
-        throw new Error('Payment verification failed');
+        throw new Error("Payment verification failed");
       }
 
       const data = await response.json();
-      
+
       if (!data.success) {
-        throw new Error(data.error || 'Payment verification failed');
+        throw new Error(data.error || "Payment verification failed");
       }
 
-      dispatch({ type: 'SET_PAYMENT_LOADING', payload: false });
-      
+      dispatch({ type: "SET_PAYMENT_LOADING", payload: false });
+
       return {
         payment_id: data.data.payment_id,
         order_id: data.data.order_id,
@@ -221,29 +258,32 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         method: data.data.method,
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Payment verification failed';
-      dispatch({ type: 'SET_PAYMENT_ERROR', payload: errorMessage });
-      dispatch({ type: 'SET_PAYMENT_LOADING', payload: false });
+      const errorMessage =
+        error instanceof Error ? error.message : "Payment verification failed";
+      dispatch({ type: "SET_PAYMENT_ERROR", payload: errorMessage });
+      dispatch({ type: "SET_PAYMENT_LOADING", payload: false });
       throw error;
     }
   };
 
   const clearPaymentError = () => {
-    dispatch({ type: 'SET_PAYMENT_ERROR', payload: null });
+    dispatch({ type: "SET_PAYMENT_ERROR", payload: null });
   };
 
   return (
-    <CartContext.Provider value={{
-      state,
-      addToCart,
-      removeFromCart,
-      updateQuantity,
-      clearCart,
-      toggleCart,
-      createRazorpayOrder,
-      processPayment,
-      clearPaymentError,
-    }}>
+    <CartContext.Provider
+      value={{
+        state,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        toggleCart,
+        createRazorpayOrder,
+        processPayment,
+        clearPaymentError,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
@@ -252,7 +292,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 export const useCart = () => {
   const context = useContext(CartContext);
   if (context === undefined) {
-    throw new Error('useCart must be used within a CartProvider');
+    throw new Error("useCart must be used within a CartProvider");
   }
   return context;
 };

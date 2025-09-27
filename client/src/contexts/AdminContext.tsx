@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  ReactNode,
+} from "react";
 
 interface Product {
   id: string;
@@ -54,8 +61,8 @@ interface Order {
   tax_amount: number;
   shipping_amount: number;
   total_amount: number;
-  payment_status: 'pending' | 'paid' | 'failed' | 'refunded';
-  order_status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+  payment_status: "pending" | "paid" | "failed" | "refunded";
+  order_status: "pending" | "confirmed" | "shipped" | "delivered" | "cancelled";
   payment_method: string;
   razorpay_order_id?: string;
   razorpay_payment_id?: string;
@@ -72,33 +79,39 @@ interface AdminContextType {
   isAuthLoading: boolean;
   login: (password: string) => Promise<void>;
   logout: () => void;
-  
+
   // Data
   products: Product[];
   orders: Order[];
   loading: boolean;
   error: string | null;
-  addProduct: (product: Omit<Product, 'id' | 'created_at' | 'updated_at'>) => Promise<void>;
+  addProduct: (
+    product: Omit<Product, "id" | "created_at" | "updated_at">,
+  ) => Promise<void>;
   updateProduct: (id: string, product: Partial<Product>) => Promise<void>;
   deleteProduct: (id: string) => Promise<void>;
   fetchProducts: () => Promise<void>;
   fetchOrders: () => Promise<void>;
   updateOrder: (id: string, orderData: Partial<Order>) => Promise<void>;
-  addOrder: (order: Omit<Order, 'id' | 'order_number' | 'created_at' | 'updated_at'>) => void;
-  updateOrderStatus: (id: string, status: Order['order_status']) => void;
+  addOrder: (
+    order: Omit<Order, "id" | "order_number" | "created_at" | "updated_at">,
+  ) => void;
+  updateOrderStatus: (id: string, status: Order["order_status"]) => void;
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 // API Base URL
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3001/api";
 
 // API Helper function
 const apiCall = async (endpoint: string, options: RequestInit = {}) => {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     headers: {
-      'Content-Type': 'application/json',
-      'x-admin-token': import.meta.env.VITE_ADMIN_TOKEN || 'your_admin_token_here',
+      "Content-Type": "application/json",
+      "x-admin-token":
+        import.meta.env.VITE_ADMIN_TOKEN || "your_admin_token_here",
       ...options.headers,
     },
     ...options,
@@ -106,21 +119,23 @@ const apiCall = async (endpoint: string, options: RequestInit = {}) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.error || 'API request failed');
+    throw new Error(errorData.error || "API request failed");
   }
 
   return response.json();
 };
 
 // Hardcoded admin password - in production, this should be stored securely
-const ADMIN_PASSWORD = 'admin123';
+const ADMIN_PASSWORD = "admin123";
 
-export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AdminProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   // Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(false);
-  
+
   // Data state
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -132,19 +147,19 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       setIsAuthLoading(true);
       setAuthError(null);
-      
+
       // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       if (password === ADMIN_PASSWORD) {
         setIsAuthenticated(true);
         // Store authentication in localStorage for persistence
-        localStorage.setItem('admin_authenticated', 'true');
+        localStorage.setItem("admin_authenticated", "true");
       } else {
-        setAuthError('Incorrect password. Please try again.');
+        setAuthError("Incorrect password. Please try again.");
       }
     } catch (err) {
-      setAuthError('Login failed. Please try again.');
+      setAuthError("Login failed. Please try again.");
     } finally {
       setIsAuthLoading(false);
     }
@@ -153,12 +168,12 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const logout = () => {
     setIsAuthenticated(false);
     setAuthError(null);
-    localStorage.removeItem('admin_authenticated');
+    localStorage.removeItem("admin_authenticated");
   };
 
   // Check for existing authentication on mount
   useEffect(() => {
-    const isAuth = localStorage.getItem('admin_authenticated') === 'true';
+    const isAuth = localStorage.getItem("admin_authenticated") === "true";
     setIsAuthenticated(isAuth);
   }, []);
 
@@ -167,31 +182,33 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       setLoading(true);
       setError(null);
-      const response = await apiCall('/products');
+      const response = await apiCall("/products");
       setProducts(response.data.data || []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch products');
-      console.error('Error fetching products:', err);
+      setError(err instanceof Error ? err.message : "Failed to fetch products");
+      console.error("Error fetching products:", err);
     } finally {
       setLoading(false);
     }
   }, []);
 
   // Add product to backend
-  const addProduct = async (productData: Omit<Product, 'id' | 'created_at' | 'updated_at'>) => {
+  const addProduct = async (
+    productData: Omit<Product, "id" | "created_at" | "updated_at">,
+  ) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await apiCall('/products', {
-        method: 'POST',
+      const response = await apiCall("/products", {
+        method: "POST",
         body: JSON.stringify(productData),
       });
-      
+
       // Add the new product to local state
-      setProducts(prev => [...prev, response.data]);
+      setProducts((prev) => [...prev, response.data]);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add product');
-      console.error('Error adding product:', err);
+      setError(err instanceof Error ? err.message : "Failed to add product");
+      console.error("Error adding product:", err);
       throw err; // Re-throw to handle in component
     } finally {
       setLoading(false);
@@ -204,19 +221,17 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setLoading(true);
       setError(null);
       const response = await apiCall(`/products/${id}`, {
-        method: 'PUT',
+        method: "PUT",
         body: JSON.stringify(productData),
       });
-      
+
       // Update the product in local state
-      setProducts(prev =>
-        prev.map(product =>
-          product.id === id ? response.data : product
-        )
+      setProducts((prev) =>
+        prev.map((product) => (product.id === id ? response.data : product)),
       );
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update product');
-      console.error('Error updating product:', err);
+      setError(err instanceof Error ? err.message : "Failed to update product");
+      console.error("Error updating product:", err);
       throw err; // Re-throw to handle in component
     } finally {
       setLoading(false);
@@ -229,14 +244,14 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setLoading(true);
       setError(null);
       await apiCall(`/products/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
-      
+
       // Remove the product from local state
-      setProducts(prev => prev.filter(product => product.id !== id));
+      setProducts((prev) => prev.filter((product) => product.id !== id));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete product');
-      console.error('Error deleting product:', err);
+      setError(err instanceof Error ? err.message : "Failed to delete product");
+      console.error("Error deleting product:", err);
       throw err; // Re-throw to handle in component
     } finally {
       setLoading(false);
@@ -248,43 +263,44 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     try {
       setLoading(true);
       setError(null);
-      const response = await apiCall('/orders');
+      const response = await apiCall("/orders");
       // Debug: Log the structure of returned data (remove in production)
       // console.log('Orders API response:', response);
       // console.log('Orders data:', response.data.data);
       setOrders(response.data.data || []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch orders');
-      console.error('Error fetching orders:', err);
+      setError(err instanceof Error ? err.message : "Failed to fetch orders");
+      console.error("Error fetching orders:", err);
     } finally {
       setLoading(false);
     }
   }, []);
 
   // Update order in backend
-  const updateOrder = useCallback(async (id: string, orderData: Partial<Order>) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await apiCall(`/orders/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify(orderData),
-      });
-      
-      // Update the order in local state
-      setOrders(prev =>
-        prev.map(order =>
-          order.id === id ? response.data : order
-        )
-      );
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update order');
-      console.error('Error updating order:', err);
-      throw err; // Re-throw to handle in component
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const updateOrder = useCallback(
+    async (id: string, orderData: Partial<Order>) => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await apiCall(`/orders/${id}`, {
+          method: "PUT",
+          body: JSON.stringify(orderData),
+        });
+
+        // Update the order in local state
+        setOrders((prev) =>
+          prev.map((order) => (order.id === id ? response.data : order)),
+        );
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to update order");
+        console.error("Error updating order:", err);
+        throw err; // Re-throw to handle in component
+      } finally {
+        setLoading(false);
+      }
+    },
+    [],
+  );
 
   // Fetch products and orders on component mount
   useEffect(() => {
@@ -293,7 +309,9 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [fetchProducts, fetchOrders]);
 
   // Legacy functions for orders (keeping for now)
-  const addOrder = (orderData: Omit<Order, 'id' | 'order_number' | 'created_at' | 'updated_at'>) => {
+  const addOrder = (
+    orderData: Omit<Order, "id" | "order_number" | "created_at" | "updated_at">,
+  ) => {
     const newOrder = {
       ...orderData,
       id: Date.now().toString(),
@@ -301,40 +319,42 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
-    setOrders(prev => [...prev, newOrder]);
+    setOrders((prev) => [...prev, newOrder]);
   };
 
-  const updateOrderStatus = (id: string, status: Order['order_status']) => {
-    setOrders(prev =>
-      prev.map(order =>
-        order.id === id ? { ...order, order_status: status } : order
-      )
+  const updateOrderStatus = (id: string, status: Order["order_status"]) => {
+    setOrders((prev) =>
+      prev.map((order) =>
+        order.id === id ? { ...order, order_status: status } : order,
+      ),
     );
   };
 
   return (
-    <AdminContext.Provider value={{
-      // Authentication
-      isAuthenticated,
-      authError,
-      isAuthLoading,
-      login,
-      logout,
-      
-      // Data
-      products,
-      orders,
-      loading,
-      error,
-      addProduct,
-      updateProduct,
-      deleteProduct,
-      fetchProducts,
-      fetchOrders,
-      updateOrder,
-      addOrder,
-      updateOrderStatus,
-    }}>
+    <AdminContext.Provider
+      value={{
+        // Authentication
+        isAuthenticated,
+        authError,
+        isAuthLoading,
+        login,
+        logout,
+
+        // Data
+        products,
+        orders,
+        loading,
+        error,
+        addProduct,
+        updateProduct,
+        deleteProduct,
+        fetchProducts,
+        fetchOrders,
+        updateOrder,
+        addOrder,
+        updateOrderStatus,
+      }}
+    >
       {children}
     </AdminContext.Provider>
   );
@@ -343,7 +363,7 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 export const useAdmin = () => {
   const context = useContext(AdminContext);
   if (context === undefined) {
-    throw new Error('useAdmin must be used within an AdminProvider');
+    throw new Error("useAdmin must be used within an AdminProvider");
   }
   return context;
 };

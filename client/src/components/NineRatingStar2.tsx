@@ -1,10 +1,12 @@
-import React from 'react';
+import React from "react";
 
 interface NineRatingStar2Props {
   className?: string;
 }
 
-export const NineRatingStar2: React.FC<NineRatingStar2Props> = ({ className = "" }) => {
+export const NineRatingStar2: React.FC<NineRatingStar2Props> = ({
+  className = "",
+}) => {
   return (
     <div className={`relative ${className}`}>
       <svg

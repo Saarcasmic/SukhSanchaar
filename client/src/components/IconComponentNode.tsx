@@ -1,10 +1,12 @@
-import React from 'react';
+import React from "react";
 
 interface IconComponentNodeProps {
   className?: string;
 }
 
-export const IconComponentNode: React.FC<IconComponentNodeProps> = ({ className = "" }) => {
+export const IconComponentNode: React.FC<IconComponentNodeProps> = ({
+  className = "",
+}) => {
   return (
     <div className={`relative ${className}`}>
       <svg

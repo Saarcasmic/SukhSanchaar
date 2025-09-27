@@ -1,7 +1,7 @@
-import React from 'react';
-import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
-import { useCart } from '../contexts/CartContext';
-import CheckoutModal from './CheckoutModal';
+import React from "react";
+import { X, Plus, Minus, ShoppingBag } from "lucide-react";
+import { useCart } from "../contexts/CartContext";
+import CheckoutModal from "./CheckoutModal";
 
 const CartSidebar: React.FC = () => {
   const { state, toggleCart, removeFromCart, updateQuantity } = useCart();
@@ -12,7 +12,7 @@ const CartSidebar: React.FC = () => {
   return (
     <>
       {/* Overlay */}
-      <div 
+      <div
         className="fixed inset-0 bg-black/50 z-50 backdrop-blur-sm"
         onClick={toggleCart}
       />
@@ -39,35 +39,54 @@ const CartSidebar: React.FC = () => {
             {state.items.length === 0 ? (
               <div className="text-center py-12">
                 <ShoppingBag className="w-16 h-16 text-cream-200 mx-auto mb-4" />
-                <p className="font-lora text-antique-brown/70 text-lg">Your cart is empty</p>
-                <p className="font-noto text-antique-brown/50 text-sm mt-2">Add some Ayurvedic goodness!</p>
+                <p className="font-lora text-antique-brown/70 text-lg">
+                  Your cart is empty
+                </p>
+                <p className="font-noto text-antique-brown/50 text-sm mt-2">
+                  Add some Ayurvedic goodness!
+                </p>
               </div>
             ) : (
               <div className="space-y-4">
-                {state.items.map(item => (
-                  <div key={item.id} className="flex gap-4 bg-white p-4 rounded-lg shadow-sm border border-cream-200">
+                {state.items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex gap-4 bg-white p-4 rounded-lg shadow-sm border border-cream-200"
+                  >
                     <img
                       src={item.image}
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded-md"
                     />
                     <div className="flex-1">
-                      <h3 className="font-lora font-semibold text-antique-brown">{item.name}</h3>
+                      <h3 className="font-lora font-semibold text-antique-brown">
+                        {item.name}
+                      </h3>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="font-noto font-bold text-ayur-red">₹{item.price}</span>
-                        <span className="font-noto text-sm text-gray-500 line-through">₹{item.mrp}</span>
+                        <span className="font-noto font-bold text-ayur-red">
+                          ₹{item.price}
+                        </span>
+                        <span className="font-noto text-sm text-gray-500 line-through">
+                          ₹{item.mrp}
+                        </span>
                       </div>
                       <div className="flex items-center justify-between mt-2">
                         <div className="flex items-center gap-2">
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={() =>
+                              updateQuantity(item.id, item.quantity - 1)
+                            }
                             className="p-1 bg-cream-200 hover:bg-cream-300 rounded-full transition-colors"
                           >
                             <Minus className="w-3 h-3 text-antique-brown" />
                           </button>
-                          <span className="font-noto font-semibold text-antique-brown px-2">{item.quantity}</span>
+                          <span className="font-noto font-semibold text-antique-brown px-2">
+                            {item.quantity}
+                          </span>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() =>
+                              updateQuantity(item.id, item.quantity + 1)
+                            }
                             className="p-1 bg-cream-200 hover:bg-cream-300 rounded-full transition-colors"
                           >
                             <Plus className="w-3 h-3 text-antique-brown" />
@@ -91,8 +110,12 @@ const CartSidebar: React.FC = () => {
           {state.items.length > 0 && (
             <div className="border-t border-cream-200 p-6 bg-white">
               <div className="flex justify-between items-center mb-4">
-                <span className="font-lora text-lg font-semibold text-antique-brown">Total:</span>
-                <span className="font-noto text-2xl font-bold text-ayur-red">₹{state.total}</span>
+                <span className="font-lora text-lg font-semibold text-antique-brown">
+                  Total:
+                </span>
+                <span className="font-noto text-2xl font-bold text-ayur-red">
+                  ₹{state.total}
+                </span>
               </div>
               <button
                 onClick={() => setShowCheckout(true)}
@@ -105,9 +128,7 @@ const CartSidebar: React.FC = () => {
         </div>
       </div>
 
-      {showCheckout && (
-        <CheckoutModal onClose={() => setShowCheckout(false)} />
-      )}
+      {showCheckout && <CheckoutModal onClose={() => setShowCheckout(false)} />}
     </>
   );
 };

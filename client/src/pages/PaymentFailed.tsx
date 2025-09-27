@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { XCircle, Home, MessageCircle, RefreshCw } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { XCircle, Home, MessageCircle, RefreshCw } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const PaymentFailed: React.FC = () => {
   const navigate = useNavigate();
@@ -8,7 +8,7 @@ const PaymentFailed: React.FC = () => {
   useEffect(() => {
     // Auto redirect to home after 15 seconds
     const timer = setTimeout(() => {
-      navigate('/');
+      navigate("/");
     }, 15000);
 
     return () => clearTimeout(timer);
@@ -18,29 +18,64 @@ const PaymentFailed: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-cream-50 to-cream-100 bg-parchment flex items-center justify-center px-4">
       {/* Background botanical illustrations */}
       <div className="absolute top-0 left-0 w-64 h-64 opacity-5">
-        <svg viewBox="0 0 200 200" className="w-full h-full text-botanical-green">
-          <path d="M50 10c-5 0-9 4-9 9 0 8 9 21 9 21s9-13 9-21c0-5-4-9-9-9zm0 12c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z" fill="currentColor"/>
-          <path d="M20 50c0-5 4-9 9-9 8 0 21 9 21 9s-13 9-21 9c-5 0-9-4-9-9zm12 0c0-1.7 1.3-3 3-3s3 1.3 3 3-1.3 3-3 3-3-1.3-3-3z" fill="currentColor"/>
+        <svg
+          viewBox="0 0 200 200"
+          className="w-full h-full text-botanical-green"
+        >
+          <path
+            d="M50 10c-5 0-9 4-9 9 0 8 9 21 9 21s9-13 9-21c0-5-4-9-9-9zm0 12c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"
+            fill="currentColor"
+          />
+          <path
+            d="M20 50c0-5 4-9 9-9 8 0 21 9 21 9s-13 9-21 9c-5 0-9-4-9-9zm12 0c0-1.7 1.3-3 3-3s3 1.3 3 3-1.3 3-3 3-3-1.3-3-3z"
+            fill="currentColor"
+          />
         </svg>
       </div>
-      
+
       <div className="absolute top-0 right-0 w-64 h-64 opacity-5 rotate-180">
-        <svg viewBox="0 0 200 200" className="w-full h-full text-botanical-green">
-          <path d="M50 10c-5 0-9 4-9 9 0 8 9 21 9 21s9-13 9-21c0-5-4-9-9-9zm0 12c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z" fill="currentColor"/>
+        <svg
+          viewBox="0 0 200 200"
+          className="w-full h-full text-botanical-green"
+        >
+          <path
+            d="M50 10c-5 0-9 4-9 9 0 8 9 21 9 21s9-13 9-21c0-5-4-9-9-9zm0 12c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"
+            fill="currentColor"
+          />
         </svg>
       </div>
 
       <div className="absolute bottom-0 left-0 w-48 h-48 opacity-5">
-        <svg viewBox="0 0 150 150" className="w-full h-full text-botanical-green">
-          <circle cx="75" cy="75" r="30" fill="none" stroke="currentColor" strokeWidth="2"/>
-          <path d="M75 45v60M45 75h60" stroke="currentColor" strokeWidth="1"/>
+        <svg
+          viewBox="0 0 150 150"
+          className="w-full h-full text-botanical-green"
+        >
+          <circle
+            cx="75"
+            cy="75"
+            r="30"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
+          <path d="M75 45v60M45 75h60" stroke="currentColor" strokeWidth="1" />
         </svg>
       </div>
 
       <div className="absolute bottom-0 right-0 w-48 h-48 opacity-5 rotate-90">
-        <svg viewBox="0 0 150 150" className="w-full h-full text-botanical-green">
-          <circle cx="75" cy="75" r="30" fill="none" stroke="currentColor" strokeWidth="2"/>
-          <path d="M75 45v60M45 75h60" stroke="currentColor" strokeWidth="1"/>
+        <svg
+          viewBox="0 0 150 150"
+          className="w-full h-full text-botanical-green"
+        >
+          <circle
+            cx="75"
+            cy="75"
+            r="30"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
+          <path d="M75 45v60M45 75h60" stroke="currentColor" strokeWidth="1" />
         </svg>
       </div>
 
@@ -66,7 +101,9 @@ const PaymentFailed: React.FC = () => {
 
         {/* Error Details */}
         <div className="bg-red-50 p-6 rounded-xl border border-red-200 mb-6">
-          <h3 className="font-lora font-semibold text-red-800 mb-3">What Happened?</h3>
+          <h3 className="font-lora font-semibold text-red-800 mb-3">
+            What Happened?
+          </h3>
           <div className="space-y-3 text-left">
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
@@ -91,7 +128,9 @@ const PaymentFailed: React.FC = () => {
 
         {/* Possible Reasons */}
         <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 mb-6">
-          <h4 className="font-noto font-semibold text-amber-800 mb-2">Common Reasons:</h4>
+          <h4 className="font-noto font-semibold text-amber-800 mb-2">
+            Common Reasons:
+          </h4>
           <ul className="font-noto text-sm text-amber-700 text-left space-y-1">
             <li>• Insufficient funds in your account</li>
             <li>• Incorrect card details entered</li>
@@ -103,21 +142,21 @@ const PaymentFailed: React.FC = () => {
         {/* Action Buttons */}
         <div className="space-y-3">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="w-full bg-ayur-red text-white py-3 rounded-full font-noto font-semibold hover:bg-ayur-red/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2"
           >
             <RefreshCw className="w-5 h-5" />
             Try Again
           </button>
-          
+
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="w-full border-2 border-ayur-red text-ayur-red py-3 rounded-full font-noto font-semibold hover:bg-ayur-red hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2"
           >
             <Home className="w-5 h-5" />
             Back to Home
           </button>
-          
+
           <a
             href="https://wa.me/919876543210"
             target="_blank"
