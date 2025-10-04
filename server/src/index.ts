@@ -27,6 +27,7 @@ app.use(helmet());
 
 // CORS configuration: only allow specific client origins
 const allowedOrigins = [
+  'http://localhost:5174',
   'http://localhost:5173',
   'https://sukh-sanchaar-client.vercel.app',
   'https://sukh-sanchaar-client-dharmawarriors-projects.vercel.app',

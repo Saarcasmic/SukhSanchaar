@@ -1,29 +1,57 @@
-import React from "react";
-import { Leaf, Award, Users, Heart } from "lucide-react";
+import React, { useState } from "react";
+import { Award, Users, Heart, ChevronDown } from "lucide-react";
+import CompanyCarousel from "../components/CompanyCarousel";
+import OrnamentalDivider from "../components/OrnamentalDivider";
 
 const AboutUsPage: React.FC = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Company images for carousel
+  const companyImages = [
+    {
+      src: "/company1.jpg",
+      alt: "Sukh Sanchaarak Manufacturing Facility",
+      caption: "Our GMP-certified manufacturing facility in Mathura"
+    },
+  ];
+
+  // Full text content
+  const fullText = [
+    {
+      content: "Sukh Sancharak Company stands as the oldest manufacturing unit in Mathura and one of Northern India's most respected Ayurvedic production houses, with a continuous legacy dating back to 1890. Founded by Pandit Kshetra Pal Sharma, our company has safeguarded and nurtured the essence of Ayurveda for more than 130 years, remaining committed to pure, plant-based healing and authentic traditional knowledge."
+    },
+    {
+      content: "Our GMP-certified manufacturing facility produces Ayurvedic medicines exclusively from natural botanical sources, honoring timeless processes documented in foundational classics such as Charak Sahita, Rastantra Saar, and Bheshajya Ratnavali. We combine tradition with rigorous quality control, ensuring each product carries the potency and purity that has distinguished our offerings for generations."
+    },
+    {
+      content: "With deep roots in Northern India's Hindi-speaking heartland and a comprehensive distribution network, Sukh Sancharak Company now aspires to share India's ancient heritage with a broader audience. Our goal is to spread the true essence of Ayurveda throughout India, making authentic, natural healing accessible to all."
+    },
+    {
+      content: "Rooted in over a century of tradition and heartfelt dedication, our vision is to rekindle the timeless bond between nature and well-being for every home. We believe Ayurveda is not merely a science but a way of life—one that nourishes the body, calms the mind, and uplifts the spirit."
+    },
+    {
+      content: "Every product we craft carries the love, care, and wisdom passed down through generations, inspiring people to reconnect with their natural balance in today's fast-paced world. At Sukh Sancharak, we don't just make medicines; we nurture a heritage of healing and trust, striving to bring genuine wellness to every life we touch."
+    }
+  ];
+
+  const displayedText = isExpanded ? fullText : fullText.slice(0, 2);
+
   return (
     <div className="min-h-screen bg-cream-50 animate-fade-in">
       {/* Hero Banner */}
-      <section className="relative py-24 bg-gradient-to-br from-cream-50 to-cream-100 bg-parchment overflow-hidden">
-        {/* Background botanical illustrations */}
-        <div className="absolute top-0 left-0 w-64 h-64 opacity-5">
-          <svg
-            viewBox="0 0 200 200"
-            className="w-full h-full text-botanical-green"
-          >
-            <path
-              d="M50 10c-5 0-9 4-9 9 0 8 9 21 9 21s9-13 9-21c0-5-4-9-9-9zm0 12c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"
-              fill="currentColor"
-            />
-            <path
-              d="M20 50c0-5 4-9 9-9 8 0 21 9 21 9s-13 9-21 9c-5 0-9-4-9-9zm12 0c0-1.7 1.3-3 3-3s3 1.3 3 3-1.3 3-3 3-3-1.3-3-3z"
-              fill="currentColor"
-            />
-          </svg>
-        </div>
-
-        <div className="absolute top-0 right-0 w-64 h-64 opacity-5 rotate-180">
+      <section className="relative py-24 overflow-hidden">
+        {/* Background image with opacity, isolated from content */}
+        <div
+          className="absolute inset-0 pointer-events-none z-0"
+          aria-hidden="true"
+          style={{
+            backgroundImage: 'url("/Sanchaar.png")',
+            backgroundSize: "cover",
+            backgroundPosition: "center top",
+            opacity: 0.4,
+          }}
+        />
+        <div className="absolute top-0 right-0 w-64 h-64 opacity-5 rotate-180 z-10">
           <svg
             viewBox="0 0 200 200"
             className="w-full h-full text-botanical-green"
@@ -35,7 +63,7 @@ const AboutUsPage: React.FC = () => {
           </svg>
         </div>
 
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           {/* Logo */}
           <div className="flex justify-center mb-8 mt-6">
             <img src="/logoo.png" alt="Sanchaaar" className="w-50 h-40" />
@@ -61,95 +89,69 @@ const AboutUsPage: React.FC = () => {
       </section>
 
       {/* History Section */}
-      <section className="py-20 bg-white relative">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className=" items-center">
-            <div>
-              <h2 className="font-playfair text-4xl font-bold text-botanical-green mb-6">
-                Our Story
-              </h2>
-              <div className="w-16 h-1 bg-ayur-gold mb-8"></div>
-              <div className="space-y-6 font-lora text-lg text-antique-brown/80 leading-relaxed text-justify">
-                <p>
-                  Sukh Sancharak Company stands as the oldest manufacturing unit
-                  in Mathura and one of Northern India’s most respected
-                  Ayurvedic production houses, with a continuous legacy dating
-                  back to 1890. Founded by Pandit Kshetra Pal Sharma, our
-                  company has safeguarded and nurtured the essence of Ayurveda
-                  for more than 130 years, remaining committed to pure,
-                  plant-based healing and authentic traditional knowledge.
-                </p>
-                <p>
-                  Our GMP-certified manufacturing facility produces Ayurvedic
-                  medicines exclusively from natural botanical sources, honoring
-                  timeless processes documented in foundational classics such as
-                  Charak Sahita, Rastantra Saar, and Bheshajya Ratnavali. We
-                  combine tradition with rigorous quality control, ensuring each
-                  product carries the potency and purity that has distinguished
-                  our offerings for generations.
-                </p>
-                <p>
-                  With deep roots in Northern India’s Hindi-speaking heartland
-                  and a comprehensive distribution network, Sukh Sancharak
-                  Company now aspires to share India’s ancient heritage with a
-                  broader audience. Our goal is to spread the true essence of
-                  Ayurveda throughout India, making authentic, natural healing
-                  accessible to all. Rooted in over a century of tradition and
-                  heartfelt dedication, our vision is to rekindle the timeless
-                  bond between nature and well-being for every home. We believe
-                  Ayurveda is not merely a science but a way of life—one that
-                  nourishes the body, calms the mind, and uplifts the spirit.
-                  Every product we craft carries the love, care, and wisdom
-                  passed down through generations, inspiring people to reconnect
-                  with their natural balance in today’s fast-paced world. At
-                  Sukh Sancharak, we don’t just make medicines; we nurture a
-                  heritage of healing and trust, striving to bring genuine
-                  wellness to every life we touch
-                </p>
+      <section className="py-16 bg-white relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <h2 className="font-playfair text-4xl font-bold text-botanical-green mb-6">
+              Our Story
+            </h2>
+            <div className="w-16 h-1 bg-ayur-gold mx-auto"></div>
+          </div>
+
+          {/* Two-Compartment Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Side - Text Content */}
+            <div className="lg:col-span-5 space-y-6">
+              <div className={`space-y-6 font-lora text-lg text-justify text-antique-brown/80 leading-relaxed ${
+                isExpanded ? 'max-h-96 overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-ayur-gold/30 scrollbar-track-transparent hover:scrollbar-thumb-ayur-gold/50' : ''
+              }`}>
+                {displayedText.map((paragraph, index) => (
+                  <p key={index}>
+                    {paragraph.content}
+                  </p>
+                ))}
+                
+                {/* Dots indicator when not expanded */}
+                {/* {!isExpanded && (
+                  <div className="flex items-center space-x-2 text-ayur-gold">
+                    <span className="text-2xl">⋯</span>
+                    <span className="text-sm font-noto">More content below</span>
+                  </div>
+                )} */}
+              </div>
+
+              {/* Read More/Read Less Button */}
+              <div className="flex justify-center">
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-ayur-gold to-ayur-gold/80 hover:from-ayur-gold/90 hover:to-ayur-gold text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                >
+                  <span className="font-lora font-medium">
+                    {isExpanded ? 'Read Less' : 'Read More'}
+                  </span>
+                  <ChevronDown 
+                    className={`w-4 h-4 transition-transform duration-300 ${
+                      isExpanded ? 'rotate-180' : ''
+                    }`} 
+                  />
+                </button>
               </div>
             </div>
-            {/* <div className="relative">
-              <div className="bg-cream-100 p-8 rounded-2xl shadow-lg border border-cream-200">
-                <div className="text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-ayur-red rounded-full mb-4">
-                    <Award className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="font-playfair text-2xl font-bold text-antique-brown mb-4">
-                    Heritage Timeline
-                  </h3>
-                  <div className="space-y-4 text-left">
-                    <div className="flex items-center gap-4">
-                      <div className="w-3 h-3 bg-ayur-gold rounded-full flex-shrink-0"></div>
-                      <div>
-                        <span className="font-noto font-bold text-ayur-red">1890</span>
-                        <p className="font-lora text-sm text-antique-brown/70">Founded by Vaidya Ramesh Sharma</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="w-3 h-3 bg-ayur-gold rounded-full flex-shrink-0"></div>
-                      <div>
-                        <span className="font-noto font-bold text-ayur-red">1925</span>
-                        <p className="font-lora text-sm text-antique-brown/70">Second generation expansion</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="w-3 h-3 bg-ayur-gold rounded-full flex-shrink-0"></div>
-                      <div>
-                        <span className="font-noto font-bold text-ayur-red">1975</span>
-                        <p className="font-lora text-sm text-antique-brown/70">Modern manufacturing facility</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="w-3 h-3 bg-ayur-gold rounded-full flex-shrink-0"></div>
-                      <div>
-                        <span className="font-noto font-bold text-ayur-red">2024</span>
-                        <p className="font-lora text-sm text-antique-brown/70">Digital transformation</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
+
+            {/* Center - Ornamental Divider */}
+            <div className="lg:col-span-2 flex justify-center">
+              <OrnamentalDivider variant="vertical" size="lg" />
+            </div>
+
+            {/* Right Side - Image Carousel */}
+            <div className="lg:col-span-5">
+              <CompanyCarousel 
+                images={companyImages}
+                autoPlay={true}
+                autoPlayInterval={4000}
+              />
+            </div>
           </div>
         </div>
       </section>

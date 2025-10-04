@@ -150,7 +150,7 @@ const AdminDashboard: React.FC = () => {
         usage_instructions: product.usage_instructions,
         weight: product.weight,
         expiry_date: product.expiry_date || "",
-        stock_quantity: product.stock_quantity.toString(),
+        stock_quantity: product?.stock_quantity?.toString(),
         is_active: product.is_active,
       });
       setEditingProduct(productId);

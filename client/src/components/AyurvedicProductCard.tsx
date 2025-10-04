@@ -23,9 +23,9 @@ export function AyurvedicProductCard({
   const hasDiscount = mrp && mrp > price;
 
   return (
-    <div className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden relative border border-gray-100">
+    <div className="group bg-white px-1 pt-1 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden relative border border-gray-100 flex flex-col h-full ">
       {/* Product Image */}
-      <div className="relative h-[320px] bg-gradient-to-br from-blue-50 to-indigo-50 overflow-hidden">
+      <div className="relative aspect-square bg-gradient-to-br from-blue-50 to-indigo-50 overflow-hidden">
         <ImageWithFallback
           src={image}
           alt={name}
@@ -35,26 +35,33 @@ export function AyurvedicProductCard({
         {/* Rating Badge */}
       </div>
 
+      {/* <div className="w-full h-px bg-black my-2 "></div> */}
+
       {/* Product Info */}
-      <div className="p-4 space-y-3">
+      <div className="p-3 lg:p-4 space-y-2 lg:space-y-3 flex flex-col flex-grow">
         {/* Category Tag */}
 
         {/* Target Audience */}
-        <p className="text-orange-600 text-sm font-medium">Pack of 2</p>
+        <p className="text-orange-600 text-xs lg:text-sm font-medium">{name === "Sudha Sindhu" ? "Pack of 6" : "Pack of 3"}</p>
 
-        {/* Product Name */}
-        <h3 className="text-lg font-bold text-gray-900 leading-tight">
-          {name}
+        {/* Product Name - Fixed height with ellipsis */}
+        <h3 className="text-base lg:text-lg font-bold text-gray-900 leading-tight h-10 lg:h-12 overflow-hidden">
+          <span className="line-clamp-2">{name}</span>
         </h3>
 
-        {/* Description */}
-        <p className="text-sm text-gray-600">Description will come here</p>
+        {/* Description - Fixed height */}
+        <p className="text-xs lg:text-sm text-gray-600 h-6 lg:h-8 overflow-hidden">
+          <span className="line-clamp-2">Description will come here</span>
+        </p>
+
+        {/* Spacer to push pricing and button to bottom */}
+        <div className="flex-grow"></div>
 
         {/* Pricing */}
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-gray-900">₹{price}</span>
+          <span className="text-xl lg:text-2xl font-bold text-gray-900">₹{price}</span>
           {hasDiscount && (
-            <span className="text-sm text-gray-500 line-through">₹{mrp}</span>
+            <span className="text-xs lg:text-sm text-gray-500 line-through">₹{mrp}</span>
           )}
         </div>
 
@@ -62,7 +69,7 @@ export function AyurvedicProductCard({
         <div className="flex justify-center">
           <Button
             onClick={() => onBuyNow(id)}
-            className="w-72 bg-ayur-red hover:bg-gray-800 text-white rounded-xl py-3 transition-all duration-200 hover:shadow-lg font-medium text-sm"
+            className="w-full bg-ayur-red hover:bg-gray-800 text-white py-2 lg:py-3 transition-all duration-200 hover:shadow-lg font-medium text-xs lg:text-sm"
           >
             Shop now
           </Button>

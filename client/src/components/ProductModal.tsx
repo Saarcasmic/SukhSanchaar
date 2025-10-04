@@ -131,7 +131,7 @@ export const ProductModal = ({
 
   const modalContent = (
     <div
-      className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-[9999]"
+      className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-[9999] "
       style={{
         position: "fixed",
         top: 0,
@@ -146,7 +146,7 @@ export const ProductModal = ({
       aria-labelledby="modal-title"
     >
       <div
-        className="bg-gray-50 rounded-2xl sm:rounded-3xl max-w-6xl w-full max-h-[90vh] shadow-2xl flex flex-col overflow-hidden relative"
+        className="bg-gray-50 rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[90vh] shadow-2xl flex flex-col overflow-hidden relative"
         style={{
           position: "relative",
           transform: "none",
@@ -180,11 +180,11 @@ export const ProductModal = ({
         {/* Main Content */}
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
           {/* Image Section */}
-          <div className="w-full lg:w-1/2 bg-[#e3e5fa] flex items-center justify-center p-4 lg:p-8 h-64 lg:h-auto">
+          <div className="w-full lg:w-1/2 bg-[#fff] flex items-center justify-center p-4 lg:p-8 h-64 lg:h-auto">
             <div className="relative w-full max-w-md lg:max-w-lg h-auto">
-              <div className="absolute w-full h-full top-0 left-0 rounded-full rotate-[-5.00deg] bg-[linear-gradient(286deg,rgba(129,138,249,1)_0%,rgba(129,138,249,0)_100%)] opacity-10" />
+              {/* <div className="absolute w-full h-full top-0 left-0 rounded-full rotate-[-5.00deg] bg-[linear-gradient(286deg,rgba(129,138,249,1)_0%,rgba(129,138,249,0)_100%)] opacity-10" /> */}
 
-              <div className="absolute w-3/4 h-3/4 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full rotate-[-175.00deg] blur-[50px] bg-[linear-gradient(286deg,rgba(129,138,249,1)_0%,rgba(130,136,215,1)_100%)] opacity-10" />
+              {/* <div className="absolute w-3/4 h-3/4 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full rotate-[-175.00deg] blur-[50px] bg-[linear-gradient(286deg,rgba(129,138,249,1)_0%,rgba(130,136,215,1)_100%)] opacity-10" /> */}
 
               <div className="relative w-full h-auto">
                 <div className="absolute w-1/2 h-4 bottom-0 left-1/2 transform -translate-x-1/2 bg-[#818af9] rounded-full blur-[50px]" />
@@ -192,7 +192,7 @@ export const ProductModal = ({
                 <img
                   className="w-full h-auto object-contain max-h-48 lg:max-h-none"
                   alt="Product Image"
-                  src="src/Icons/proto1-removebg-preview.png"
+                  src={product?.name === "Sudha Sindhu" ? "/prod1.png" : "/product1.jpeg"}
                 />
               </div>
             </div>
@@ -200,7 +200,7 @@ export const ProductModal = ({
 
           {/* Product Details Section - Scrollable */}
           <div className="w-full lg:w-1/2 flex flex-col overflow-hidden">
-            <div className="flex-1 overflow-y-auto p-4 lg:p-8 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
+            <div className="flex-1 overflow-y-auto p-4 lg:p-8 mb-8 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
               {/* Sale Badge - only show if there's an original price */}
               {product?.original_price &&
                 product.original_price > product.price && (
@@ -220,11 +220,11 @@ export const ProductModal = ({
 
               <div className="flex flex-col lg:flex-row items-start lg:items-center gap-3 lg:gap-4 mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="[font-family:'Manrope-Medium',Helvetica] font-medium text-[#4fcc97] text-xs text-center tracking-[1.98px] leading-[15px]">
+                  <div className="[font-family:'Manrope-Medium',Helvetica] font-medium text-ayur-red text-xs text-center tracking-[1.98px] leading-[15px]">
                     {product?.category?.toUpperCase() || "AYURVEDIC"}
                   </div>
 
-                  <img
+                  {/* <img
                     className="w-px h-2 object-cover"
                     alt="Line"
                     src="src/Icons/Line21.svg"
@@ -241,7 +241,7 @@ export const ProductModal = ({
                     {product?.rating
                       ? `${product.rating} (${product.review_count || 0} reviews)`
                       : "4.9 (2130 reviews)"}
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -258,39 +258,7 @@ export const ProductModal = ({
                 </div>
 
                 {/* Product Images */}
-                <div className="flex items-center gap-4 lg:gap-6">
-                  <img
-                    className="w-12 h-12 lg:w-16 lg:h-16 object-cover rounded-lg border-2 border-[#818af9]"
-                    alt="Product Thumbnail"
-                    src={product?.image_url || "src/Icons/Rectangle3782.png"}
-                  />
-
-                  {product?.images && product.images.length > 0 ? (
-                    product.images
-                      .slice(0, 2)
-                      .map((image, index) => (
-                        <img
-                          key={index}
-                          className="w-10 h-10 lg:w-11 lg:h-11 object-cover rounded-lg border border-gray-300"
-                          alt="Product Thumbnail"
-                          src={image}
-                        />
-                      ))
-                  ) : (
-                    <>
-                      <img
-                        className="w-10 h-10 lg:w-11 lg:h-11 object-cover rounded-lg border border-gray-300"
-                        alt="Product Thumbnail"
-                        src="src/Icons/Rectangle3783.png"
-                      />
-                      <img
-                        className="w-10 h-10 lg:w-11 lg:h-11 object-cover rounded-lg border border-gray-300"
-                        alt="Product Thumbnail"
-                        src="src/Icons/Rectangle3784.png"
-                      />
-                    </>
-                  )}
-                </div>
+                
 
                 <div className="flex flex-col gap-4">
                   <div className="[font-family:'Manrope-SemiBold',Helvetica] font-semibold text-black text-sm lg:text-xs tracking-[0.24px] leading-[15px]">
@@ -298,7 +266,7 @@ export const ProductModal = ({
                   </div>
 
                   <div className="flex flex-wrap gap-2 lg:gap-3">
-                    <div className="px-3 py-2 bg-[#818af9] rounded-[10px] border-2 border-solid border-[#f1e5e538]">
+                    <div className="px-3 py-2 bg-ayur-red rounded-[10px] border-2 border-solid border-[#f1e5e538]">
                       <div className="[font-family:'Manrope-Bold',Helvetica] font-bold text-[#ffffff] text-sm lg:text-xs tracking-[0] leading-[normal]">
                         {product?.weight || "100ml"}
                       </div>
@@ -306,30 +274,8 @@ export const ProductModal = ({
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-3">
-                  <div className="[font-family:'Manrope-SemiBold',Helvetica] font-semibold text-black text-sm lg:text-xs tracking-[0.24px] leading-[15px]">
-                    Ingredients:
-                  </div>
+                
 
-                  <div className="[font-family:'Manrope-Light',Helvetica] font-light text-black text-sm lg:text-xs tracking-[0.24px] leading-[21.4px]">
-                    {product?.ingredients && product.ingredients.length > 0
-                      ? product.ingredients.join(", ")
-                      : "Premium Ayurvedic ingredients"}
-                  </div>
-                </div>
-
-                {/* Benefits Section */}
-                {product?.benefits && product.benefits.length > 0 && (
-                  <div className="flex flex-col gap-3">
-                    <div className="[font-family:'Manrope-SemiBold',Helvetica] font-semibold text-black text-sm lg:text-xs tracking-[0.24px] leading-[15px]">
-                      Benefits:
-                    </div>
-
-                    <div className="[font-family:'Manrope-Light',Helvetica] font-light text-black text-sm lg:text-xs tracking-[0.24px] leading-[21.4px]">
-                      {product.benefits.join(", ")}
-                    </div>
-                  </div>
-                )}
 
                 {/* Usage Instructions */}
                 {product?.usage_instructions && (
@@ -368,11 +314,11 @@ export const ProductModal = ({
                 <p className="font-semibold text-black text-sm lg:text-base truncate">
                   {product?.name || "Product Name"}
                 </p>
-                <div className="font-medium text-green-600 text-xs tracking-wide">
+                <div className="font-medium text-ayur-red text-xs tracking-wide">
                   {product?.category?.toUpperCase() || "AYURVEDIC"}
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-lg text-indigo-600">
+                  <span className="font-bold text-lg text-black">
                     ₹{product?.price || "0"}
                   </span>
                   {product?.original_price &&
@@ -414,7 +360,7 @@ export const ProductModal = ({
 
               <button
                 onClick={handleAddToCart}
-                className="px-6 py-3 bg-indigo-500 rounded-md hover:bg-indigo-600 transition-colors whitespace-nowrap flex-1 lg:flex-none"
+                className="px-6 py-3 bg-ayur-red rounded-md hover:bg-ayur-red/80 transition-colors whitespace-nowrap flex-1 lg:flex-none"
               >
                 <span className="font-bold text-white text-sm">
                   ADD TO CART

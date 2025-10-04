@@ -17,7 +17,7 @@ const ProductsSection: React.FC = () => {
     <>
       <div
         id="products"
-        className="min-h-screen relative overflow-hidden pt-20"
+        className="min-h-screen relative overflow-hidden"
       >
         {/* Background with parchment texture and botanical motifs */}
         <div
@@ -35,18 +35,31 @@ const ProductsSection: React.FC = () => {
         <div className="relative z-10 container mx-auto px-6 py-12">
           {/* Header */}
           <div className="text-center mb-12">
+            {/* Mobile: Show only "Bestsellers" */}
             <h1
-              className="text-4xl md:text-5xl font-medium text-amber-900 mb-4"
+              className="text-3xl sm:hidden font-medium text-amber-900 mb-4"
               style={{
                 fontFamily: '"Playfair Display", "Times New Roman", serif',
               }}
             >
-              Premium Ayurvedic Collection
+              Bestsellers
             </h1>
-            <p className="text-lg text-amber-700/80 max-w-2xl mx-auto">
-              Authentic formulations rooted in 130+ years of Ayurvedic wisdom,
-              crafted for modern wellness seekers.
-            </p>
+            
+            {/* Desktop: Show full title and subtitle */}
+            <div className="hidden sm:block">
+              <h1
+                className="text-4xl md:text-5xl font-medium text-amber-900 mb-4"
+                style={{
+                  fontFamily: '"Playfair Display", "Times New Roman", serif',
+                }}
+              >
+                Premium Ayurvedic Collection
+              </h1>
+              {/* <p className="text-lg text-amber-700/80 max-w-2xl mx-auto">
+                Authentic formulations rooted in 130+ years of Ayurvedic wisdom,
+                crafted for modern wellness seekers.
+              </p> */}
+            </div>
 
             {/* Decorative divider */}
             <div className="flex items-center justify-center mt-8 mb-2">
@@ -74,7 +87,7 @@ const ProductsSection: React.FC = () => {
 
           {/* Product Grid */}
           {!loading && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
               {products.length === 0 ? (
                 <div className="col-span-full text-center py-12">
                   <div className="text-amber-600 text-lg font-semibold mb-2">
@@ -100,15 +113,15 @@ const ProductsSection: React.FC = () => {
                     />
 
                     {/* Row separator for structured feel - only show after complete rows */}
-                    {(index + 1) % 3 === 0 && index !== products.length - 1 && (
-                      <div className="hidden lg:block absolute -bottom-5 left-1/2 transform -translate-x-1/2 w-screen">
+                    {(index + 1) % 4 === 0 && index !== products.length - 1 && (
+                      <div className="hidden lg:block absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-screen">
                         <div className="h-px bg-gradient-to-r from-transparent via-amber-200/50 to-transparent"></div>
                       </div>
                     )}
 
-                    {/* Tablet row separators */}
+                    {/* Mobile row separators */}
                     {(index + 1) % 2 === 0 && index !== products.length - 1 && (
-                      <div className="hidden md:block lg:hidden absolute -bottom-5 left-1/2 transform -translate-x-1/2 w-screen">
+                      <div className="block lg:hidden absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-screen">
                         <div className="h-px bg-gradient-to-r from-transparent via-amber-200/50 to-transparent"></div>
                       </div>
                     )}
@@ -119,11 +132,7 @@ const ProductsSection: React.FC = () => {
           )}
 
           {/* Footer section */}
-          <div className="text-center mt-16 pt-8 border-t border-amber-200/50">
-            <p className="text-amber-700/60 italic">
-              "Wellness rooted in tradition, crafted for today"
-            </p>
-          </div>
+          
         </div>
       </div>
 

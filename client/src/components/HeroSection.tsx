@@ -1,12 +1,63 @@
-import React from "react";
-import { ArrowRight } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 const HeroSection: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  // Dummy images for carousel - you can replace these with your actual images
+  const slides = [
+    {
+      id: 1,
+      image: "/poster4.svg", // Ayurvedic herbs      title: "Wellness Rooted in Tradition",
+      subtitle: "Experience the power of ancient wisdom for modern health",
+      buttonText: "Shop Now",
+      buttonLink: "#products"
+    },
+    {
+      id: 2,
+      image: "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/sign/SukhSanchaar%20Content/Posters/generate.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV83OTU1MzI4Ny0zOTJmLTQzMTctOGU3YS1mMTY2YjAzZDA5NDciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJTdWtoU2FuY2hhYXIgQ29udGVudC9Qb3N0ZXJzL2dlbmVyYXRlLnBuZyIsImlhdCI6MTc1OTU2MjkyMiwiZXhwIjoyMDc0OTIyOTIyfQ.W5rOtwGJ0Eb7p-8IYyf6omyedoJGRWnAgR7EHVnuYN4", // Updated image URL
+      title: "A Legacy from 1890s India",
+      subtitle: "Traditional Ayurvedic Remedies from the Golden Era",
+      buttonText: "Explore Products",
+      buttonLink: "#products"
+    },
+    
+    // {
+    //   id: 5,
+    //   image: "/generate3.png", // Ayurvedic herbs      title: "Wellness Rooted in Tradition",
+    //   subtitle: "Experience the power of ancient wisdom for modern health",
+    //   buttonText: "Shop Now",
+    //   buttonLink: "#products"
+    // },
+    
+  ];
+
+  // Auto-advance carousel every 5 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
   const scrollToProducts = () => {
     const productsElement = document.getElementById("products");
     if (productsElement) {
       const elementPosition = productsElement.offsetTop;
-      const offsetPosition = elementPosition - 5; // 100px offset from the top
+      const offsetPosition = elementPosition - 100;
 
       window.scrollTo({
         top: offsetPosition,
@@ -19,7 +70,7 @@ const HeroSection: React.FC = () => {
     const aboutElement = document.getElementById("about");
     if (aboutElement) {
       const elementPosition = aboutElement.offsetTop;
-      const offsetPosition = elementPosition - 5; // 100px offset from the top
+      const offsetPosition = elementPosition - 100;
 
       window.scrollTo({
         top: offsetPosition,
@@ -29,70 +80,77 @@ const HeroSection: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Historical 1940s shop background image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url("/hero-background.png")',
-        }}
-      />
-
-      {/* Dark overlay for text readability */}
-      <div className="absolute inset-0 bg-black/40"></div>
-
-      {/* Vintage sepia overlay for historical feel */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amber-900/20 via-yellow-800/10 to-orange-900/20"></div>
-
-      {/* Subtle vignette effect */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20"></div>
-      <div
-        className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl animate-fade-in mt-32 sm:mt-16"
-        style={{
-          top: "2.5rem",
-          position: "relative",
-        }}
-      >
-        {/* Main headline */}
-        <h1
-          className="text-5xl sm:text-7xl lg:text-8xl font-bold text-white mb-8 leading-tight drop-shadow-2xl"
-          style={{ fontFamily: "Crimson Text, Times New Roman, serif" }}
+    <section className="relative w-full overflow-hidden  h-64 sm:h-80 md:h-[466px]" style={{ marginTop: "50px" }}>
+      {/* Carousel Container */}
+      <div className="relative w-full h-full">
+        {/* Slides */}
+        <div 
+          className="flex transition-transform duration-500 ease-in-out h-full"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
         >
-          A Legacy from
-          <br />
-          <span className="text-transparent bg-gradient-to-r from-amber-300 via-yellow-200 to-orange-200 bg-clip-text">
-            1890s India
-          </span>
-        </h1>
+          {slides.map((slide) => (
+            <div
+              key={slide.id}
+              className="w-full h-full flex-shrink-0 relative"
+            >
+              {/* Background Image */}
+              <div className="absolute inset-0">
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  className="w-full h-full "
+                  style={{ height: "100%", width: "100%" }}
+                />
+              </div>
 
-        {/* Subheading */}
-        <p className="font-lora text-xl sm:text-2xl lg:text-3xl text-amber-100 mb-9 max-w-4xl mx-auto leading-relaxed drop-shadow-lg">
-          Traditional Ayurvedic Remedies from the Golden Era
-        </p>
+              {/* Dark overlay for text readability */}
+              {/* <div className="absolute inset-0 bg-black/40"></div> */}
 
-        {/* Ornamental divider */}
-        <div className="flex items-center justify-center mb-8">
-          <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent"></div>
-          <div className="mx-4 w-3 h-3 bg-amber-300 rounded-full animate-glow shadow-lg"></div>
-          <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent"></div>
+              {/* Vintage sepia overlay for historical feel */}
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-900/20 via-yellow-800/10 to-orange-900/20"></div>
+
+              {/* Subtle vignette effect */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20"></div>
+
+              {/* Content */}
+              <div className="relative z-10 h-full flex items-center justify-center">
+                <div className="text-center px-4 sm:px-6 lg:px-8 max-w-5xl animate-fade-in">
+                  
+
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-          <button
-            onClick={scrollToProducts}
-            className="group bg-ayur-red text-white px-12 py-5 rounded-full font-noto font-semibold text-xl hover:from-amber-700 hover:to-orange-800 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:-translate-y-3 flex items-center gap-3 border border-amber-400/30 backdrop-blur-sm"
-          >
-            Explore Products
-            <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-          </button>
+        {/* Navigation Arrows */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
 
-          <button
-            onClick={scrollToAbout}
-            className="group border-2 border-amber-300 text-amber-200 px-12 py-5 rounded-full font-noto font-semibold text-xl hover:bg-gradient-to-r hover:from-amber-300 hover:to-yellow-200 hover:text-amber-900 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:-translate-y-3 bg-black/20 backdrop-blur-sm"
-          >
-            Our Story
-          </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
+
+        {/* Dots Indicator */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentSlide
+                  ? "bg-amber-300 scale-125"
+                  : "bg-white/50 hover:bg-white/70"
+              }`}
+            />
+          ))}
         </div>
       </div>
     </section>

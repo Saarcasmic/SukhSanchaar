@@ -16,102 +16,79 @@ const Footer: React.FC = () => {
   if (location.pathname === "/admin") return null;
 
   return (
-    <footer className="bg-black text-cream-50 py-12 ">
+    <footer id="footer" className="bg-black text-cream-50 py-12 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
           {/* Brand Section */}
-          <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="p-2 bg-ayur-red rounded-full">
-                <Leaf className="w-6 h-6 text-white" />
-              </div>
+          <div className="space-y-6">
+            <div className="flex items-center space-x-2">
               <span className="font-playfair text-2xl font-bold">
-                Vedic Herbs
+                Sukh Sanchaarak
               </span>
             </div>
-            <p className="font-lora text-cream-100 mb-4 leading-relaxed">
-              Traditional Ayurvedic remedies crafted with pure herbs and ancient
-              wisdom since 1890. Your journey to natural wellness begins here.
+            <p className="font-lora text-cream-100 leading-relaxed max-w-md">
+              42, Holi Gate Road, Krishna Nagar, Mathura, Uttar Pradesh 281001, India
             </p>
+
             <div className="flex space-x-4">
               <a
                 href="#"
                 className="p-2 bg-ayur-red/20 hover:bg-ayur-red/30 rounded-full transition-colors"
               >
-                <Facebook className="w-5 h-5" />
+                <Facebook className="w-7 h-7" />
               </a>
               <a
                 href="#"
                 className="p-2 bg-ayur-red/20 hover:bg-ayur-red/30 rounded-full transition-colors"
               >
-                <Instagram className="w-5 h-5" />
+                <Instagram className="w-7 h-7" />
               </a>
             </div>
           </div>
 
           {/* Contact Info */}
-          <div>
-            <h3 className="font-playfair text-xl font-bold mb-6">Contact Us</h3>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-ayur-gold flex-shrink-0" />
-                <div>
+          <div className="space-y-6">
+            <h3 className="font-playfair text-xl font-bold">Contact Us</h3>
+            <div className="space-y-6">
+              <div className="flex items-start space-x-4">
+                <Phone className="w-5 h-5 text-ayur-gold flex-shrink-0 mt-1" />
+                <div className="space-y-1">
                   <p className="font-noto text-sm text-cream-200">Call us</p>
                   <a
                     href="tel:+918218304730"
-                    className="font-lora hover:text-ayur-gold transition-colors"
+                    className="font-lora hover:text-ayur-gold transition-colors block"
                   >
                     +91 8218304730
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-ayur-gold flex-shrink-0" />
-                <div>
+              <div className="flex items-start space-x-4">
+                <Mail className="w-5 h-5 text-ayur-gold flex-shrink-0 mt-1" />
+                <div className="space-y-1">
                   <p className="font-noto text-sm text-cream-200">Email us</p>
                   <a
                     href="mailto:support@sukhsancharak.com"
-                    className="font-lora hover:text-ayur-gold transition-colors"
+                    className="font-lora hover:text-ayur-gold transition-colors block break-all"
                   >
                     support@sukhsancharak.com
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3">
-                <MessageCircle className="w-5 h-5 text-ayur-gold flex-shrink-0" />
-                <div>
+              <div className="flex items-start space-x-4">
+                <MessageCircle className="w-5 h-5 text-ayur-gold flex-shrink-0 mt-1" />
+                <div className="space-y-1">
                   <p className="font-noto text-sm text-cream-200">WhatsApp</p>
                   <a
                     href="https://wa.me/918218304730"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-lora hover:text-ayur-gold transition-colors"
+                    className="font-lora hover:text-ayur-gold transition-colors block"
                   >
                     Chat with us
                   </a>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-playfair text-xl font-bold mb-6">
-              Heritage & Quality
-            </h3>
-            <div className="space-y-3 font-lora">
-              <p className="text-cream-100 leading-relaxed">
-                <span className="text-ayur-gold font-semibold">Since 1890</span>{" "}
-                - Four generations of Ayurvedic expertise, bringing you
-                authentic herbal remedies crafted with traditional methods.
-              </p>
-              <div className="bg-ayur-red/10 p-4 rounded-lg border border-ayur-red/20">
-                <p className="text-sm text-cream-200 italic">
-                  "Pure herbs, ancient wisdom, modern wellness - your trusted
-                  companion on the path to natural health."
-                </p>
               </div>
             </div>
           </div>
@@ -120,7 +97,7 @@ const Footer: React.FC = () => {
         <div className="border-t border-cream-200/20 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="font-noto text-cream-200 text-sm">
-              © 2024 Vedic Herbs. All rights reserved. Crafted with love and
+              © 2024 Sukh Sanchaarak. All rights reserved. Crafted with love and
               ancient wisdom.
             </p>
             <div className="flex flex-wrap gap-4 md:gap-6 mt-4 md:mt-0 font-noto text-sm">
