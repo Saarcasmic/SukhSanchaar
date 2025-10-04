@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
               </span>
             </div>
             <p className="font-lora text-cream-100 leading-relaxed max-w-md">
-              42, Holi Gate Road, Krishna Nagar, Mathura, Uttar Pradesh 281001, India
+              738, Tajpura, Mathura, Uttar Pradesh 281001, India
             </p>
 
             <div className="flex space-x-4">
@@ -68,10 +68,10 @@ const Footer: React.FC = () => {
                 <div className="space-y-1">
                   <p className="font-noto text-sm text-cream-200">Email us</p>
                   <a
-                    href="mailto:support@sukhsancharak.com"
+                    href="mailto:bhavyapalsharma@gmail.com"
                     className="font-lora hover:text-ayur-gold transition-colors block break-all"
                   >
-                    support@sukhsancharak.com
+                    bhavyapalsharma@gmail.com
                   </a>
                 </div>
               </div>
