@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
   return (
     <footer id="footer" className="bg-black text-cream-50 py-12 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
           {/* Brand Section */}
           <div className="space-y-6">
             <div className="flex items-center space-x-2">
@@ -29,21 +29,6 @@ const Footer: React.FC = () => {
             <p className="font-lora text-cream-100 leading-relaxed max-w-md">
               738, Tajpura, Mathura, Uttar Pradesh 281001, India
             </p>
-
-            <div className="flex space-x-4">
-              <a
-                href="#"
-                className="p-2 bg-ayur-red/20 hover:bg-ayur-red/30 rounded-full transition-colors"
-              >
-                <Facebook className="w-7 h-7" />
-              </a>
-              <a
-                href="#"
-                className="p-2 bg-ayur-red/20 hover:bg-ayur-red/30 rounded-full transition-colors"
-              >
-                <Instagram className="w-7 h-7" />
-              </a>
-            </div>
           </div>
 
           {/* Contact Info */}
@@ -89,6 +74,42 @@ const Footer: React.FC = () => {
                     Chat with us
                   </a>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Socials Section */}
+          <div className="space-y-6">
+            <h3 className="font-playfair text-xl font-bold">Socials</h3>
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3">
+                <a
+                  href="#"
+                  className="p-2 bg-ayur-red/20 hover:bg-ayur-red/30 rounded-full transition-colors"
+                >
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a
+                  href="#"
+                  className="font-lora hover:text-ayur-gold transition-colors"
+                >
+                  @sukhsanchaarak
+                </a>
+              </div>
+              
+              <div className="flex items-center space-x-3">
+                <a
+                  href="#"
+                  className="p-2 bg-ayur-red/20 hover:bg-ayur-red/30 rounded-full transition-colors"
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a
+                  href="#"
+                  className="font-lora hover:text-ayur-gold transition-colors"
+                >
+                  @sukhsanchaarak
+                </a>
               </div>
             </div>
           </div>

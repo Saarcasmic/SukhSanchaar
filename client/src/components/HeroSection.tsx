@@ -5,10 +5,37 @@ const HeroSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   
   // Dummy images for carousel - you can replace these with your actual images
+  // Responsive image for slide id=1: /poster1.svg if width > 1500px, else /poster4.svg
+  const getResponsiveImage = () => {
+    if (typeof window !== "undefined") {
+      if (window.innerWidth <= 600) {
+        // Mobile screens
+        return "/poster2.svg";
+      } else if (window.innerWidth > 1500) {
+        // Large screens
+        return "/poster1.svg";
+      }
+    }
+    // Default (desktop/tablet)
+    return "/poster4.svg";
+  };
+
+  const [slide1Image, setSlide1Image] = useState(getResponsiveImage());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setSlide1Image(getResponsiveImage());
+    };
+    window.addEventListener("resize", handleResize);
+    // Set initial image in case of hydration mismatch
+    setSlide1Image(getResponsiveImage());
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const slides = [
     {
       id: 1,
-      image: "/poster4.svg", // Ayurvedic herbs      title: "Wellness Rooted in Tradition",
+      image: slide1Image,
       subtitle: "Experience the power of ancient wisdom for modern health",
       buttonText: "Shop Now",
       buttonLink: "#products"
@@ -21,7 +48,6 @@ const HeroSection: React.FC = () => {
       buttonText: "Explore Products",
       buttonLink: "#products"
     },
-    
     // {
     //   id: 5,
     //   image: "/generate3.png", // Ayurvedic herbs      title: "Wellness Rooted in Tradition",
@@ -29,7 +55,6 @@ const HeroSection: React.FC = () => {
     //   buttonText: "Shop Now",
     //   buttonLink: "#products"
     // },
-    
   ];
 
   // Auto-advance carousel every 5 seconds

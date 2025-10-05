@@ -1,23 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useProducts } from "../contexts/ProductContext";
 import { ProductModal } from "./ProductModal";
 import { AyurvedicProductCard } from "./AyurvedicProductCard";
+import { Search, X } from "lucide-react";
 
-const ProductsSection: React.FC = () => {
+interface ProductsSectionProps {
+  showFilters?: boolean;
+}
+
+const ProductsSection: React.FC<ProductsSectionProps> = ({ showFilters = false }) => {
   const { products, loading, error } = useProducts();
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const handleProductClick = (product: any) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
   };
 
+  // Get unique categories from products
+  const categories = useMemo(() => {
+    const uniqueCategories = Array.from(
+      new Set(products.map((product) => product.category))
+    ).filter(Boolean);
+    return ["all", ...uniqueCategories];
+  }, [products]);
+
+  // Filter products based on search query and category
+  const filteredProducts = useMemo(() => {
+    // If filters are not shown (home page), return all products
+    if (!showFilters) {
+      return products;
+    }
+
+    let filtered = products;
+
+    // Filter by category
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter(
+        (product) => product.category === selectedCategory
+      );
+    }
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (product) =>
+          product.name.toLowerCase().includes(query) ||
+          product.description.toLowerCase().includes(query) ||
+          product.benefits.some((benefit) =>
+            benefit.toLowerCase().includes(query)
+          ) ||
+          product.ingredients.some((ingredient) =>
+            ingredient.toLowerCase().includes(query)
+          )
+      );
+    }
+
+    return filtered;
+  }, [products, searchQuery, selectedCategory, showFilters]);
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("all");
+  };
+
   return (
     <>
       <div
         id="products"
-        className="min-h-screen relative overflow-hidden"
+        className="relative overflow-hidden"
       >
         {/* Background with parchment texture and botanical motifs */}
         <div
@@ -69,6 +124,115 @@ const ProductsSection: React.FC = () => {
             </div>
           </div>
 
+          {/* Search and Filter Section - Only show when showFilters is true */}
+          {showFilters && (
+            <div className="mb-8">
+              {/* Search Bar and Category Chips Container */}
+              <div className="max-w-7xl mx-auto mb-6">
+                {/* Desktop Layout: Search bar and chips side by side */}
+                <div className="hidden lg:flex items-center gap-6">
+                  {/* Search Bar - Flexible width */}
+                  <div className="flex-1 min-w-0">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Search products..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full px-4 py-4 pl-12 pr-4 text-sm border-2 border-amber-300 rounded-xl focus:outline-none focus:border-amber-500 bg-white shadow-lg hover:shadow-xl transition-all duration-200"
+                      />
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-amber-600" />
+                      {searchQuery && (
+                        <button
+                          onClick={() => setSearchQuery("")}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-amber-600 hover:text-amber-800 transition-colors duration-200"
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Category Filter Chips - Desktop - Flexible width */}
+                  <div className="flex flex-wrap gap-2 flex-shrink-0">
+                    {categories.map((category) => (
+                      <button
+                        key={category}
+                        onClick={() => setSelectedCategory(category)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                          selectedCategory === category
+                            ? "bg-amber-600 text-white shadow-md"
+                            : "bg-white/80 text-amber-700 border border-amber-200 hover:bg-amber-50 hover:border-amber-300"
+                        }`}
+                      >
+                        {category === "all" ? "All Products" : category}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Mobile Layout: Search bar on top, chips below */}
+                <div className="lg:hidden">
+                  {/* Search Bar */}
+                  <div className="max-w-md mx-auto mb-4">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Search products..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full px-4 py-4 pl-12 pr-4 text-sm border-2 border-amber-300 rounded-xl focus:outline-none focus:border-amber-500 bg-white shadow-lg hover:shadow-xl transition-all duration-200"
+                      />
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-amber-600" />
+                      {searchQuery && (
+                        <button
+                          onClick={() => setSearchQuery("")}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-amber-600 hover:text-amber-800 transition-colors duration-200"
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Category Filter Chips - Mobile */}
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {categories.map((category) => (
+                      <button
+                        key={category}
+                        onClick={() => setSelectedCategory(category)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                          selectedCategory === category
+                            ? "bg-amber-600 text-white shadow-md"
+                            : "bg-white/80 text-amber-700 border border-amber-200 hover:bg-amber-50 hover:border-amber-300"
+                        }`}
+                      >
+                        {category === "all" ? "All Products" : category}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Clear Filters Button */}
+              {(searchQuery || selectedCategory !== "all") && (
+                <div className="text-center">
+                  <button
+                    onClick={clearFilters}
+                    className="text-amber-600 hover:text-amber-800 text-sm font-medium underline"
+                  >
+                    Clear all filters
+                  </button>
+                </div>
+              )}
+
+              {/* Results Count */}
+              <div className="text-center text-sm text-amber-700/80 mt-2">
+                {filteredProducts.length} product{filteredProducts.length !== 1 ? "s" : ""} found
+              </div>
+            </div>
+          )}
+
           {/* Error Display */}
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-8 text-center">
@@ -88,23 +252,26 @@ const ProductsSection: React.FC = () => {
           {/* Product Grid */}
           {!loading && (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-              {products.length === 0 ? (
+              {filteredProducts.length === 0 ? (
                 <div className="col-span-full text-center py-12">
                   <div className="text-amber-600 text-lg font-semibold mb-2">
-                    No Products Available
+                    {products.length === 0 ? "No Products Available" : "No Products Found"}
                   </div>
                   <p className="text-amber-700/60">
-                    Check back later for our premium Ayurvedic collection.
+                    {products.length === 0 
+                      ? "Check back later for our premium Ayurvedic collection."
+                      : "Try adjusting your search or filter criteria."
+                    }
                   </p>
                 </div>
               ) : (
-                products.map((product, index) => (
+                filteredProducts.map((product, index) => (
                   <div key={product.id} className="relative">
                     <AyurvedicProductCard
                       id={product.id}
                       name={product.name}
                       tagline={
-                        product.benefits[0] || "Premium Ayurvedic Product"
+                        product.description || "Premium Ayurvedic Product"
                       }
                       price={product.price}
                       mrp={product.original_price}
@@ -113,14 +280,14 @@ const ProductsSection: React.FC = () => {
                     />
 
                     {/* Row separator for structured feel - only show after complete rows */}
-                    {(index + 1) % 4 === 0 && index !== products.length - 1 && (
+                    {(index + 1) % 4 === 0 && index !== filteredProducts.length - 1 && (
                       <div className="hidden lg:block absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-screen">
                         <div className="h-px bg-gradient-to-r from-transparent via-amber-200/50 to-transparent"></div>
                       </div>
                     )}
 
                     {/* Mobile row separators */}
-                    {(index + 1) % 2 === 0 && index !== products.length - 1 && (
+                    {(index + 1) % 2 === 0 && index !== filteredProducts.length - 1 && (
                       <div className="block lg:hidden absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-screen">
                         <div className="h-px bg-gradient-to-r from-transparent via-amber-200/50 to-transparent"></div>
                       </div>

@@ -136,9 +136,9 @@ const Navbar: React.FC = () => {
             {/* Right Side Icons */}
             <div className="flex items-center space-x-4">
               {/* Search Icon - Mobile */}
-              <button className="md:hidden p-2 text-gray-600 hover:text-ayur-red transition-colors">
+              {/* <button className="md:hidden p-2 text-gray-600 hover:text-ayur-red transition-colors">
                 <Search className="w-5 h-5" />
-              </button>
+              </button> */}
 
               
 
@@ -146,8 +146,11 @@ const Navbar: React.FC = () => {
               <button
                 onClick={toggleCart}
                 className="relative p-2 text-gray-600 hover:text-ayur-red transition-colors"
+                aria-label="View cart"
               >
-                <ShoppingCart className="w-5 h-5" />
+                <span className="inline-flex items-center justify-center rounded-full border border-current w-9 h-9">
+                  <ShoppingCart className="w-5 h-5" stroke="currentColor" />
+                </span>
                 {state.items.length > 0 && (
                   <span className="absolute -top-1 -right-1 bg-ayur-red text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                     {state.items.reduce((sum, item) => sum + item.quantity, 0)}

@@ -38,21 +38,24 @@ export function AyurvedicProductCard({
       {/* <div className="w-full h-px bg-black my-2 "></div> */}
 
       {/* Product Info */}
-      <div className="p-3 lg:p-4 space-y-2 lg:space-y-3 flex flex-col flex-grow">
+      <div className="p-3 lg:p-4 flex flex-col flex-grow">
         {/* Category Tag */}
-
-        {/* Target Audience */}
-        <p className="text-orange-600 text-xs lg:text-sm font-medium">{name === "Sudha Sindhu" ? "Pack of 6" : "Pack of 3"}</p>
-
-        {/* Product Name - Fixed height with ellipsis */}
-        <h3 className="text-base lg:text-lg font-bold text-gray-900 leading-tight h-10 lg:h-12 overflow-hidden">
-          <span className="line-clamp-2">{name}</span>
-        </h3>
-
-        {/* Description - Fixed height */}
-        <p className="text-xs lg:text-sm text-gray-600 h-6 lg:h-8 overflow-hidden">
-          <span className="line-clamp-2">Description will come here</span>
+        <p className="text-orange-600 text-xs lg:text-sm font-medium mb-1">
+          {name === "Sudha Sindhu" ? "Pack of 6" : "Pack of 3"}
         </p>
+
+        {/* Product Name and Tagline - tightly grouped */}
+        <div className="mb-1">
+          <h3 className="text-base lg:text-lg font-bold text-gray-900 leading-tight h-10 lg:h-6 overflow-hidden mb-0">
+            <span className="line-clamp-2">{name}</span>
+          </h3>
+          <p className="text-xs lg:text-sm text-gray-600 h-8 lg:h-11 overflow-hidden mt-0">
+            <span className="line-clamp-2">
+              {/* Tagline with ellipsis at the end of the second line */}
+              {tagline}
+            </span>
+          </p>
+        </div>
 
         {/* Spacer to push pricing and button to bottom */}
         <div className="flex-grow"></div>
