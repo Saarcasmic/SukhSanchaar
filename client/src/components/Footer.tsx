@@ -84,31 +84,31 @@ const Footer: React.FC = () => {
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <a
-                  href="#"
+                  href="https://www.facebook.com/share/1ALDJPH9nA/"
                   className="p-2 bg-ayur-red/20 hover:bg-ayur-red/30 rounded-full transition-colors"
                 >
                   <Facebook className="w-5 h-5" />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.facebook.com/share/1ALDJPH9nA/"
                   className="font-lora hover:text-ayur-gold transition-colors"
                 >
-                  @sukhsanchaarak
+                  @sukh_sancharak_company
                 </a>
               </div>
               
               <div className="flex items-center space-x-3">
                 <a
-                  href="#"
+                  href="https://www.instagram.com/sukh_sancharak_company?igsh=MThvcmxsM24wbmJ6eA=="
                   className="p-2 bg-ayur-red/20 hover:bg-ayur-red/30 rounded-full transition-colors"
                 >
                   <Instagram className="w-5 h-5" />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.instagram.com/sukh_sancharak_company?igsh=MThvcmxsM24wbmJ6eA=="
                   className="font-lora hover:text-ayur-gold transition-colors"
                 >
-                  @sukhsanchaarak
+                  @sukh_sancharak_company
                 </a>
               </div>
             </div>

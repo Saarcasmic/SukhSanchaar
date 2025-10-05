@@ -78,12 +78,15 @@ const Navbar: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div className="flex items-center justify-between h-full">
             {/* Logo */}
-            <Link to="/" className="flex flex-col items-center ">
+            <button 
+              onClick={handleHomeClick}
+              className="flex flex-col items-center hover:opacity-80 transition-opacity"
+            >
               <img src="/logoo.png" alt="Sanchaaar" className="h-8 w-auto" />
               <div className="hidden sm:block">
                 <p className="text-xs text-gray-600 font-medium">Since 1890</p>
               </div>
-            </Link>
+            </button>
 
             {/* Navigation Links - Desktop */}
             <div className="hidden lg:flex items-center space-x-8 mr-auto ml-8">

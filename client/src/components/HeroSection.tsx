@@ -70,7 +70,7 @@ const HeroSection: React.FC = () => {
   const goToSlide = (index: number) => setCurrentSlide(index);
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ marginTop: "50px", aspectRatio: "2.4/1" }}>
+    <section className="relative w-full overflow-hidden" style={{ marginTop: "65px", aspectRatio: "2.4/1" }}>
       <div className="relative w-full h-full">
         {/* Slides */}
         <div 
@@ -127,7 +127,7 @@ const HeroSection: React.FC = () => {
         <button
           onClick={prevSlide}
           aria-label="Previous slide"
-          className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-all duration-300 backdrop-blur-sm z-20"
+          className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-all duration-300  z-20"
         >
           <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
@@ -135,7 +135,7 @@ const HeroSection: React.FC = () => {
         <button
           onClick={nextSlide}
           aria-label="Next slide"
-          className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-all duration-300 backdrop-blur-sm z-20"
+          className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-all duration-300  z-20"
         >
           <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Award, Users, Heart, ChevronDown } from "lucide-react";
 import CompanyCarousel from "../components/CompanyCarousel";
+import CompanyHistoryCarousel from "../components/CompanyHistoryCarousel";
 import OrnamentalDivider from "../components/OrnamentalDivider";
 
 const AboutUsPage: React.FC = () => {
@@ -9,10 +10,57 @@ const AboutUsPage: React.FC = () => {
   // Company images for carousel
   const companyImages = [
     {
-      src: "/company1.jpg",
+      src: "/company_1.jpg",
       alt: "Sukh Sanchaarak Manufacturing Facility",
       caption: "Our GMP-certified manufacturing facility in Mathura"
     },
+    {
+      src: "/company_6.jpeg",
+      alt: "Sukh Sanchaarak Manufacturing Facility",
+      caption: "Our GMP-certified manufacturing facility in Mathura"
+    },
+    {
+      src: "/company_7.jpeg",
+      alt: "Sukh Sanchaarak Manufacturing Facility",
+      caption: "Our GMP-certified manufacturing facility in Mathura"
+    },
+    {
+      src: "/company_8.jpeg",
+      alt: "Sukh Sanchaarak Manufacturing Facility",
+      caption: "Our GMP-certified manufacturing facility in Mathura"
+    }
+  ];
+
+  // Historical company images for the carousel
+  const historicalImages = [
+    {
+      id: 1,
+      src: "company_2.jpeg",
+      alt: "Traditional Ayurvedic Medicine Preparation",
+      caption: "Traditional Medicine Preparation",
+      year: "1890s"
+    },
+    {
+      id: 2,
+      src: "company_3.jpeg",
+      alt: "Herbal Garden and Plant Collection",
+      caption: "Herbal Garden Collection",
+      year: "1920s"
+    },
+    {
+      id: 3,
+      src: "company_4.jpeg",
+      alt: "Ancient Ayurvedic Texts and Manuscripts",
+      caption: "Ancient Ayurvedic Knowledge",
+      year: "1950s"
+    },
+    {
+      id: 4,
+      src: "company_5.jpeg",
+      alt: "Traditional Grinding and Processing",
+      caption: "Traditional Processing Methods",
+      year: "1970s"
+    }
   ];
 
   // Full text content
@@ -39,7 +87,7 @@ const AboutUsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-cream-50 animate-fade-in">
       {/* Hero Banner */}
-      <section className="relative py-24 overflow-hidden">
+      <section className="relative py-16 md:py-20 lg:py-24 overflow-hidden">
         {/* Background image with opacity, isolated from content */}
         <div
           className="absolute inset-0 pointer-events-none z-0"
@@ -51,7 +99,7 @@ const AboutUsPage: React.FC = () => {
             opacity: 0.4,
           }}
         />
-        <div className="absolute top-0 right-0 w-64 h-64 opacity-5 rotate-180 z-10">
+        <div className="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 opacity-5 rotate-180 z-10">
           <svg
             viewBox="0 0 200 200"
             className="w-full h-full text-botanical-green"
@@ -63,71 +111,59 @@ const AboutUsPage: React.FC = () => {
           </svg>
         </div>
 
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+        <div className="relative max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 text-center z-10">
           {/* Logo */}
-          <div className="flex justify-center mb-8 mt-6">
-            <img src="/logoo.png" alt="Sanchaaar" className="w-50 h-40" />
+          <div className="flex justify-center mb-6 md:mb-8 mt-4 md:mt-6">
+            <img src="/logoo.png" alt="Sanchaaar" className="h-28 md:h-36 lg:h-40 w-auto" />
           </div>
 
-          {/* <h1 className="font-playfair text-5xl sm:text-6xl font-bold text-antique-brown mb-6">
-            Our <span className="text-ayur-red">Heritage Story</span>
-          </h1> */}
-
-          <p className="font-lora text-xl sm:text-2xl text-antique-brown/80 max-w-3xl mx-auto leading-relaxed">
+          <p className="font-lora text-lg md:text-xl lg:text-2xl text-antique-brown/80 max-w-4xl mx-auto leading-relaxed px-2">
             Since 1890 – Our Legacy Blends timeless generations of Ayurvedic
             excellence, bringing you authentic herbal remedies crafted with
             traditional wisdom.
           </p>
 
           {/* Golden ornamental line */}
-          <div className="flex items-center justify-center mt-8">
-            <div className="w-20 h-px bg-ayur-gold"></div>
-            <div className="mx-4 w-4 h-4 bg-ayur-gold rounded-full"></div>
-            <div className="w-20 h-px bg-ayur-gold"></div>
+          <div className="flex items-center justify-center mt-6 md:mt-8">
+            <div className="w-16 md:w-20 h-px bg-ayur-gold"></div>
+            <div className="mx-3 md:mx-4 w-3 h-3 md:w-4 md:h-4 bg-ayur-gold rounded-full"></div>
+            <div className="w-16 md:w-20 h-px bg-ayur-gold"></div>
           </div>
         </div>
       </section>
 
       {/* History Section */}
-      <section className="py-16 bg-white relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-12 md:py-16 lg:py-20 bg-white relative">
+        <div className="max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-20">
           {/* Section Header */}
-          <div className="text-center mb-12">
-            <h2 className="font-playfair text-4xl font-bold text-botanical-green mb-6">
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="font-playfair text-3xl md:text-4xl lg:text-5xl font-bold text-botanical-green mb-4 md:mb-6">
               Our Story
             </h2>
-            <div className="w-16 h-1 bg-ayur-gold mx-auto"></div>
+            <div className="w-12 md:w-16 h-1 bg-ayur-gold mx-auto"></div>
           </div>
 
-          {/* Two-Compartment Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Two-Compartment Layout - Responsive Grid */}
+          <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-12 items-start lg:items-center">
             {/* Left Side - Text Content */}
-            <div className="lg:col-span-5 space-y-6">
-              <div className={`space-y-6 font-lora text-lg text-justify text-antique-brown/80 leading-relaxed ${
-                isExpanded ? 'max-h-96 overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-ayur-gold/30 scrollbar-track-transparent hover:scrollbar-thumb-ayur-gold/50' : ''
+            <div className="w-full lg:col-span-5 space-y-4 md:space-y-6">
+              <div className={`space-y-4 md:space-y-6 font-lora text-base md:text-lg text-justify text-antique-brown/80 leading-relaxed ${
+                isExpanded ? 'max-h-[500px] md:max-h-96 overflow-y-auto pr-2 md:pr-4 scrollbar-thin scrollbar-thumb-ayur-gold/30 scrollbar-track-transparent hover:scrollbar-thumb-ayur-gold/50' : ''
               }`}>
                 {displayedText.map((paragraph, index) => (
-                  <p key={index}>
+                  <p key={index} className="text-sm md:text-base lg:text-lg">
                     {paragraph.content}
                   </p>
                 ))}
-                
-                {/* Dots indicator when not expanded */}
-                {/* {!isExpanded && (
-                  <div className="flex items-center space-x-2 text-ayur-gold">
-                    <span className="text-2xl">⋯</span>
-                    <span className="text-sm font-noto">More content below</span>
-                  </div>
-                )} */}
               </div>
 
               {/* Read More/Read Less Button */}
               <div className="flex justify-center">
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-ayur-gold to-ayur-gold/80 hover:from-ayur-gold/90 hover:to-ayur-gold text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="flex items-center space-x-2 px-5 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-ayur-gold to-ayur-gold/80 hover:from-ayur-gold/90 hover:to-ayur-gold text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <span className="font-lora font-medium">
+                  <span className="font-lora font-medium text-sm md:text-base">
                     {isExpanded ? 'Read Less' : 'Read More'}
                   </span>
                   <ChevronDown 
@@ -139,13 +175,20 @@ const AboutUsPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Center - Ornamental Divider */}
-            <div className="lg:col-span-2 flex justify-center">
-              <OrnamentalDivider variant="vertical" size="lg" />
+            {/* Center - Ornamental Divider (Horizontal on mobile, Vertical on desktop) */}
+            <div className="w-full lg:w-auto lg:col-span-2 flex justify-center py-6 lg:py-0">
+              {/* Horizontal Divider for Mobile */}
+              <div className="block lg:hidden w-full">
+                <OrnamentalDivider variant="horizontal" size="md" />
+              </div>
+              {/* Vertical Divider for Desktop */}
+              <div className="hidden lg:block">
+                <OrnamentalDivider variant="vertical" size="lg" />
+              </div>
             </div>
 
             {/* Right Side - Image Carousel */}
-            <div className="lg:col-span-5">
+            <div className="w-full lg:col-span-5">
               <CompanyCarousel 
                 images={companyImages}
                 autoPlay={true}
@@ -157,17 +200,17 @@ const AboutUsPage: React.FC = () => {
       </section>
 
       {/* Vision Section */}
-      <section className="py-20 bg-cream-50 bg-parchment">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="font-playfair text-4xl font-bold text-botanical-green mb-6">
+      <section className="py-12 md:py-16 lg:py-20 bg-cream-50 bg-parchment">
+        <div className="max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-20">
+          <div className="text-center mb-10 md:mb-14 lg:mb-16">
+            <h2 className="font-playfair text-3xl md:text-4xl lg:text-5xl font-bold text-botanical-green mb-4 md:mb-6">
               Our Vision & Values
             </h2>
-            <div className="w-24 h-1 bg-ayur-gold mx-auto"></div>
+            <div className="w-20 md:w-24 h-1 bg-ayur-gold mx-auto"></div>
           </div>
 
-          <div className="mb-12 max-w-6xl mx-auto text-center">
-            <p className="font-lora text-lg text-antique-brown/80 leading-relaxed text-justify">
+          <div className="mb-10 md:mb-12 max-w-6xl xl:max-w-7xl mx-auto text-center">
+            <p className="font-lora text-sm md:text-base lg:text-lg text-antique-brown/80 leading-relaxed text-justify px-2">
               At Sukh Sancharak, our vision is to honor and advance the ancient
               wisdom of Ayurveda by delivering authentic, natural healing
               solutions that nurture health and well-being across India and
@@ -183,16 +226,16 @@ const AboutUsPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {/* Authenticity */}
-            <div className="text-center bg-white p-8 rounded-2xl shadow-lg border border-cream-200 hover:shadow-xl transition-shadow">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-ayur-red to-ayur-red/80 rounded-full mb-6">
-                <Heart className="w-8 h-8 text-white" />
+            <div className="text-center bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-cream-200 hover:shadow-xl transition-shadow">
+              <div className="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-ayur-red to-ayur-red/80 rounded-full mb-4 md:mb-6">
+                <Heart className="w-7 h-7 md:w-8 md:h-8 text-white" />
               </div>
-              <h3 className="font-playfair text-2xl font-bold text-antique-brown mb-4">
+              <h3 className="font-playfair text-xl md:text-2xl font-bold text-antique-brown mb-3 md:mb-4">
                 Authenticity
               </h3>
-              <p className="font-lora text-antique-brown/70 leading-relaxed text-justify">
+              <p className="font-lora text-sm md:text-base text-antique-brown/70 leading-relaxed text-justify">
                 We strictly follow classical Ayurvedic practices, honoring
                 ancient texts and traditional manufacturing methods to preserve
                 the original healing potency of our medicines.
@@ -200,14 +243,14 @@ const AboutUsPage: React.FC = () => {
             </div>
 
             {/* Quality */}
-            <div className="text-center bg-white p-8 rounded-2xl shadow-lg border border-cream-200 hover:shadow-xl transition-shadow">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-botanical-green to-botanical-green/80 rounded-full mb-6">
-                <Award className="w-8 h-8 text-white" />
+            <div className="text-center bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-cream-200 hover:shadow-xl transition-shadow">
+              <div className="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-botanical-green to-botanical-green/80 rounded-full mb-4 md:mb-6">
+                <Award className="w-7 h-7 md:w-8 md:h-8 text-white" />
               </div>
-              <h3 className="font-playfair text-2xl font-bold text-antique-brown mb-4">
+              <h3 className="font-playfair text-xl md:text-2xl font-bold text-antique-brown mb-3 md:mb-4">
                 Quality
               </h3>
-              <p className="font-lora text-antique-brown/70 leading-relaxed text-justify">
+              <p className="font-lora text-sm md:text-base text-antique-brown/70 leading-relaxed text-justify">
                 Our GMP-certified processes include stringent quality controls,
                 ensuring that every product meets the highest standards of
                 safety and efficacy.
@@ -215,14 +258,14 @@ const AboutUsPage: React.FC = () => {
             </div>
 
             {/* Trust */}
-            <div className="text-center bg-white p-8 rounded-2xl shadow-lg border border-cream-200 hover:shadow-xl transition-shadow">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-ayur-gold to-ayur-gold/80 rounded-full mb-6">
-                <Users className="w-8 h-8 text-white" />
+            <div className="text-center bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-cream-200 hover:shadow-xl transition-shadow sm:col-span-2 lg:col-span-1">
+              <div className="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-ayur-gold to-ayur-gold/80 rounded-full mb-4 md:mb-6">
+                <Users className="w-7 h-7 md:w-8 md:h-8 text-white" />
               </div>
-              <h3 className="font-playfair text-2xl font-bold text-antique-brown mb-4">
+              <h3 className="font-playfair text-xl md:text-2xl font-bold text-antique-brown mb-3 md:mb-4">
                 Trust
               </h3>
-              <p className="font-lora text-antique-brown/70 leading-relaxed text-justify">
+              <p className="font-lora text-sm md:text-base text-antique-brown/70 leading-relaxed text-justify">
                 We reject shortcuts such as synthetic additives, maintaining the
                 holistic integrity of Ayurveda in every product we offer.
               </p>
@@ -231,15 +274,15 @@ const AboutUsPage: React.FC = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-white relative">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className=" items-center">
+      <section className="py-12 md:py-16 lg:py-20 bg-white relative">
+        <div className="max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-20">
+          <div className="items-center">
             <div>
-              <h2 className="font-playfair text-4xl font-bold text-botanical-green mb-6">
+              <h2 className="font-playfair text-2xl md:text-3xl lg:text-4xl font-bold text-botanical-green mb-4 md:mb-6">
                 Quality and Safety Commitments:
               </h2>
-              <div className="w-16 h-1 bg-ayur-gold mb-8"></div>
-              <div className="space-y-6 font-lora text-lg text-antique-brown/80 leading-relaxed text-justify">
+              <div className="w-12 md:w-16 h-1 bg-ayur-gold mb-6 md:mb-8"></div>
+              <div className="space-y-4 md:space-y-6 font-lora text-sm md:text-base lg:text-lg text-antique-brown/80 leading-relaxed text-justify">
                 <p>
                   For over 135 years, Sukh Sancharak has stood firm in its
                   dedication to uncompromising quality and safety. Our
@@ -280,16 +323,16 @@ const AboutUsPage: React.FC = () => {
                   compromise.
                 </p>
               </div>
-              <div className="flex gap-8 mt-6 justify-center">
+              <div className="flex flex-col sm:flex-row gap-6 md:gap-8 mt-6 md:mt-8 justify-center items-center">
                 <img
                   src="/gmp_logo.png"
                   alt="GMP Certified"
-                  className="w-36 h-36 object-contain"
+                  className="w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 object-contain"
                 />
                 <img
                   src="/135_logo.png"
                   alt="135 Years Heritage"
-                  className="w-36 h-36 object-contain"
+                  className="w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 object-contain"
                 />
               </div>
             </div>
@@ -297,65 +340,18 @@ const AboutUsPage: React.FC = () => {
         </div>
       </section>
 
-      {/* CEO Message */}
-      <section className="py-20 bg-antique-brown text-cream-50 relative overflow-hidden">
-        {/* Background botanical elements */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute bottom-10 left-10 w-32 h-32">
-            <svg viewBox="0 0 100 100" className="w-full h-full text-current">
-              <circle
-                cx="50"
-                cy="50"
-                r="25"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
+      {/* Company History Carousel */}
+      <section className="py-12 md:py-16 bg-white relative overflow-hidden">
+        <div className="relative max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-20">
+          {/* Carousel Container */}
+          <div className="flex justify-center">
+            <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl">
+              <CompanyHistoryCarousel 
+                images={historicalImages}
+                autoPlay={true}
+                autoPlayInterval={4000}
               />
-              <path
-                d="M50 25v50M25 50h50"
-                stroke="currentColor"
-                strokeWidth="1"
-              />
-            </svg>
-          </div>
-          <div className="absolute top-10 right-10 w-28 h-28">
-            <svg viewBox="0 0 80 80" className="w-full h-full text-current">
-              <path
-                d="M40 10c-8 0-15 7-15 15 0 13 15 35 15 35s15-22 15-35c0-8-7-15-15-15z"
-                fill="currentColor"
-              />
-            </svg>
-          </div>
-        </div>
-
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-playfair text-4xl font-bold mb-8">
-            Message from Our{" "}
-            <span className="text-ayur-gold">Heritage Keeper</span>
-          </h2>
-
-          <div className="bg-ayur-red/10 p-8 rounded-2xl border border-ayur-red/20 mb-8">
-            <blockquote className="font-lora text-xl leading-relaxed italic mb-6">
-              "As the fourth-generation custodian of this sacred knowledge, I am
-              honored to continue our family's mission of bringing authentic
-              Ayurvedic healing to the world. Every product we create carries
-              within it the wisdom of our ancestors and the promise of natural
-              wellness for future generations."
-            </blockquote>
-            <div className="text-center">
-              <p className="font-noto font-semibold text-ayur-gold text-lg">
-                Dr. Rajesh Sharma
-              </p>
-              <p className="font-noto text-cream-200">
-                Fourth Generation Heritage Keeper
-              </p>
             </div>
-          </div>
-
-          <div className="flex items-center justify-center">
-            <div className="w-20 h-px bg-ayur-gold"></div>
-            <div className="mx-4 w-4 h-4 bg-ayur-gold rounded-full"></div>
-            <div className="w-20 h-px bg-ayur-gold"></div>
           </div>
         </div>
       </section>
