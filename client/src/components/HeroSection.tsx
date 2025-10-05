@@ -45,24 +45,16 @@ const HeroSection: React.FC = () => {
   const slides: Slide[] = [
     {
       id: 1,
-      // Your high-resolution image from Supabase - will be auto-resized
+      // Full design image with text and products baked in
       backgroundImage: "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Posters/Poster_check.jpg",
-      title: "SUDHA SINDHU",
-      subtitle: "Bestseller",
-      buttonText: "SHOP NOW",
-      buttonLink: "#products",
       imagePosition: "center center",
-      useFullImage: false
+      useFullImage: true // Full image, no text overlay
     },
     {
       id: 2,
       backgroundImage: "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Posters/generate.png",
-      title: "A Legacy from 1890s India",
-      subtitle: "Traditional Ayurvedic Remedies from the Golden Era",
-      buttonText: "Explore Products",
-      buttonLink: "#products",
       imagePosition: "center center",
-      useFullImage: true
+      useFullImage: true // Full image, no text overlay
     }
   ];
 
@@ -78,7 +70,7 @@ const HeroSection: React.FC = () => {
   const goToSlide = (index: number) => setCurrentSlide(index);
 
   return (
-    <section className="relative w-full overflow-hidden h-64 sm:h-80 md:h-96 lg:h-[500px]" style={{ marginTop: "50px" }}>
+    <section className="relative w-full overflow-hidden" style={{ marginTop: "50px", aspectRatio: "2.4/1" }}>
       <div className="relative w-full h-full">
         {/* Slides */}
         <div 
@@ -87,7 +79,6 @@ const HeroSection: React.FC = () => {
         >
           {slides.map((slide, index) => {
             const responsiveUrls = getResponsiveUrls(slide.backgroundImage);
-            
             
             return (
               <div key={slide.id} className="w-full h-full flex-shrink-0 relative">
@@ -118,17 +109,13 @@ const HeroSection: React.FC = () => {
                   <img
                     src={responsiveUrls.original}
                     alt={slide.title || `Hero banner ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     style={{ 
                       objectPosition: slide.imagePosition || "center center"
                     }}
                     loading={index === 0 ? "eager" : "lazy"}
                   />
                 </picture>
-
-                {/* Overlays */}
-                {/* <div className="absolute inset-0 bg-gradient-to-br from-amber-900/10 via-yellow-800/5 to-orange-900/10"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div> */}
 
                 
               </div>
@@ -140,7 +127,7 @@ const HeroSection: React.FC = () => {
         <button
           onClick={prevSlide}
           aria-label="Previous slide"
-          className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-all duration-300  z-20"
+          className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-all duration-300 backdrop-blur-sm z-20"
         >
           <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
@@ -148,7 +135,7 @@ const HeroSection: React.FC = () => {
         <button
           onClick={nextSlide}
           aria-label="Next slide"
-          className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-all duration-300 z-20"
+          className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-all duration-300 backdrop-blur-sm z-20"
         >
           <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
