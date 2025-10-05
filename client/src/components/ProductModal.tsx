@@ -49,26 +49,23 @@ export const ProductModal = ({
   // Create images array with conditional first image
   const getImagesArray = () => {
     if (!product) return [];
-    
-    const firstImage = product.name === "Sudha Sindhu" ? "/prod1.png" : "/product1.jpeg";
+
+    const firstImage =
+      product.name === "Sudha Sindhu" ? "/prod1.png" : "/product1.jpeg";
     const additionalImages = product.images || [];
-    
+
     return [firstImage, ...additionalImages];
   };
 
   const images = getImagesArray();
 
   const handlePreviousImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === 0 ? images.length - 1 : prev - 1
-    );
+    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     setIsAutoPlay(false); // Pause autoplay when user manually navigates
   };
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === images.length - 1 ? 0 : prev + 1
-    );
+    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     setIsAutoPlay(false); // Pause autoplay when user manually navigates
   };
 
@@ -77,14 +74,13 @@ export const ProductModal = ({
     if (!isModalOpen || images.length <= 1 || !isAutoPlay) return;
 
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => 
-        prev === images.length - 1 ? 0 : prev + 1
+      setCurrentImageIndex((prev) =>
+        prev === images.length - 1 ? 0 : prev + 1,
       );
     }, 4000);
 
     return () => clearInterval(interval);
   }, [isModalOpen, images.length, isAutoPlay]);
-
 
   const handleQuantityIncrease = () => {
     setQuantity((prev) => prev + 1);
@@ -223,7 +219,7 @@ export const ProductModal = ({
           <div className="w-full lg:w-1/2 bg-[#fff] flex mt-4 justify-center p-4 lg:p-8 min-h-64 lg:h-auto">
             <div className="relative w-full max-w-md lg:max-w-lg">
               {/* Main Image Display */}
-              <div 
+              <div
                 className="relative w-full h-auto"
                 onMouseEnter={() => setIsAutoPlay(false)}
                 onMouseLeave={() => setIsAutoPlay(true)}
@@ -259,10 +255,7 @@ export const ProductModal = ({
                     </button>
                   </>
                 )}
-
-                
               </div>
-
             </div>
           </div>
 
@@ -326,7 +319,6 @@ export const ProductModal = ({
                 </div>
 
                 {/* Product Images */}
-                
 
                 <div className="flex flex-col gap-4">
                   <div className="[font-family:'Manrope-SemiBold',Helvetica] font-semibold text-black text-sm lg:text-xs tracking-[0.24px] leading-[15px]">
@@ -341,9 +333,6 @@ export const ProductModal = ({
                     </div>
                   </div>
                 </div>
-
-                
-
 
                 {/* Usage Instructions */}
                 {product?.usage_instructions && (
@@ -375,7 +364,11 @@ export const ProductModal = ({
               <img
                 className="w-12 h-12 lg:w-16 lg:h-16 object-cover rounded-lg flex-shrink-0"
                 alt="Product"
-                src={images.length > 0 ? images[currentImageIndex] : (product?.image_url || "src/Icons/Rectangle3764.png")}
+                src={
+                  images.length > 0
+                    ? images[currentImageIndex]
+                    : product?.image_url || "src/Icons/Rectangle3764.png"
+                }
               />
 
               <div className="flex flex-col gap-1 min-w-0 flex-1">

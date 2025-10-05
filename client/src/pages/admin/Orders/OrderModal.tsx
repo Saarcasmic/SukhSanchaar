@@ -10,7 +10,9 @@ import {
   CreditCard,
   Save,
   Loader2,
+  Download,
 } from "lucide-react";
+import { generateInvoicePDF } from "../../../utils/generateInvoice";
 
 interface Order {
   id: string;
@@ -61,6 +63,7 @@ const OrderModal: React.FC<OrderModalProps> = ({
 }) => {
   const [selectedStatus, setSelectedStatus] = useState(order.order_status);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   // Debug: Log the order data structure (remove in production)
   // console.log('OrderModal received order:', JSON.stringify(order, null, 2));
@@ -125,6 +128,19 @@ const OrderModal: React.FC<OrderModalProps> = ({
       alert("Failed to update order status. Please try again.");
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  // Handle PDF generation
+  const handleGenerateInvoice = async () => {
+    try {
+      setIsGeneratingPDF(true);
+      await generateInvoicePDF(order);
+    } catch (error) {
+      console.error("Failed to generate invoice:", error);
+      alert("Failed to generate invoice. Please try again.");
+    } finally {
+      setIsGeneratingPDF(false);
     }
   };
 
@@ -440,30 +456,52 @@ const OrderModal: React.FC<OrderModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
+        <div className="flex items-center justify-between gap-3 p-6 border-t border-gray-200">
+          {/* Generate Bill Button - Left Side */}
           <button
-            onClick={onClose}
-            className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            onClick={handleGenerateInvoice}
+            disabled={isGeneratingPDF}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
-            Close
-          </button>
-          <button
-            onClick={handleStatusUpdate}
-            disabled={isUpdating || selectedStatus === order.order_status}
-            className="px-4 py-2 bg-ayur-red text-white rounded-lg hover:bg-ayur-red/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-          >
-            {isUpdating ? (
+            {isGeneratingPDF ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Updating...
+                Generating...
               </>
             ) : (
               <>
-                <Save className="w-4 h-4" />
-                Save Changes
+                <Download className="w-4 h-4" />
+                Generate Bill
               </>
             )}
           </button>
+
+          {/* Right Side Buttons */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              Close
+            </button>
+            <button
+              onClick={handleStatusUpdate}
+              disabled={isUpdating || selectedStatus === order.order_status}
+              className="px-4 py-2 bg-ayur-red text-white rounded-lg hover:bg-ayur-red/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {isUpdating ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  Save Changes
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

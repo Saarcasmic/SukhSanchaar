@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Award, Users, Heart, ChevronDown } from "lucide-react";
 import CompanyCarousel from "../components/CompanyCarousel";
-import CompanyHistoryCarousel from "../components/CompanyHistoryCarousel";
+import CenteredCarousel from "../components/CenteredCarousel";
 import OrnamentalDivider from "../components/OrnamentalDivider";
 
 const AboutUsPage: React.FC = () => {
@@ -12,23 +12,23 @@ const AboutUsPage: React.FC = () => {
     {
       src: "/company_1.jpg",
       alt: "Sukh Sanchaarak Manufacturing Facility",
-      caption: "Our GMP-certified manufacturing facility in Mathura"
+      caption: "Our GMP-certified manufacturing facility in Mathura",
     },
     {
       src: "/company_6.jpeg",
       alt: "Sukh Sanchaarak Manufacturing Facility",
-      caption: "Our GMP-certified manufacturing facility in Mathura"
+      caption: "Our GMP-certified manufacturing facility in Mathura",
     },
     {
       src: "/company_7.jpeg",
       alt: "Sukh Sanchaarak Manufacturing Facility",
-      caption: "Our GMP-certified manufacturing facility in Mathura"
+      caption: "Our GMP-certified manufacturing facility in Mathura",
     },
     {
       src: "/company_8.jpeg",
       alt: "Sukh Sanchaarak Manufacturing Facility",
-      caption: "Our GMP-certified manufacturing facility in Mathura"
-    }
+      caption: "Our GMP-certified manufacturing facility in Mathura",
+    },
   ];
 
   // Historical company images for the carousel
@@ -38,48 +38,53 @@ const AboutUsPage: React.FC = () => {
       src: "company_2.jpeg",
       alt: "Traditional Ayurvedic Medicine Preparation",
       caption: "Traditional Medicine Preparation",
-      year: "1890s"
+      year: "1890s",
     },
     {
       id: 2,
       src: "company_3.jpeg",
       alt: "Herbal Garden and Plant Collection",
       caption: "Herbal Garden Collection",
-      year: "1920s"
+      year: "1920s",
     },
     {
       id: 3,
       src: "company_4.jpeg",
       alt: "Ancient Ayurvedic Texts and Manuscripts",
       caption: "Ancient Ayurvedic Knowledge",
-      year: "1950s"
+      year: "1950s",
     },
     {
       id: 4,
       src: "company_5.jpeg",
       alt: "Traditional Grinding and Processing",
       caption: "Traditional Processing Methods",
-      year: "1970s"
-    }
+      year: "1970s",
+    },
   ];
 
   // Full text content
   const fullText = [
     {
-      content: "Sukh Sancharak Company stands as the oldest manufacturing unit in Mathura and one of Northern India's most respected Ayurvedic production houses, with a continuous legacy dating back to 1890. Founded by Pandit Kshetra Pal Sharma, our company has safeguarded and nurtured the essence of Ayurveda for more than 130 years, remaining committed to pure, plant-based healing and authentic traditional knowledge."
+      content:
+        "Sukh Sancharak Company stands as the oldest manufacturing unit in Mathura and one of Northern India's most respected Ayurvedic production houses, with a continuous legacy dating back to 1890. Founded by Pandit Kshetra Pal Sharma, our company has safeguarded and nurtured the essence of Ayurveda for more than 130 years, remaining committed to pure, plant-based healing and authentic traditional knowledge.",
     },
     {
-      content: "Our GMP-certified manufacturing facility produces Ayurvedic medicines exclusively from natural botanical sources, honoring timeless processes documented in foundational classics such as Charak Sahita, Rastantra Saar, and Bheshajya Ratnavali. We combine tradition with rigorous quality control, ensuring each product carries the potency and purity that has distinguished our offerings for generations."
+      content:
+        "Our GMP-certified manufacturing facility produces Ayurvedic medicines exclusively from natural botanical sources, honoring timeless processes documented in foundational classics such as Charak Sahita, Rastantra Saar, and Bheshajya Ratnavali. We combine tradition with rigorous quality control, ensuring each product carries the potency and purity that has distinguished our offerings for generations.",
     },
     {
-      content: "With deep roots in Northern India's Hindi-speaking heartland and a comprehensive distribution network, Sukh Sancharak Company now aspires to share India's ancient heritage with a broader audience. Our goal is to spread the true essence of Ayurveda throughout India, making authentic, natural healing accessible to all."
+      content:
+        "With deep roots in Northern India's Hindi-speaking heartland and a comprehensive distribution network, Sukh Sancharak Company now aspires to share India's ancient heritage with a broader audience. Our goal is to spread the true essence of Ayurveda throughout India, making authentic, natural healing accessible to all.",
     },
     {
-      content: "Rooted in over a century of tradition and heartfelt dedication, our vision is to rekindle the timeless bond between nature and well-being for every home. We believe Ayurveda is not merely a science but a way of life—one that nourishes the body, calms the mind, and uplifts the spirit."
+      content:
+        "Rooted in over a century of tradition and heartfelt dedication, our vision is to rekindle the timeless bond between nature and well-being for every home. We believe Ayurveda is not merely a science but a way of life—one that nourishes the body, calms the mind, and uplifts the spirit.",
     },
     {
-      content: "Every product we craft carries the love, care, and wisdom passed down through generations, inspiring people to reconnect with their natural balance in today's fast-paced world. At Sukh Sancharak, we don't just make medicines; we nurture a heritage of healing and trust, striving to bring genuine wellness to every life we touch."
-    }
+      content:
+        "Every product we craft carries the love, care, and wisdom passed down through generations, inspiring people to reconnect with their natural balance in today's fast-paced world. At Sukh Sancharak, we don't just make medicines; we nurture a heritage of healing and trust, striving to bring genuine wellness to every life we touch.",
+    },
   ];
 
   const displayedText = isExpanded ? fullText : fullText.slice(0, 2);
@@ -114,7 +119,11 @@ const AboutUsPage: React.FC = () => {
         <div className="relative max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 text-center z-10">
           {/* Logo */}
           <div className="flex justify-center mb-6 md:mb-8 mt-4 md:mt-6">
-            <img src="/logoo.png" alt="Sanchaaar" className="h-28 md:h-36 lg:h-40 w-auto" />
+            <img
+              src="/logoo.png"
+              alt="Sanchaaar"
+              className="h-28 md:h-36 lg:h-40 w-auto"
+            />
           </div>
 
           <p className="font-lora text-lg md:text-xl lg:text-2xl text-antique-brown/80 max-w-4xl mx-auto leading-relaxed px-2">
@@ -147,9 +156,13 @@ const AboutUsPage: React.FC = () => {
           <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-12 items-start lg:items-center">
             {/* Left Side - Text Content */}
             <div className="w-full lg:col-span-5 space-y-4 md:space-y-6">
-              <div className={`space-y-4 md:space-y-6 font-lora text-base md:text-lg text-justify text-antique-brown/80 leading-relaxed ${
-                isExpanded ? 'max-h-[500px] md:max-h-96 overflow-y-auto pr-2 md:pr-4 scrollbar-thin scrollbar-thumb-ayur-gold/30 scrollbar-track-transparent hover:scrollbar-thumb-ayur-gold/50' : ''
-              }`}>
+              <div
+                className={`space-y-4 md:space-y-6 font-lora text-base md:text-lg text-justify text-antique-brown/80 leading-relaxed ${
+                  isExpanded
+                    ? "max-h-[500px] md:max-h-96 overflow-y-auto pr-2 md:pr-4 scrollbar-thin scrollbar-thumb-ayur-gold/30 scrollbar-track-transparent hover:scrollbar-thumb-ayur-gold/50"
+                    : ""
+                }`}
+              >
                 {displayedText.map((paragraph, index) => (
                   <p key={index} className="text-sm md:text-base lg:text-lg">
                     {paragraph.content}
@@ -164,12 +177,12 @@ const AboutUsPage: React.FC = () => {
                   className="flex items-center space-x-2 px-5 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-ayur-gold to-ayur-gold/80 hover:from-ayur-gold/90 hover:to-ayur-gold text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   <span className="font-lora font-medium text-sm md:text-base">
-                    {isExpanded ? 'Read Less' : 'Read More'}
+                    {isExpanded ? "Read Less" : "Read More"}
                   </span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 transition-transform duration-300 ${
-                      isExpanded ? 'rotate-180' : ''
-                    }`} 
+                      isExpanded ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
               </div>
@@ -189,7 +202,7 @@ const AboutUsPage: React.FC = () => {
 
             {/* Right Side - Image Carousel */}
             <div className="w-full lg:col-span-5">
-              <CompanyCarousel 
+              <CompanyCarousel
                 images={companyImages}
                 autoPlay={true}
                 autoPlayInterval={4000}
@@ -341,18 +354,26 @@ const AboutUsPage: React.FC = () => {
       </section>
 
       {/* Company History Carousel */}
-      <section className="py-12 md:py-16 bg-white relative overflow-hidden">
-        <div className="relative max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-20">
-          {/* Carousel Container */}
-          <div className="flex justify-center">
-            <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl">
-              <CompanyHistoryCarousel 
-                images={historicalImages}
-                autoPlay={true}
-                autoPlayInterval={4000}
-              />
-            </div>
+      <section className="py-12 md:py-16 lg:py-20 bg-cream-50 relative overflow-hidden">
+        <div className="relative w-full">
+          {/* Section Header */}
+          <div className="text-center mb-8 md:mb-12 px-4 sm:px-6 lg:px-8">
+            <h2 className="font-playfair text-3xl md:text-4xl lg:text-5xl font-bold text-botanical-green mb-4 md:mb-6">
+              Through the Decades
+            </h2>
+            <div className="w-12 md:w-16 h-1 bg-ayur-gold mx-auto mb-4"></div>
+            <p className="font-lora text-sm md:text-base lg:text-lg text-antique-brown/70 max-w-3xl mx-auto">
+              A glimpse into our heritage spanning over 135 years of Ayurvedic
+              excellence
+            </p>
           </div>
+
+          {/* Carousel Container - Full Width */}
+          <CenteredCarousel
+            images={historicalImages}
+            autoPlay={true}
+            autoPlayInterval={5000}
+          />
         </div>
       </section>
     </div>

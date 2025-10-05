@@ -96,7 +96,7 @@ const Footer: React.FC = () => {
                   @sukh_sancharak_company
                 </a>
               </div>
-              
+
               <div className="flex items-center space-x-3">
                 <a
                   href="https://www.instagram.com/sukh_sancharak_company?igsh=MThvcmxsM24wbmJ6eA=="
@@ -118,8 +118,8 @@ const Footer: React.FC = () => {
         <div className="border-t border-cream-200/20 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="font-noto text-cream-200 text-sm">
-              © 2024 Sukh Sanchaarak. All rights reserved. Crafted with love and
-              ancient wisdom.
+              © 2024 Sukh Sanchaarak. All rights reserved. Crafted with love
+              and ancient wisdom.
             </p>
             <div className="flex flex-wrap gap-4 md:gap-6 mt-4 md:mt-0 font-noto text-sm">
               <a

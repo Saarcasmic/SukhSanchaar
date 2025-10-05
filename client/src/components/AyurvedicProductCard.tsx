@@ -62,9 +62,13 @@ export function AyurvedicProductCard({
 
         {/* Pricing */}
         <div className="flex items-center gap-2">
-          <span className="text-xl lg:text-2xl font-bold text-gray-900">₹{price}</span>
+          <span className="text-xl lg:text-2xl font-bold text-gray-900">
+            ₹{price}
+          </span>
           {hasDiscount && (
-            <span className="text-xs lg:text-sm text-gray-500 line-through">₹{mrp}</span>
+            <span className="text-xs lg:text-sm text-gray-500 line-through">
+              ₹{mrp}
+            </span>
           )}
         </div>
 

@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
   const handleContactClick = () => {
     // Close mobile menu if open
     setIsMobileMenuOpen(false);
-    
+
     // If we're on the home page, scroll to footer
     if (location.pathname === "/") {
       const footer = document.getElementById("footer");
@@ -37,7 +37,7 @@ const Navbar: React.FC = () => {
   const handleHomeClick = () => {
     // Close mobile menu if open
     setIsMobileMenuOpen(false);
-    
+
     // Navigate to home page and scroll to top
     navigate("/");
     // Scroll to top after navigation
@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
   const handleAboutClick = () => {
     // Close mobile menu if open
     setIsMobileMenuOpen(false);
-    
+
     // Navigate to about page and scroll to top
     navigate("/about");
     // Scroll to top after navigation
@@ -78,7 +78,7 @@ const Navbar: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div className="flex items-center justify-between h-full">
             {/* Logo */}
-            <button 
+            <button
               onClick={handleHomeClick}
               className="flex flex-col items-center hover:opacity-80 transition-opacity"
             >
@@ -143,8 +143,6 @@ const Navbar: React.FC = () => {
                 <Search className="w-5 h-5" />
               </button> */}
 
-              
-
               {/* Cart Icon */}
               <button
                 onClick={toggleCart}
@@ -166,7 +164,11 @@ const Navbar: React.FC = () => {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="lg:hidden p-2 text-gray-600 hover:text-ayur-red transition-colors"
               >
-                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {isMobileMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
               </button>
             </div>
           </div>
@@ -200,7 +202,7 @@ const Navbar: React.FC = () => {
                 >
                   Contact Us
                 </button>
-                
+
                 {/* Mobile Search */}
                 <div className="pt-4 border-t border-gray-200">
                   <div className="relative">

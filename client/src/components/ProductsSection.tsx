@@ -8,7 +8,9 @@ interface ProductsSectionProps {
   showFilters?: boolean;
 }
 
-const ProductsSection: React.FC<ProductsSectionProps> = ({ showFilters = false }) => {
+const ProductsSection: React.FC<ProductsSectionProps> = ({
+  showFilters = false,
+}) => {
   const { products, loading, error } = useProducts();
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +25,7 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({ showFilters = false }
   // Get unique categories from products
   const categories = useMemo(() => {
     const uniqueCategories = Array.from(
-      new Set(products.map((product) => product.category))
+      new Set(products.map((product) => product.category)),
     ).filter(Boolean);
     return ["all", ...uniqueCategories];
   }, [products]);
@@ -40,7 +42,7 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({ showFilters = false }
     // Filter by category
     if (selectedCategory !== "all") {
       filtered = filtered.filter(
-        (product) => product.category === selectedCategory
+        (product) => product.category === selectedCategory,
       );
     }
 
@@ -52,11 +54,11 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({ showFilters = false }
           product.name.toLowerCase().includes(query) ||
           product.description.toLowerCase().includes(query) ||
           product.benefits.some((benefit) =>
-            benefit.toLowerCase().includes(query)
+            benefit.toLowerCase().includes(query),
           ) ||
           product.ingredients.some((ingredient) =>
-            ingredient.toLowerCase().includes(query)
-          )
+            ingredient.toLowerCase().includes(query),
+          ),
       );
     }
 
@@ -70,17 +72,13 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({ showFilters = false }
 
   return (
     <>
-      <div
-        id="products"
-        className="relative overflow-hidden"
-      >
+      <div id="products" className="relative overflow-hidden">
         {/* Background with parchment texture and botanical motifs */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 w-full"
           style={{
             backgroundImage: 'url("/Sanchaar.png")',
-            backgroundSize: "contain",
-            // backgroundRepeat: 'no-repeat',
+            backgroundSize: "cover",
             backgroundPosition: "center",
             opacity: 0.3,
           }}
@@ -99,7 +97,7 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({ showFilters = false }
             >
               Bestsellers
             </h1>
-            
+
             {/* Desktop: Show full title and subtitle */}
             <div className="hidden sm:block">
               <h1
@@ -228,7 +226,8 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({ showFilters = false }
 
               {/* Results Count */}
               <div className="text-center text-sm text-amber-700/80 mt-2">
-                {filteredProducts.length} product{filteredProducts.length !== 1 ? "s" : ""} found
+                {filteredProducts.length} product
+                {filteredProducts.length !== 1 ? "s" : ""} found
               </div>
             </div>
           )}
@@ -255,13 +254,14 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({ showFilters = false }
               {filteredProducts.length === 0 ? (
                 <div className="col-span-full text-center py-12">
                   <div className="text-amber-600 text-lg font-semibold mb-2">
-                    {products.length === 0 ? "No Products Available" : "No Products Found"}
+                    {products.length === 0
+                      ? "No Products Available"
+                      : "No Products Found"}
                   </div>
                   <p className="text-amber-700/60">
-                    {products.length === 0 
+                    {products.length === 0
                       ? "Check back later for our premium Ayurvedic collection."
-                      : "Try adjusting your search or filter criteria."
-                    }
+                      : "Try adjusting your search or filter criteria."}
                   </p>
                 </div>
               ) : (
@@ -280,18 +280,20 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({ showFilters = false }
                     />
 
                     {/* Row separator for structured feel - only show after complete rows */}
-                    {(index + 1) % 4 === 0 && index !== filteredProducts.length - 1 && (
-                      <div className="hidden lg:block absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-screen">
-                        <div className="h-px bg-gradient-to-r from-transparent via-amber-200/50 to-transparent"></div>
-                      </div>
-                    )}
+                    {(index + 1) % 4 === 0 &&
+                      index !== filteredProducts.length - 1 && (
+                        <div className="hidden lg:block absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-screen">
+                          <div className="h-px bg-gradient-to-r from-transparent via-amber-200/50 to-transparent"></div>
+                        </div>
+                      )}
 
                     {/* Mobile row separators */}
-                    {(index + 1) % 2 === 0 && index !== filteredProducts.length - 1 && (
-                      <div className="block lg:hidden absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-screen">
-                        <div className="h-px bg-gradient-to-r from-transparent via-amber-200/50 to-transparent"></div>
-                      </div>
-                    )}
+                    {(index + 1) % 2 === 0 &&
+                      index !== filteredProducts.length - 1 && (
+                        <div className="block lg:hidden absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-screen">
+                          <div className="h-px bg-gradient-to-r from-transparent via-amber-200/50 to-transparent"></div>
+                        </div>
+                      )}
                   </div>
                 ))
               )}
@@ -299,7 +301,6 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({ showFilters = false }
           )}
 
           {/* Footer section */}
-          
         </div>
       </div>
 

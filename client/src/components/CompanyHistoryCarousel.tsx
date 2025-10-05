@@ -17,7 +17,7 @@ interface CompanyHistoryCarouselProps {
 const CompanyHistoryCarousel: React.FC<CompanyHistoryCarouselProps> = ({
   images,
   autoPlay = true,
-  autoPlayInterval = 3000
+  autoPlayInterval = 3000,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -38,7 +38,7 @@ const CompanyHistoryCarousel: React.FC<CompanyHistoryCarouselProps> = ({
       {/* Carousel Container */}
       <div className="relative overflow-hidden rounded-lg md:rounded-xl shadow-lg bg-white border border-cream-200">
         {/* Images */}
-        <div 
+        <div
           className="flex transition-transform duration-700 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
@@ -51,7 +51,7 @@ const CompanyHistoryCarousel: React.FC<CompanyHistoryCarouselProps> = ({
                   className="w-full h-full object-cover"
                   loading={index === 0 ? "eager" : "lazy"}
                 />
-                
+
                 {/* Overlay with caption */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent">
                   <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 text-white">

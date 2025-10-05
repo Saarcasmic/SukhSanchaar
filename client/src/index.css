@@ -62,8 +62,13 @@
   }
 }
 @keyframes zoom-slow {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.08); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
 }
 .animate-zoom-slow {
   animation: zoom-slow 2.5s ease-in-out infinite;

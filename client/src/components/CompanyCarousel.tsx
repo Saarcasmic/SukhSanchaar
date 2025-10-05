@@ -33,7 +33,7 @@ const CompanyCarousel: React.FC<CompanyCarouselProps> = ({
 
   const goToPrevious = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1,
     );
   };
 
@@ -64,7 +64,7 @@ const CompanyCarousel: React.FC<CompanyCarouselProps> = ({
               />
               {/* Overlay for better text readability */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-              
+
               {/* Caption */}
               {/* {image.caption && (
                 <div className="absolute bottom-4 left-4 right-4">

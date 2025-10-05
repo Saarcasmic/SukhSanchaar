@@ -4,27 +4,27 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 // Helper function to generate responsive image URLs using Supabase transformations
 const getResponsiveUrls = (baseUrl: string) => {
   // Remove any existing query parameters and signed tokens
-  const cleanUrl = baseUrl.split('?')[0];
-  
+  const cleanUrl = baseUrl.split("?")[0];
+
   // For Supabase transformations, use the public URL path
   // Transform: /storage/v1/object/sign/... to /storage/v1/render/image/public/...
   const publicUrl = cleanUrl.replace(
-    '/storage/v1/object/sign/',
-    '/storage/v1/render/image/public/'
+    "/storage/v1/object/sign/",
+    "/storage/v1/render/image/public/",
   );
 
   return {
     // Mobile: 600x800 portrait with WebP format for better compression
     mobile: `${publicUrl}?width=600&height=800&resize=cover&format=webp&quality=80`,
-    
+
     // Tablet: 1024x768 landscape
     tablet: `${publicUrl}?width=1024&height=768&resize=cover&format=webp&quality=85`,
-    
+
     // Desktop: 1920x800 wide
     desktop: `${publicUrl}?width=1920&height=800&resize=cover&format=webp&quality=90`,
-    
+
     // Fallback original (for browsers that don't support WebP)
-    original: cleanUrl
+    original: cleanUrl,
   };
 };
 
@@ -46,16 +46,18 @@ const HeroSection: React.FC = () => {
     {
       id: 1,
       // Full design image with text and products baked in
-      backgroundImage: "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Posters/Poster_check.jpg",
+      backgroundImage:
+        "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Posters/Poster_check.jpg",
       imagePosition: "center center",
-      useFullImage: true // Full image, no text overlay
+      useFullImage: true, // Full image, no text overlay
     },
     {
       id: 2,
-      backgroundImage: "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Posters/generate.png",
+      backgroundImage:
+        "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Posters/generate.png",
       imagePosition: "center center",
-      useFullImage: true // Full image, no text overlay
-    }
+      useFullImage: true, // Full image, no text overlay
+    },
   ];
 
   useEffect(() => {
@@ -66,58 +68,63 @@ const HeroSection: React.FC = () => {
   }, [slides.length]);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  const prevSlide = () =>
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   const goToSlide = (index: number) => setCurrentSlide(index);
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ marginTop: "65px", aspectRatio: "2.4/1" }}>
+    <section
+      className="relative w-full overflow-hidden"
+      style={{ marginTop: "65px", aspectRatio: "2.4/1" }}
+    >
       <div className="relative w-full h-full">
         {/* Slides */}
-        <div 
+        <div
           className="flex transition-transform duration-500 ease-in-out h-full"
           style={{ transform: `translateX(-${currentSlide * 100}%)` }}
         >
           {slides.map((slide, index) => {
             const responsiveUrls = getResponsiveUrls(slide.backgroundImage);
-            
+
             return (
-              <div key={slide.id} className="w-full h-full flex-shrink-0 relative">
+              <div
+                key={slide.id}
+                className="w-full h-full flex-shrink-0 relative"
+              >
                 {/* Responsive Image using Picture Element */}
                 <picture className="absolute inset-0">
                   {/* Mobile: 600x800 (portrait) */}
-                  <source 
-                    media="(max-width: 640px)" 
+                  <source
+                    media="(max-width: 640px)"
                     srcSet={responsiveUrls.mobile}
                     type="image/webp"
                   />
-                  
+
                   {/* Tablet: 1024x768 (landscape) */}
-                  <source 
-                    media="(max-width: 1024px)" 
+                  <source
+                    media="(max-width: 1024px)"
                     srcSet={responsiveUrls.tablet}
                     type="image/webp"
                   />
-                  
+
                   {/* Desktop: 1920x800 (wide) */}
-                  <source 
-                    media="(min-width: 1025px)" 
+                  <source
+                    media="(min-width: 1025px)"
                     srcSet={responsiveUrls.desktop}
                     type="image/webp"
                   />
-                  
+
                   {/* Fallback for browsers without WebP support */}
                   <img
                     src={responsiveUrls.original}
                     alt={slide.title || `Hero banner ${index + 1}`}
                     className="w-full h-full object-contain"
-                    style={{ 
-                      objectPosition: slide.imagePosition || "center center"
+                    style={{
+                      objectPosition: slide.imagePosition || "center center",
                     }}
                     loading={index === 0 ? "eager" : "lazy"}
                   />
                 </picture>
-
-                
               </div>
             );
           })}
