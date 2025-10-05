@@ -1,10 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Plus, Minus } from "lucide-react";
-import { IconComponentNode } from "./IconComponentNode";
-import { NineRatingStar } from "./NineRatingStar";
-import { NineRatingStar1 } from "./NineRatingStar1";
-import { NineRatingStar2 } from "./NineRatingStar2";
+import { Plus, Minus, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from "../contexts/CartContext";
 
 interface Product {
@@ -40,11 +36,55 @@ export const ProductModal = ({
 }): JSX.Element | null => {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isAutoPlay, setIsAutoPlay] = useState(true);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setQuantity(1); // Reset quantity when modal closes
+    setCurrentImageIndex(0); // Reset image index when modal closes
+    setIsAutoPlay(true); // Reset autoplay when modal closes
   };
+
+  // Create images array with conditional first image
+  const getImagesArray = () => {
+    if (!product) return [];
+    
+    const firstImage = product.name === "Sudha Sindhu" ? "/prod1.png" : "/product1.jpeg";
+    const additionalImages = product.images || [];
+    
+    return [firstImage, ...additionalImages];
+  };
+
+  const images = getImagesArray();
+
+  const handlePreviousImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev === 0 ? images.length - 1 : prev - 1
+    );
+    setIsAutoPlay(false); // Pause autoplay when user manually navigates
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev === images.length - 1 ? 0 : prev + 1
+    );
+    setIsAutoPlay(false); // Pause autoplay when user manually navigates
+  };
+
+  // Auto-advance carousel every 4 seconds
+  useEffect(() => {
+    if (!isModalOpen || images.length <= 1 || !isAutoPlay) return;
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => 
+        prev === images.length - 1 ? 0 : prev + 1
+      );
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isModalOpen, images.length, isAutoPlay]);
+
 
   const handleQuantityIncrease = () => {
     setQuantity((prev) => prev + 1);
@@ -179,22 +219,50 @@ export const ProductModal = ({
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
-          {/* Image Section */}
-          <div className="w-full lg:w-1/2 bg-[#fff] flex items-center justify-center p-4 lg:p-8 h-64 lg:h-auto">
-            <div className="relative w-full max-w-md lg:max-w-lg h-auto">
-              {/* <div className="absolute w-full h-full top-0 left-0 rounded-full rotate-[-5.00deg] bg-[linear-gradient(286deg,rgba(129,138,249,1)_0%,rgba(129,138,249,0)_100%)] opacity-10" /> */}
-
-              {/* <div className="absolute w-3/4 h-3/4 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full rotate-[-175.00deg] blur-[50px] bg-[linear-gradient(286deg,rgba(129,138,249,1)_0%,rgba(130,136,215,1)_100%)] opacity-10" /> */}
-
-              <div className="relative w-full h-auto">
+          {/* Image Carousel Section */}
+          <div className="w-full lg:w-1/2 bg-[#fff] flex mt-4 justify-center p-4 lg:p-8 min-h-64 lg:h-auto">
+            <div className="relative w-full max-w-md lg:max-w-lg">
+              {/* Main Image Display */}
+              <div 
+                className="relative w-full h-auto"
+                onMouseEnter={() => setIsAutoPlay(false)}
+                onMouseLeave={() => setIsAutoPlay(true)}
+              >
                 <div className="absolute w-1/2 h-4 bottom-0 left-1/2 transform -translate-x-1/2 bg-[#818af9] rounded-full blur-[50px]" />
 
-                <img
-                  className="w-full h-auto object-contain max-h-48 lg:max-h-none"
-                  alt="Product Image"
-                  src={product?.name === "Sudha Sindhu" ? "/prod1.png" : "/product1.jpeg"}
-                />
+                {images.length > 0 && (
+                  <div className="w-full aspect-square rounded-lg overflow-hidden max-h-78 lg:max-h-none">
+                    <img
+                      className="w-full h-full object-cover transition-opacity duration-300"
+                      alt={`Product Image ${currentImageIndex + 1}`}
+                      src={images[currentImageIndex]}
+                    />
+                  </div>
+                )}
+
+                {/* Navigation Arrows - Only show if more than 1 image */}
+                {images.length > 1 && (
+                  <>
+                    <button
+                      onClick={handlePreviousImage}
+                      className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
+                      aria-label="Previous image"
+                    >
+                      <ChevronLeft className="w-5 h-5 text-gray-700" />
+                    </button>
+                    <button
+                      onClick={handleNextImage}
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
+                      aria-label="Next image"
+                    >
+                      <ChevronRight className="w-5 h-5 text-gray-700" />
+                    </button>
+                  </>
+                )}
+
+                
               </div>
+
             </div>
           </div>
 
@@ -279,7 +347,7 @@ export const ProductModal = ({
 
                 {/* Usage Instructions */}
                 {product?.usage_instructions && (
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 mb-8 lg:mb-0">
                     <div className="[font-family:'Manrope-SemiBold',Helvetica] font-semibold text-black text-sm lg:text-xs tracking-[0.24px] leading-[15px]">
                       Usage Instructions:
                     </div>
@@ -307,7 +375,7 @@ export const ProductModal = ({
               <img
                 className="w-12 h-12 lg:w-16 lg:h-16 object-cover rounded-lg flex-shrink-0"
                 alt="Product"
-                src={product?.image_url || "src/Icons/Rectangle3764.png"}
+                src={images.length > 0 ? images[currentImageIndex] : (product?.image_url || "src/Icons/Rectangle3764.png")}
               />
 
               <div className="flex flex-col gap-1 min-w-0 flex-1">
