@@ -98,8 +98,9 @@ const HeroSection: React.FC = () => {
                 <img
                   src={slide.image}
                   alt={slide.title}
-                  className="w-full h-full "
-                  style={{ height: "100%", width: "100%" }}
+                  className="w-full h-full object-cover object-center"
+                  style={{ minHeight: 0, minWidth: 0 }}
+                  sizes="100vw"
                 />
               </div>
 
