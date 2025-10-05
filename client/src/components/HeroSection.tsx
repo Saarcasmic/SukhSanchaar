@@ -1,33 +1,68 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+// Helper function to generate responsive image URLs using Supabase transformations
+const getResponsiveUrls = (baseUrl: string) => {
+  // Remove any existing query parameters and signed tokens
+  const cleanUrl = baseUrl.split('?')[0];
+  
+  // For Supabase transformations, use the public URL path
+  // Transform: /storage/v1/object/sign/... to /storage/v1/render/image/public/...
+  const publicUrl = cleanUrl.replace(
+    '/storage/v1/object/sign/',
+    '/storage/v1/render/image/public/'
+  );
+
+  return {
+    // Mobile: 600x800 portrait with WebP format for better compression
+    mobile: `${publicUrl}?width=600&height=800&resize=cover&format=webp&quality=80`,
+    
+    // Tablet: 1024x768 landscape
+    tablet: `${publicUrl}?width=1024&height=768&resize=cover&format=webp&quality=85`,
+    
+    // Desktop: 1920x800 wide
+    desktop: `${publicUrl}?width=1920&height=800&resize=cover&format=webp&quality=90`,
+    
+    // Fallback original (for browsers that don't support WebP)
+    original: cleanUrl
+  };
+};
+
+interface Slide {
+  id: number;
+  backgroundImage: string;
+  title?: string;
+  subtitle?: string;
+  buttonText?: string;
+  buttonLink?: string;
+  imagePosition?: string;
+  useFullImage?: boolean;
+}
+
 const HeroSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const slides = [
+  const slides: Slide[] = [
     {
       id: 1,
-      // Use background image WITHOUT text (just products + leaves)
-      backgroundImage: "/poster1.svg", // Clean background without text
-      // Define text content separately for responsive overlay
+      // Your high-resolution image from Supabase - will be auto-resized
+      backgroundImage: "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Posters/Poster_check.jpg",
       title: "SUDHA SINDHU",
       subtitle: "Bestseller",
       buttonText: "SHOP NOW",
       buttonLink: "#products",
-      // Control image positioning
-      imagePosition: "right center",
-      // Optional: for slides with full image (like slide 2)
+      imagePosition: "center center",
       useFullImage: false
     },
     {
       id: 2,
-      backgroundImage: "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/sign/SukhSanchaar%20Content/Posters/generate.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV83OTU1MzI4Ny0zOTJmLTQzMTctOGU3YS1mMTY2YjAzZDA5NDciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJTdWtoU2FuY2hhYXIgQ29udGVudC9Qb3N0ZXJzL2dlbmVyYXRlLnBuZyIsImlhdCI6MTc1OTU2MjkyMiwiZXhwIjoyMDc0OTIyOTIyfQ.W5rOtwGJ0Eb7p-8IYyf6omyedoJGRWnAgR7EHVnuYN4",
+      backgroundImage: "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Posters/generate.png",
       title: "A Legacy from 1890s India",
       subtitle: "Traditional Ayurvedic Remedies from the Golden Era",
       buttonText: "Explore Products",
       buttonLink: "#products",
       imagePosition: "center center",
-      useFullImage: true // This slide uses full image with text baked in
+      useFullImage: true
     }
   ];
 
@@ -50,79 +85,62 @@ const HeroSection: React.FC = () => {
           className="flex transition-transform duration-500 ease-in-out h-full"
           style={{ transform: `translateX(-${currentSlide * 100}%)` }}
         >
-          {slides.map((slide) => (
-            <div key={slide.id} className="w-full h-full flex-shrink-0 relative">
-              {/* Background Image */}
-              <div className="absolute inset-0">
-                <img
-                  src={slide.backgroundImage}
-                  alt={slide.title}
-                  className="w-full h-full object-cover"
-                  style={{ 
-                    objectPosition: slide.imagePosition || "center center"
-                  }}
-                  loading="lazy"
-                />
+          {slides.map((slide, index) => {
+            const responsiveUrls = getResponsiveUrls(slide.backgroundImage);
+            
+            
+            return (
+              <div key={slide.id} className="w-full h-full flex-shrink-0 relative">
+                {/* Responsive Image using Picture Element */}
+                <picture className="absolute inset-0">
+                  {/* Mobile: 600x800 (portrait) */}
+                  <source 
+                    media="(max-width: 640px)" 
+                    srcSet={responsiveUrls.mobile}
+                    type="image/webp"
+                  />
+                  
+                  {/* Tablet: 1024x768 (landscape) */}
+                  <source 
+                    media="(max-width: 1024px)" 
+                    srcSet={responsiveUrls.tablet}
+                    type="image/webp"
+                  />
+                  
+                  {/* Desktop: 1920x800 (wide) */}
+                  <source 
+                    media="(min-width: 1025px)" 
+                    srcSet={responsiveUrls.desktop}
+                    type="image/webp"
+                  />
+                  
+                  {/* Fallback for browsers without WebP support */}
+                  <img
+                    src={responsiveUrls.original}
+                    alt={slide.title || `Hero banner ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    style={{ 
+                      objectPosition: slide.imagePosition || "center center"
+                    }}
+                    loading={index === 0 ? "eager" : "lazy"}
+                  />
+                </picture>
+
+                {/* Overlays */}
+                {/* <div className="absolute inset-0 bg-gradient-to-br from-amber-900/10 via-yellow-800/5 to-orange-900/10"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div> */}
+
+                
               </div>
-
-              {/* Overlays */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-900/10 via-yellow-800/5 to-orange-900/10"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
-
-              {/* Text Content Overlay - Only show if not using full image */}
-              {!slide.useFullImage && (
-                <div className="relative z-10 h-full flex items-center">
-                  <div className="w-full px-6 sm:px-12 lg:px-20">
-                    <div className="max-w-2xl">
-                      {/* Main Title */}
-                      <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-800 mb-2 leading-tight tracking-tight">
-                        {slide.title}
-                      </h1>
-                      
-                      {/* Subtitle */}
-                      <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light italic text-gray-700 mb-6">
-                        {slide.subtitle}
-                      </p>
-
-                      {/* Button */}
-                      <a
-                        href={slide.buttonLink}
-                        className="inline-block px-8 py-3 bg-gray-800 text-white font-semibold rounded-full hover:bg-gray-900 transition-all duration-300 text-sm sm:text-base shadow-lg hover:shadow-xl transform hover:scale-105"
-                      >
-                        {slide.buttonText}
-                      </a>
-
-                      {/* Badges Row */}
-                      <div className="flex items-center gap-3 sm:gap-4 mt-6 sm:mt-8">
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-white rounded-full flex items-center justify-center shadow-md">
-                          <span className="text-[8px] sm:text-[9px] md:text-[10px] font-bold text-center leading-tight">
-                            GMP<br/>CERTIFIED<br/>PRACTICE
-                          </span>
-                        </div>
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-amber-700 rounded-full flex items-center justify-center shadow-md">
-                          <span className="text-[8px] sm:text-[9px] md:text-[10px] font-bold text-white text-center leading-tight">
-                            135+<br/>YEARS<br/>LEGACY
-                          </span>
-                        </div>
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-green-600 rounded-full flex items-center justify-center shadow-md">
-                          <span className="text-[8px] sm:text-[9px] md:text-[10px] font-bold text-white text-center leading-tight">
-                            AYURVEDIC<br/>100% Natural
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Navigation Arrows */}
         <button
           onClick={prevSlide}
           aria-label="Previous slide"
-          className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-all duration-300 backdrop-blur-sm z-20"
+          className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-all duration-300  z-20"
         >
           <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
@@ -130,7 +148,7 @@ const HeroSection: React.FC = () => {
         <button
           onClick={nextSlide}
           aria-label="Next slide"
-          className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-all duration-300 backdrop-blur-sm z-20"
+          className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-all duration-300 z-20"
         >
           <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>

@@ -46,10 +46,10 @@ export function AyurvedicProductCard({
 
         {/* Product Name and Tagline - tightly grouped */}
         <div className="mb-1">
-          <h3 className="text-base lg:text-lg font-bold text-gray-900 leading-tight h-10 lg:h-6 overflow-hidden mb-0">
+          <h3 className="text-base lg:text-lg font-bold text-gray-900 leading-tight h-10 lg:h-6 overflow-hidden mb-1">
             <span className="line-clamp-2">{name}</span>
           </h3>
-          <p className="text-xs lg:text-sm text-gray-600 h-8 lg:h-11 overflow-hidden mt-0">
+          <p className="text-xs lg:text-sm text-gray-600 h-8 lg:h-11 overflow-hidden mt-2">
             <span className="line-clamp-2">
               {/* Tagline with ellipsis at the end of the second line */}
               {tagline}
@@ -69,7 +69,7 @@ export function AyurvedicProductCard({
         </div>
 
         {/* Add to Cart Button */}
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-1">
           <Button
             onClick={() => onBuyNow(id)}
             className="w-full bg-ayur-red hover:bg-gray-800 text-white py-2 lg:py-3 transition-all duration-200 hover:shadow-lg font-medium text-xs lg:text-sm"
