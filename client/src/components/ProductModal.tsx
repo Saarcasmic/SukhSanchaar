@@ -211,7 +211,7 @@ export const ProductModal = ({
         {/* Main Content */}
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
           {/* Image Carousel Section */}
-          <div className="w-full lg:w-1/2 bg-[#fff] flex mt-4 justify-center p-4 lg:p-8 min-h-64 lg:h-auto">
+          <div className="w-full lg:w-1/2 bg-[#fff] flex  justify-center p-4 lg:p-8 min-h-64 lg:h-auto">
             <div className="relative w-full max-w-md lg:max-w-lg">
               {/* Main Image Display */}
               <div
@@ -347,15 +347,14 @@ export const ProductModal = ({
         </div>
 
         {/* Cart Section - Fixed at bottom */}
-        {/* Cart Section - Floating Overlay */}
         <div
-          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 
-             w-[95%] max-w-5xl bg-white rounded-xl shadow-lg border border-gray-200 
+          className="absolute bottom-4 left-1/2 transform -translate-x-1/2
+             w-[95%] max-w-5xl bg-white rounded-xl shadow-lg border border-gray-200
              py-3 px-4 lg:py-2 lg:px-4"
         >
-          <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-8">
-            {/* Product Info Section */}
-            <div className="flex items-center gap-4 flex-1 w-full lg:w-auto">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center gap-3 lg:gap-4">
+            {/* Product Info Section - Hidden on mobile */}
+            <div className="hidden lg:flex items-center gap-4 flex-1 w-full lg:w-auto">
               <img
                 className="w-12 h-12 lg:w-16 lg:h-16 object-cover rounded-lg flex-shrink-0"
                 alt="Product"
@@ -387,38 +386,58 @@ export const ProductModal = ({
               </div>
             </div>
 
+            {/* Mobile Product Info - Only show on mobile */}
+            <div className="flex lg:hidden items-center gap-3 flex-1 w-full">
+              <div className="flex justify-between items-center min-w-0 flex-1">
+                <p className="font-semibold text-black text-sm truncate">
+                  {product?.name || "Product Name"}
+                </p>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className="font-bold text-lg text-black">
+                    ₹{product?.price || "0"}
+                  </span>
+                  {product?.original_price &&
+                    product.original_price > product.price && (
+                      <span className="text-sm text-gray-500 line-through">
+                        ₹{product.original_price}
+                      </span>
+                    )}
+                </div>
+              </div>
+            </div>
+
             {/* Quantity and Add to Cart Section */}
-            <div className="flex items-center gap-4 w-full lg:w-auto">
-              <div className="flex items-center gap-3">
-                <span className="font-semibold text-sm text-gray-800">
+            <div className="flex items-center gap-3 lg:gap-4 w-full lg:w-auto">
+              <div className="flex items-center gap-2 lg:gap-3">
+                <span className="font-semibold text-xs lg:text-sm text-gray-800 whitespace-nowrap">
                   Qty:
                 </span>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleQuantityDecrease}
-                    className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 rounded transition-colors"
+                    className="w-7 h-7 lg:w-8 lg:h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 rounded transition-colors"
                   >
-                    <Minus className="w-4 h-4 text-gray-600" />
+                    <Minus className="w-3 h-3 lg:w-4 lg:h-4 text-gray-600" />
                   </button>
-                  <div className="w-12 h-10 flex items-center justify-center bg-white rounded-md border border-gray-300">
-                    <span className="font-normal text-gray-800">
+                  <div className="w-10 h-8 lg:w-12 lg:h-10 flex items-center justify-center bg-white rounded-md border border-gray-300">
+                    <span className="font-normal text-gray-800 text-sm lg:text-base">
                       {quantity}
                     </span>
                   </div>
                   <button
                     onClick={handleQuantityIncrease}
-                    className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 rounded transition-colors"
+                    className="w-7 h-7 lg:w-8 lg:h-8 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 rounded transition-colors"
                   >
-                    <Plus className="w-4 h-4 text-gray-600" />
+                    <Plus className="w-3 h-3 lg:w-4 lg:h-4 text-gray-600" />
                   </button>
                 </div>
               </div>
 
               <button
                 onClick={handleAddToCart}
-                className="px-6 py-3 bg-ayur-red rounded-md hover:bg-ayur-red/80 transition-colors whitespace-nowrap flex-1 lg:flex-none"
+                className="px-4 py-2 lg:px-6 lg:py-3 bg-ayur-red rounded-md hover:bg-ayur-red/80 transition-colors whitespace-nowrap flex-1 lg:flex-none min-w-0"
               >
-                <span className="font-bold text-white text-sm">
+                <span className="font-bold text-white text-xs lg:text-sm">
                   ADD TO CART
                 </span>
               </button>
