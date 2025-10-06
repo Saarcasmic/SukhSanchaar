@@ -49,12 +49,7 @@ export const ProductModal = ({
   // Create images array with conditional first image
   const getImagesArray = () => {
     if (!product) return [];
-
-    const firstImage =
-      product.name === "Sudha Sindhu" ? "/prod1.png" : "/product1.jpeg";
-    const additionalImages = product.images || [];
-
-    return [firstImage, ...additionalImages];
+    return product.images || [];
   };
 
   const images = getImagesArray();
