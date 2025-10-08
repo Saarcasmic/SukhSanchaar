@@ -89,33 +89,27 @@ export class PaymentController {
       // Update order with payment details if order_id is provided
       if (order_id) {
         try {
-          console.log('Updating order payment details for order_id:', order_id);
           const updatedOrder = await OrderModel.updatePaymentDetails(
             order_id,
             razorpay_order_id,
             razorpay_payment_id,
             razorpay_signature
           );
-          console.log('Order payment details updated successfully:', updatedOrder.id);
 
           // Send email notifications after successful payment
           try {
-            console.log('Sending email notifications...');
             await Promise.all([
               NotificationService.sendOrderConfirmationToCustomer(updatedOrder),
               NotificationService.sendOrderConfirmationToAdmin(updatedOrder)
             ]);
-            console.log('✅ Email notifications sent successfully');
           } catch (notificationError) {
-            console.error('❌ Error sending email notifications:', notificationError);
+            console.error('Error sending email notifications:', notificationError);
             // Don't throw error - payment is still successful
           }
         } catch (error) {
           console.error('Error updating order payment details:', error);
           // Don't throw error here as payment verification is successful
         }
-      } else {
-        console.log('No order_id provided, skipping database update and notifications');
       }
 
       const response: ApiResponse = {

@@ -123,12 +123,6 @@ const Footer: React.FC = () => {
             </p>
             <div className="flex flex-wrap gap-4 md:gap-6 mt-4 md:mt-0 font-noto text-sm">
               <a
-                href="#"
-                className="text-cream-200 hover:text-ayur-gold transition-colors"
-              >
-                Privacy Policy
-              </a>
-              <a
                 href="https://merchant.razorpay.com/policy/RIKuq9uRIGD4Nz/terms"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -151,12 +145,6 @@ const Footer: React.FC = () => {
                 className="text-cream-200 hover:text-ayur-gold transition-colors"
               >
                 Refund Policy
-              </a>
-              <a
-                href="/admin"
-                className="text-cream-200 hover:text-ayur-gold transition-colors"
-              >
-                Admin
               </a>
             </div>
           </div>

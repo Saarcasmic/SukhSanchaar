@@ -16,11 +16,6 @@ const router = Router();
 
 // Public routes
 router.post('/order-confirmation', NotificationController.sendOrderConfirmation);
-router.post('/shipping-update', NotificationController.sendShippingUpdate);
 
-// Admin-only routes
-router.post('/low-stock', requireAdmin, NotificationController.sendLowStockAlert);
-router.post('/daily-summary', requireAdmin, NotificationController.sendDailySummary);
-router.post('/test', requireAdmin, NotificationController.testNotification);
 
 export default router;
