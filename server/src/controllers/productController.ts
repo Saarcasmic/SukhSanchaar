@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 import { ProductModel } from '../models/Product';
-import { ApiResponse, ProductQueryParams, CreateProductRequest, UpdateProductRequest } from '../types';
+import { ApiResponse, ProductQueryParams } from '../types';
 import { ValidationError, NotFoundError } from '../middleware/errorHandler';
+import { Database } from '../models/database.types';
+
+// Use Supabase generated types
+type CreateProductRequest = Omit<Database['public']['Tables']['products']['Insert'], 'id' | 'created_at' | 'updated_at'>;
+type UpdateProductRequest = Partial<Database['public']['Tables']['products']['Update']>;
 
 export class ProductController {
   /**

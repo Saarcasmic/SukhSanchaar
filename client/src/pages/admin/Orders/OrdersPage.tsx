@@ -71,22 +71,51 @@ const OrdersPage: React.FC = () => {
   const [sortField, setSortField] = useState<SortField>("created_at");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(50);
+  const [paginationInfo, setPaginationInfo] = useState<{
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  } | null>(null);
 
   // Modal state
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Manual refresh function (only called when user clicks refresh button)
-  const handleRefresh = async () => {
+  // Load orders with pagination
+  const loadOrders = async (
+    page: number = currentPage,
+    limit: number = itemsPerPage,
+  ) => {
     try {
-      await fetchOrders();
+      const pagination = await fetchOrders(page, limit);
+      if (pagination) {
+        setPaginationInfo(pagination);
+      }
     } catch (error) {
-      console.error("Failed to refresh orders:", error);
+      console.error("Failed to load orders:", error);
     }
   };
 
-  // Filter and search orders
+  // Manual refresh function (only called when user clicks refresh button)
+  const handleRefresh = async () => {
+    await loadOrders(currentPage, itemsPerPage);
+  };
+
+  // Load orders on component mount
+  React.useEffect(() => {
+    loadOrders(1, itemsPerPage);
+  }, []);
+
+  // Load orders when page or items per page changes
+  React.useEffect(() => {
+    if (currentPage !== 1) {
+      loadOrders(currentPage, itemsPerPage);
+    }
+  }, [currentPage, itemsPerPage]);
+
+  // Filter and search orders (client-side filtering for current page)
   const filteredOrders = useMemo(() => {
     let filtered = orders;
 
@@ -112,7 +141,7 @@ const OrdersPage: React.FC = () => {
     return filtered;
   }, [orders, searchTerm, statusFilter]);
 
-  // Sort orders
+  // Sort orders (client-side sorting for current page)
   const sortedOrders = useMemo(() => {
     return [...filteredOrders].sort((a, b) => {
       let aValue: any = a[sortField];
@@ -134,12 +163,8 @@ const OrdersPage: React.FC = () => {
     });
   }, [filteredOrders, sortField, sortDirection]);
 
-  // Paginate orders
-  const paginatedOrders = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return sortedOrders.slice(startIndex, endIndex);
-  }, [sortedOrders, currentPage, itemsPerPage]);
+  // Use sorted orders directly (pagination is handled by backend)
+  const paginatedOrders = sortedOrders;
 
   // Handle sorting
   const handleSort = (field: SortField) => {
@@ -224,7 +249,8 @@ const OrdersPage: React.FC = () => {
     return paymentId.length > 6 ? `...${paymentId.slice(-6)}` : paymentId;
   };
 
-  const totalPages = Math.ceil(sortedOrders.length / itemsPerPage);
+  const totalPages = paginationInfo?.totalPages || 1;
+  const totalOrders = paginationInfo?.total || 0;
 
   if (loading) {
     return (
@@ -281,7 +307,7 @@ const OrdersPage: React.FC = () => {
           {/* Status Filter Tabs */}
           <div className="flex flex-wrap gap-2">
             {[
-              { key: "all", label: "All", count: orders.length },
+              { key: "all", label: "All", count: totalOrders },
               {
                 key: "pending",
                 label: "Pending",
@@ -345,18 +371,25 @@ const OrdersPage: React.FC = () => {
       {/* Results Summary */}
       <div className="mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
         <p className="text-sm text-gray-600">
-          Showing {paginatedOrders.length} of {sortedOrders.length} orders
+          Showing {paginatedOrders.length} of {totalOrders} orders (Page{" "}
+          {currentPage} of {totalPages})
         </p>
         <div className="flex items-center gap-2">
           <label className="text-sm text-gray-600">Items per page:</label>
           <select
             value={itemsPerPage}
-            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+            onChange={(e) => {
+              const newLimit = Number(e.target.value);
+              setItemsPerPage(newLimit);
+              setCurrentPage(1); // Reset to first page when changing items per page
+              loadOrders(1, newLimit);
+            }}
             className="border border-gray-300 rounded px-2 py-1 text-sm"
           >
             <option value={10}>10</option>
             <option value={20}>20</option>
             <option value={50}>50</option>
+            <option value={100}>100</option>
           </select>
         </div>
       </div>
@@ -563,7 +596,11 @@ const OrdersPage: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex-1 flex justify-between sm:hidden">
               <button
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                onClick={() => {
+                  const newPage = Math.max(1, currentPage - 1);
+                  setCurrentPage(newPage);
+                  loadOrders(newPage, itemsPerPage);
+                }}
                 disabled={currentPage === 1}
                 className="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -573,9 +610,11 @@ const OrdersPage: React.FC = () => {
                 Page {currentPage} of {totalPages}
               </span>
               <button
-                onClick={() =>
-                  setCurrentPage(Math.min(totalPages, currentPage + 1))
-                }
+                onClick={() => {
+                  const newPage = Math.min(totalPages, currentPage + 1);
+                  setCurrentPage(newPage);
+                  loadOrders(newPage, itemsPerPage);
+                }}
                 disabled={currentPage === totalPages}
                 className="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -593,7 +632,11 @@ const OrdersPage: React.FC = () => {
               <div>
                 <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
                   <button
-                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                    onClick={() => {
+                      const newPage = Math.max(1, currentPage - 1);
+                      setCurrentPage(newPage);
+                      loadOrders(newPage, itemsPerPage);
+                    }}
                     disabled={currentPage === 1}
                     className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -609,7 +652,10 @@ const OrdersPage: React.FC = () => {
                     return (
                       <button
                         key={page}
-                        onClick={() => setCurrentPage(page)}
+                        onClick={() => {
+                          setCurrentPage(page);
+                          loadOrders(page, itemsPerPage);
+                        }}
                         className={`relative inline-flex items-center px-3 py-2 border text-sm font-medium ${
                           page === currentPage
                             ? "z-10 bg-ayur-red border-ayur-red text-white"
@@ -621,9 +667,11 @@ const OrdersPage: React.FC = () => {
                     );
                   })}
                   <button
-                    onClick={() =>
-                      setCurrentPage(Math.min(totalPages, currentPage + 1))
-                    }
+                    onClick={() => {
+                      const newPage = Math.min(totalPages, currentPage + 1);
+                      setCurrentPage(newPage);
+                      loadOrders(newPage, itemsPerPage);
+                    }}
                     disabled={currentPage === totalPages}
                     className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >

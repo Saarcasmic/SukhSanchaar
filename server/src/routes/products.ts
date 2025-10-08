@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ProductController } from '../controllers/productController';
+import { SimpleProductController } from '../controllers/simpleProductController';
 import { requireAdmin } from '../middleware/auth';
 
 const router = Router();
@@ -17,14 +17,11 @@ const router = Router();
  */
 
 // Public routes
-router.get('/', ProductController.getAllProducts);
-router.get('/search', ProductController.searchProducts);
-router.get('/category/:category', ProductController.getProductsByCategory);
-router.get('/:id', ProductController.getProductById);
+router.get('/', SimpleProductController.getAllProducts);
 
 // Admin-only routes
-router.post('/', requireAdmin, ProductController.createProduct);
-router.put('/:id', requireAdmin, ProductController.updateProduct);
-router.delete('/:id', requireAdmin, ProductController.deleteProduct);
+router.post('/', requireAdmin, SimpleProductController.createProduct);
+router.put('/:id', requireAdmin, SimpleProductController.updateProduct);
+router.delete('/:id', requireAdmin, SimpleProductController.deleteProduct);
 
 export default router;

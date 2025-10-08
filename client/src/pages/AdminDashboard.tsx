@@ -47,7 +47,7 @@ const AdminDashboard: React.FC = () => {
     usage_instructions: "",
     weight: "",
     expiry_date: "",
-    stock_quantity: "",
+    pack_details: "1",
     is_active: true,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -101,8 +101,9 @@ const AdminDashboard: React.FC = () => {
           productForm.usage_instructions || "As directed by physician",
         weight: productForm.weight || "100ml",
         expiry_date: productForm.expiry_date || undefined,
-        stock_quantity: parseInt(productForm.stock_quantity) || 0,
+        pack_details: productForm.pack_details,
         is_active: productForm.is_active,
+        review_count: 0, // Default to 0 for new products
       };
 
       await addProduct(productData);
@@ -120,7 +121,7 @@ const AdminDashboard: React.FC = () => {
         usage_instructions: "",
         weight: "",
         expiry_date: "",
-        stock_quantity: "",
+        pack_details: "1",
         is_active: true,
       });
       setShowAddProduct(false);
@@ -150,7 +151,7 @@ const AdminDashboard: React.FC = () => {
         usage_instructions: product.usage_instructions,
         weight: product.weight,
         expiry_date: product.expiry_date || "",
-        stock_quantity: product?.stock_quantity?.toString(),
+        pack_details: product.pack_details || "1",
         is_active: product.is_active,
       });
       setEditingProduct(productId);
@@ -193,8 +194,9 @@ const AdminDashboard: React.FC = () => {
         usage_instructions: productForm.usage_instructions,
         weight: productForm.weight,
         expiry_date: productForm.expiry_date || undefined,
-        stock_quantity: parseInt(productForm.stock_quantity) || 0,
+        pack_details: productForm.pack_details,
         is_active: productForm.is_active,
+        review_count: 0, // Default to 0 for updated products
       };
 
       await updateProduct(editingProduct, productData);
@@ -212,7 +214,7 @@ const AdminDashboard: React.FC = () => {
         usage_instructions: "",
         weight: "",
         expiry_date: "",
-        stock_quantity: "",
+        pack_details: "1",
         is_active: true,
       });
       setShowAddProduct(false);
@@ -382,7 +384,7 @@ const AdminDashboard: React.FC = () => {
                         usage_instructions: "",
                         weight: "",
                         expiry_date: "",
-                        stock_quantity: "",
+                        pack_details: "1",
                         is_active: true,
                       });
                     }}
@@ -452,7 +454,7 @@ const AdminDashboard: React.FC = () => {
                             )}
                           </div>
                           <div className="flex items-center justify-between text-xs sm:text-sm text-antique-brown/60 mb-3 sm:mb-4">
-                            <span>Stock: {product.stock_quantity}</span>
+                            <span>Pack of {product.pack_details}</span>
                             <span className="truncate ml-2">
                               Weight: {product.weight}
                             </span>
@@ -558,7 +560,7 @@ const AdminDashboard: React.FC = () => {
                     usage_instructions: "",
                     weight: "",
                     expiry_date: "",
-                    stock_quantity: "",
+                    pack_details: "1",
                     is_active: true,
                   });
                 }}
@@ -688,20 +690,26 @@ const AdminDashboard: React.FC = () => {
                 </div>
                 <div>
                   <label className="block font-noto font-semibold text-antique-brown mb-2 text-sm sm:text-base">
-                    Stock Quantity *
+                    Pack Details *
                   </label>
-                  <input
-                    type="number"
-                    value={productForm.stock_quantity}
+                  <select
+                    value={productForm.pack_details}
                     onChange={(e) =>
                       setProductForm((prev) => ({
                         ...prev,
-                        stock_quantity: e.target.value,
+                        pack_details: e.target.value,
                       }))
                     }
                     className="w-full p-3 border border-cream-200 rounded-lg focus:ring-2 focus:ring-ayur-red focus:border-transparent text-sm sm:text-base"
-                    placeholder="0"
-                  />
+                  >
+                    <option value="1">1 unit</option>
+                    <option value="2">2 units</option>
+                    <option value="3">3 units</option>
+                    <option value="4">4 units</option>
+                    <option value="5">5 units</option>
+                    <option value="6">6 units</option>
+                    <option value="7">7 units</option>
+                  </select>
                 </div>
               </div>
 

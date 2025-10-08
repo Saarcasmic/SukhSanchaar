@@ -276,6 +276,7 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({
                       price={product.price}
                       mrp={product.original_price}
                       image={product.image_url}
+                      pack_details={product.pack_details}
                       onBuyNow={() => handleProductClick(product)}
                     />
 

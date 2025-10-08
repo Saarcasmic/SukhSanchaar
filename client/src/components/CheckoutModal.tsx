@@ -35,6 +35,10 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
         return 50;
       case "Rajasthan":
         return 100;
+      case "Uttar Pradesh":
+        return 30;
+      case "Others":
+        return 0;
       default:
         return 0;
     }
@@ -400,6 +404,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
                 <option value="">Select State</option>
                 <option value="Delhi">Delhi</option>
                 <option value="Rajasthan">Rajasthan</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Others">Others</option>
               </select>
             </div>
           </div>

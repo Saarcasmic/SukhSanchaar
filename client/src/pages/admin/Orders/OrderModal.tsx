@@ -361,10 +361,10 @@ const OrderModal: React.FC<OrderModalProps> = ({
                 <span className="text-gray-600">Subtotal:</span>
                 <span className="text-gray-900">₹{order.subtotal || 0}</span>
               </div>
-              <div className="flex justify-between text-sm">
+              {/* <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Tax (18%):</span>
                 <span className="text-gray-900">₹{order.tax_amount || 0}</span>
-              </div>
+              </div> */}
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Shipping:</span>
                 <span className="text-gray-900">

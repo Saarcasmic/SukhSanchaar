@@ -8,6 +8,7 @@ interface AyurvedicProductCardProps {
   price: number;
   mrp?: number;
   image: string;
+  pack_details: string;
   onBuyNow: (id: string) => void;
 }
 
@@ -18,6 +19,7 @@ export function AyurvedicProductCard({
   price,
   mrp,
   image,
+  pack_details,
   onBuyNow,
 }: AyurvedicProductCardProps) {
   const hasDiscount = mrp && mrp > price;
@@ -41,7 +43,7 @@ export function AyurvedicProductCard({
       <div className="p-3 lg:p-4 flex flex-col flex-grow">
         {/* Category Tag */}
         <p className="text-orange-600 text-xs lg:text-sm font-medium mb-1">
-          {name === "Sudha Sindhu" ? "Pack of 6" : "Pack of 3"}
+          {`Pack of ${pack_details}`}
         </p>
 
         {/* Product Name and Tagline - tightly grouped */}

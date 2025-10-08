@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
 import { supabase, TABLES, handleSupabaseError } from '../models/supabase';
 import { ApiResponse } from '../types';
+import { Database } from '../models/database.types';
+
+// Use Supabase generated types
+type Order = Database['public']['Tables']['orders']['Row'];
+type OrderItem = Database['public']['Tables']['order_items']['Row'];
 
 export class AdminController {
   /**

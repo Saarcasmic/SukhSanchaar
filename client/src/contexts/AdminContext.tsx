@@ -6,28 +6,7 @@ import React, {
   useCallback,
   ReactNode,
 } from "react";
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  original_price?: number;
-  category: string;
-  image_url: string;
-  images?: string[];
-  ingredients: string[];
-  benefits: string[];
-  usage_instructions: string;
-  weight: string;
-  expiry_date?: string;
-  stock_quantity: number;
-  is_active: boolean;
-  rating?: number;
-  review_count?: number;
-  created_at: string;
-  updated_at: string;
-}
+import { Product } from "../types/product";
 
 interface Order {
   id: string;
@@ -91,7 +70,7 @@ interface AdminContextType {
   updateProduct: (id: string, product: Partial<Product>) => Promise<void>;
   deleteProduct: (id: string) => Promise<void>;
   fetchProducts: () => Promise<void>;
-  fetchOrders: () => Promise<void>;
+  fetchOrders: (page?: number, limit?: number) => Promise<any>;
   updateOrder: (id: string, orderData: Partial<Order>) => Promise<void>;
   addOrder: (
     order: Omit<Order, "id" | "order_number" | "created_at" | "updated_at">,
@@ -258,23 +237,28 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  // Fetch orders from backend
-  const fetchOrders = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await apiCall("/orders");
-      // Debug: Log the structure of returned data (remove in production)
-      // console.log('Orders API response:', response);
-      // console.log('Orders data:', response.data.data);
-      setOrders(response.data.data || []);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to fetch orders");
-      console.error("Error fetching orders:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  // Fetch orders from backend with pagination
+  const fetchOrders = useCallback(
+    async (page: number = 1, limit: number = 50) => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await apiCall(`/orders?page=${page}&limit=${limit}`);
+        // Debug: Log the structure of returned data (remove in production)
+        // console.log('Orders API response:', response);
+        // console.log('Orders data:', response.data.data);
+        setOrders(response.data.data || []);
+        return response.data.pagination; // Return pagination info for the component
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to fetch orders");
+        console.error("Error fetching orders:", err);
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [],
+  );
 
   // Update order in backend
   const updateOrder = useCallback(

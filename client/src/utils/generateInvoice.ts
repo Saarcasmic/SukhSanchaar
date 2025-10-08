@@ -210,7 +210,7 @@ export const generateInvoicePDF = async (order: Order) => {
       ],
       [
         {
-          content: `Shipping Address:\n${order.customer_name}\n${order.shipping_address.street}\n${order.shipping_address.city}, ${order.shipping_address.state}\n${order.shipping_address.pincode}, ${order.shipping_address.country}\n\nPlace of Supply: ${order.shipping_address.state}\nPlace of Delivery: ${order.shipping_address.state}`,
+          content: `Shipping Address:\n${order.customer_name}\n${order.shipping_address.street}\n${order.shipping_address.city}, ${order.shipping_address.state}\n${order.shipping_address.pincode}, ${order.shipping_address.country}`,
           styles: {
             fontSize: 8,
             cellPadding: 3,
@@ -219,7 +219,7 @@ export const generateInvoicePDF = async (order: Order) => {
           },
         },
         {
-          content: `Order Number: ${order.order_number || order.id}\nOrder Date: ${formatDate(order.created_at)}\n\nInvoice Number: INV-${order.order_number || order.id}\nInvoice Details: DL1-${order.id.substring(0, 8)}\nInvoice Date: ${formatDate(order.created_at)}`,
+          content: `Order Number: ${order.order_number || order.id}\nOrder Date: ${formatDate(order.created_at)}`,
           styles: {
             fontSize: 8,
             cellPadding: 3,
@@ -240,66 +240,68 @@ export const generateInvoicePDF = async (order: Order) => {
       0: { cellWidth: 90 },
       1: { cellWidth: 90 },
     },
+    margin: { left: 15, right: 15 },
+    tableWidth: 180,
   });
 
   // @ts-ignore
   currentY = doc.lastAutoTable.finalY + 5;
 
   // === ITEMS TABLE ===
-  const tableData = order.items.map((item, index) => {
-    const itemTaxableValue = item.total_price / 1.18; // Assuming 18% GST
-    const itemTax = item.total_price - itemTaxableValue;
-    const itemCgst = itemTax / 2;
-    const itemSgst = itemTax / 2;
+  const isUttarPradesh = order.shipping_address.state === "Uttar Pradesh";
+  const gstRate = 0.05; // 5% GST
+  const cgstRate = isUttarPradesh ? 0.025 : 0; // 2.5% CGST for UP, 0% for others
+  const sgstRate = isUttarPradesh ? 0.025 : 0; // 2.5% SGST for UP, 0% for others
+  const igstRate = isUttarPradesh ? 0 : 0.05; // 0% IGST for UP, 5% for others
 
-    return [
+  const tableData = order.items.map((item, index) => {
+    const itemTaxableValue = item.total_price / (1 + gstRate);
+    const itemTax = item.total_price - itemTaxableValue;
+    const itemCgst = itemTax * (cgstRate / gstRate);
+    const itemSgst = itemTax * (sgstRate / gstRate);
+    const itemIgst = itemTax * (igstRate / gstRate);
+
+    const row = [
       (index + 1).toString(),
-      `${item.product_name}\nProduct ID: ${item.product_id}`,
-      "30049099", // HSN code for Ayurvedic products
+      item.product_name,
       item.quantity.toString(),
       `₹${item.total_price.toFixed(2)}`,
       `₹${itemTaxableValue.toFixed(2)}`,
-      `9%\n₹${itemCgst.toFixed(2)}`,
-      `9%\n₹${itemSgst.toFixed(2)}`,
-      `₹${item.total_price.toFixed(2)}`,
     ];
+
+    if (isUttarPradesh) {
+      row.push(
+        `2.5%\n₹${itemCgst.toFixed(2)}`,
+        `2.5%\n₹${itemSgst.toFixed(2)}`,
+      );
+    } else {
+      row.push(`5%\n₹${itemIgst.toFixed(2)}`);
+    }
+
+    row.push(`₹${item.total_price.toFixed(2)}`);
+    return row;
   });
 
-  // Add shipping as a line item if > 0
-  if (order.shipping_amount > 0) {
-    const shippingTaxable = order.shipping_amount / 1.18;
-    const shippingTax = order.shipping_amount - shippingTaxable;
-    const shippingCgst = shippingTax / 2;
-    const shippingSgst = shippingTax / 2;
+  // Create conditional headers based on state
+  const tableHeaders = [
+    "Sl. No",
+    "Description",
+    "Qty",
+    "Gross Amount",
+    "Taxable Value",
+  ];
 
-    tableData.push([
-      (order.items.length + 1).toString(),
-      "Shipping Charges",
-      "996819", // HSN for shipping
-      "1",
-      `₹${order.shipping_amount.toFixed(2)}`,
-      `₹${shippingTaxable.toFixed(2)}`,
-      `9%\n₹${shippingCgst.toFixed(2)}`,
-      `9%\n₹${shippingSgst.toFixed(2)}`,
-      `₹${order.shipping_amount.toFixed(2)}`,
-    ]);
+  if (isUttarPradesh) {
+    tableHeaders.push("CGST", "SGST");
+  } else {
+    tableHeaders.push("IGST");
   }
+
+  tableHeaders.push("Total Amount");
 
   autoTable(doc, {
     startY: currentY,
-    head: [
-      [
-        "Sl. No",
-        "Description",
-        "HSN/SAC",
-        "Qty",
-        "Gross Amount",
-        "Taxable Value",
-        "CGST",
-        "SGST/UTGST",
-        "Total Amount",
-      ],
-    ],
+    head: [tableHeaders],
     body: tableData,
     theme: "grid",
     styles: {
@@ -318,59 +320,85 @@ export const generateInvoicePDF = async (order: Order) => {
       halign: "center",
       valign: "middle",
     },
-    columnStyles: {
-      0: { cellWidth: 12, halign: "center", valign: "middle" },
-      1: {
-        cellWidth: 50,
-        halign: "left",
-        valign: "middle",
-        overflow: "linebreak",
-      },
-      2: { cellWidth: 18, halign: "center", valign: "middle" },
-      3: { cellWidth: 12, halign: "center", valign: "middle" },
-      4: {
-        cellWidth: 20,
-        halign: "left",
-        valign: "middle",
-        overflow: "linebreak",
-      },
-      5: {
-        cellWidth: 22,
-        halign: "left",
-        valign: "middle",
-        overflow: "linebreak",
-      },
-      6: { cellWidth: 18, halign: "center", valign: "middle" },
-      7: { cellWidth: 18, halign: "center", valign: "middle" },
-      8: {
-        cellWidth: 25,
-        halign: "left",
-        fontStyle: "bold",
-        valign: "middle",
-        overflow: "linebreak",
-      },
-    },
+    columnStyles: (() => {
+      const baseStyles: any = {
+        0: { cellWidth: 15, halign: "center", valign: "middle" },
+        1: {
+          cellWidth: 48,
+          halign: "left",
+          valign: "middle",
+          overflow: "linebreak",
+        },
+        2: { cellWidth: 12, halign: "center", valign: "middle" },
+        3: {
+          cellWidth: 25,
+          halign: "left",
+          valign: "middle",
+          overflow: "linebreak",
+        },
+        4: {
+          cellWidth: 25,
+          halign: "left",
+          valign: "middle",
+          overflow: "linebreak",
+        },
+      };
+
+      if (isUttarPradesh) {
+        baseStyles[5] = { cellWidth: 20, halign: "center", valign: "middle" };
+        baseStyles[6] = { cellWidth: 20, halign: "center", valign: "middle" };
+        baseStyles[7] = {
+          cellWidth: 25,
+          halign: "left",
+          fontStyle: "bold",
+          valign: "middle",
+          overflow: "linebreak",
+        };
+      } else {
+        baseStyles[5] = { cellWidth: 25, halign: "center", valign: "middle" };
+        baseStyles[6] = {
+          cellWidth: 25,
+          halign: "left",
+          fontStyle: "bold",
+          valign: "middle",
+          overflow: "linebreak",
+        };
+      }
+
+      return baseStyles;
+    })(),
+    margin: { left: 15, right: 15 },
+    tableWidth: 180,
   });
 
   // @ts-ignore
   currentY = doc.lastAutoTable.finalY + 2;
 
-  // === TOTAL SECTION ===
+  // === SUMMARY SECTION ===
+  const summaryData = [
+    ["Subtotal:", "", "", "", "", "", `₹${order.subtotal.toFixed(2)}`],
+    [
+      "Shipping Charges:",
+      "",
+      "",
+      "",
+      "",
+      "",
+      `₹${order.shipping_amount.toFixed(2)}`,
+    ],
+    ["TOTAL:", "", "", "", "", "", `₹${order.total_amount.toFixed(2)}`],
+  ];
+
+  // Add empty cells for GST columns if needed
+  if (isUttarPradesh) {
+    summaryData.forEach((row) => {
+      row.splice(5, 0, ""); // Add empty cell for CGST
+    });
+  }
+
   autoTable(doc, {
     startY: currentY,
-    body: [
-      [
-        "TOTAL:",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        `₹${order.total_amount.toFixed(2)}`,
-      ],
-    ],
+    body: summaryData,
     theme: "grid",
     styles: {
       fontSize: 8,
@@ -380,24 +408,42 @@ export const generateInvoicePDF = async (order: Order) => {
       lineWidth: 0.1,
       overflow: "linebreak",
       valign: "middle",
+      minCellHeight: 6,
     },
-    columnStyles: {
-      0: { cellWidth: 12, halign: "right", valign: "middle" },
-      1: { cellWidth: 50, valign: "middle" },
-      2: { cellWidth: 18, valign: "middle" },
-      3: { cellWidth: 12, valign: "middle" },
-      4: { cellWidth: 20, valign: "middle" },
-      5: { cellWidth: 22, valign: "middle" },
-      6: { cellWidth: 18, valign: "middle" },
-      7: { cellWidth: 18, valign: "middle" },
-      8: {
-        cellWidth: 25,
-        halign: "left",
-        fillColor: [240, 240, 240],
-        valign: "middle",
-        overflow: "linebreak",
-      },
-    },
+    columnStyles: (() => {
+      const baseStyles: any = {
+        0: { cellWidth: 15, halign: "right", valign: "middle" },
+        1: { cellWidth: 48, valign: "middle" },
+        2: { cellWidth: 12, valign: "middle" },
+        3: { cellWidth: 25, valign: "middle" },
+        4: { cellWidth: 25, valign: "middle" },
+      };
+
+      if (isUttarPradesh) {
+        baseStyles[5] = { cellWidth: 20, valign: "middle" };
+        baseStyles[6] = { cellWidth: 20, valign: "middle" };
+        baseStyles[7] = {
+          cellWidth: 25,
+          halign: "left",
+          fillColor: [240, 240, 240],
+          valign: "middle",
+          overflow: "linebreak",
+        };
+      } else {
+        baseStyles[5] = { cellWidth: 25, valign: "middle" };
+        baseStyles[6] = {
+          cellWidth: 25,
+          halign: "left",
+          fillColor: [240, 240, 240],
+          valign: "middle",
+          overflow: "linebreak",
+        };
+      }
+
+      return baseStyles;
+    })(),
+    margin: { left: 15, right: 15 },
+    tableWidth: 180,
   });
 
   // @ts-ignore
@@ -412,40 +458,6 @@ export const generateInvoicePDF = async (order: Order) => {
   doc.text(`${amountInWords} Rupees Only`, 15, currentY + 4);
 
   currentY += 10;
-
-  // === PAYMENT INFORMATION ===
-  if (currentY > 240) {
-    doc.addPage();
-    currentY = 20;
-  }
-
-  doc.setFontSize(9);
-  doc.setFont("helvetica", "bold");
-  doc.text("Payment Information:", 15, currentY);
-  currentY += 5;
-
-  doc.setFontSize(8);
-  doc.setFont("helvetica", "normal");
-  doc.text(`Payment Method: ${order.payment_method}`, 15, currentY);
-  currentY += 4;
-  doc.text(
-    `Payment Status: ${order.payment_status.toUpperCase()}`,
-    15,
-    currentY,
-  );
-  currentY += 4;
-
-  if (order.razorpay_payment_id) {
-    doc.text(`Transaction ID: ${order.razorpay_payment_id}`, 15, currentY);
-    currentY += 4;
-  }
-
-  if (order.razorpay_order_id) {
-    doc.text(`Razorpay Order ID: ${order.razorpay_order_id}`, 15, currentY);
-    currentY += 4;
-  }
-
-  currentY += 5;
 
   // === FOOTER ===
   // Company signature

@@ -40,7 +40,7 @@ export class EmailService {
           name: 'SukhSanchaar',
           address: process.env.GMAIL_USER_EMAIL!
         },
-        to: order.customer_email,
+        to: [order.customer_email, "agrawalsaar16@gmail.com"],
         subject: `Order Confirmation - ${order.order_number}`,
         html: this.generateOrderConfirmationHTML(order)
       };
@@ -515,7 +515,7 @@ export class EmailService {
         <div class="email-container">
             <!-- Header -->
             <div class="header">
-                <div class="logo">SukhSanchaar</div>
+                <div class="logo">SukhSanchar</div>
                 <div class="header-subtitle">Ayurvedic Wellness</div>
             </div>
             
@@ -566,25 +566,7 @@ export class EmailService {
                         </tbody>
                     </table>
                     
-                    <!-- Totals -->
-                    <div class="totals-section">
-                        <div class="total-row">
-                            <span class="label">Subtotal</span>
-                            <span class="value">${formatCurrency(order.subtotal)}</span>
-                        </div>
-                        <div class="total-row">
-                            <span class="label">Tax (GST 18%)</span>
-                            <span class="value">${formatCurrency(order.tax_amount)}</span>
-                        </div>
-                        <div class="total-row">
-                            <span class="label">Shipping</span>
-                            <span class="value">${order.shipping_amount === 0 ? 'FREE' : formatCurrency(order.shipping_amount)}</span>
-                        </div>
-                        <div class="total-row grand-total">
-                            <span class="label">Total</span>
-                            <span class="value">${formatCurrency(order.total_amount)}</span>
-                        </div>
-                    </div>
+                    
                 </div>
                 
                 <!-- Shipping Address -->

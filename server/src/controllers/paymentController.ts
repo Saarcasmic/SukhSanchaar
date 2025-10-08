@@ -99,8 +99,7 @@ export class PaymentController {
           // Send email notifications after successful payment
           try {
             await Promise.all([
-              NotificationService.sendOrderConfirmationToCustomer(updatedOrder),
-              NotificationService.sendOrderConfirmationToAdmin(updatedOrder)
+              NotificationService.sendOrderConfirmationToCustomer(updatedOrder)
             ]);
           } catch (notificationError) {
             console.error('Error sending email notifications:', notificationError);

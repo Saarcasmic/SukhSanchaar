@@ -13,12 +13,14 @@ export interface Product {
   usage_instructions: string;
   weight: string;
   expiry_date?: string;
-  stock_quantity: number;
   is_active: boolean;
   rating?: number;
-  review_count?: number;
+  review_count: number;
   created_at: string;
   updated_at: string;
+  image_onZoom?: string;
+  pack_details: string;
+  image_product_info?: string[];
 }
 
 export interface Order {
@@ -80,8 +82,11 @@ export interface CreateProductRequest {
   usage_instructions: string;
   weight: string;
   expiry_date?: string;
-  stock_quantity: number;
   is_active?: boolean;
+  image_onZoom?: string;
+  pack_details: string;
+  image_product_info?: string[];
+  review_count?: number;
 }
 
 export interface UpdateProductRequest extends Partial<CreateProductRequest> {}

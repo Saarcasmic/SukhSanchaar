@@ -1,6 +1,7 @@
 /**
  * Database types for Supabase
- * These should match your actual Supabase database schema
+ * Updated with current live schema from Supabase database
+ * Generated on: 2025-01-08
  */
 export interface Database {
   public: {
@@ -20,12 +21,14 @@ export interface Database {
           usage_instructions: string;
           weight: string;
           expiry_date: string | null;
-          stock_quantity: number;
           is_active: boolean;
           rating: number | null;
-          review_count: number | null;
+          review_count: number;
           created_at: string;
           updated_at: string;
+          image_onZoom: string | null;
+          pack_details: string;
+          image_product_info: string[] | null;
         };
         Insert: {
           id?: string;
@@ -41,12 +44,14 @@ export interface Database {
           usage_instructions: string;
           weight: string;
           expiry_date?: string | null;
-          stock_quantity: number;
           is_active?: boolean;
           rating?: number | null;
-          review_count?: number | null;
+          review_count?: number;
           created_at?: string;
           updated_at?: string;
+          image_onZoom?: string | null;
+          pack_details?: string;
+          image_product_info?: string[] | null;
         };
         Update: {
           id?: string;
@@ -62,12 +67,14 @@ export interface Database {
           usage_instructions?: string;
           weight?: string;
           expiry_date?: string | null;
-          stock_quantity?: number;
           is_active?: boolean;
           rating?: number | null;
-          review_count?: number | null;
+          review_count?: number;
           created_at?: string;
           updated_at?: string;
+          image_onZoom?: string | null;
+          pack_details?: string;
+          image_product_info?: string[] | null;
         };
       };
       orders: {
@@ -217,7 +224,7 @@ export interface Database {
       [_ in never]: never;
     };
     Enums: {
-      [_ in never]: never;
+      pack_type: '1' | '2' | '3' | '4' | '5' | '6' | '7';
     };
   };
 }

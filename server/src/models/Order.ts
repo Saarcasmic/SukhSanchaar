@@ -182,7 +182,7 @@ export class OrderModel {
       const orderNumber = await this.generateOrderNumber();
 
       // Calculate totals
-      const { subtotal, tax_amount, shipping_amount, total_amount } = await this.calculateOrderTotals(orderData.items);
+      const { subtotal, tax_amount, shipping_amount, total_amount } = await this.calculateOrderTotals(orderData.items, orderData.shipping_address);
 
       // Create order
       const { data: order, error: orderError } = await supabase
@@ -372,7 +372,7 @@ export class OrderModel {
   /**
    * Calculate order totals
    */
-  private static async calculateOrderTotals(items: { product_id: string; quantity: number }[]): Promise<{
+  private static async calculateOrderTotals(items: { product_id: string; quantity: number }[], shippingAddress?: { state: string }): Promise<{
     subtotal: number;
     tax_amount: number;
     shipping_amount: number;
@@ -392,18 +392,33 @@ export class OrderModel {
       }
     }
 
-    // Calculate tax (18% GST)
-    const tax_rate = 0.18;
-    const tax_amount = subtotal * tax_rate;
+    // Tax is already included in product prices, so tax_amount = 0
+    const tax_amount = 0;
 
-    // Calculate shipping (free above ₹500, otherwise ₹50)
-    const shipping_amount = subtotal >= 500 ? 0 : 50;
+    // Calculate shipping based on state (matching frontend logic)
+    const getShippingCharges = (state: string) => {
+      switch (state) {
+        case "Delhi":
+          return 50;
+        case "Rajasthan":
+          return 100;
+        case "Uttar Pradesh":
+          return 30;
+        case "Others":
+          return 0;
+        default:
+          return 0;
+      }
+    };
 
-    const total_amount = subtotal + tax_amount + shipping_amount;
+    const shipping_amount = shippingAddress?.state ? getShippingCharges(shippingAddress.state) : 0;
+
+    // Total = subtotal + shipping (tax already included in product prices)
+    const total_amount = subtotal + shipping_amount;
 
     return {
       subtotal: Math.round(subtotal * 100) / 100,
-      tax_amount: Math.round(tax_amount * 100) / 100,
+      tax_amount: 0, // Tax is included in product prices
       shipping_amount,
       total_amount: Math.round(total_amount * 100) / 100
     };

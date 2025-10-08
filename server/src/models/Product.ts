@@ -1,5 +1,11 @@
 import { supabase, TABLES, handleSupabaseError, isSupabaseSuccess } from './supabase';
-import { Product, CreateProductRequest, UpdateProductRequest, ProductQueryParams, PaginatedResponse } from '../types';
+import { Database } from './database.types';
+import { ProductQueryParams, PaginatedResponse } from '../types';
+
+// Use Supabase generated types
+type Product = Database['public']['Tables']['products']['Row'];
+type CreateProductRequest = Omit<Database['public']['Tables']['products']['Insert'], 'id' | 'created_at' | 'updated_at'>;
+type UpdateProductRequest = Partial<Database['public']['Tables']['products']['Update']>;
 
 export class ProductModel {
   /**
@@ -40,9 +46,10 @@ export class ProductModel {
         query = query.lte('price', max_price);
       }
 
-      if (in_stock) {
-        query = query.gt('stock_quantity', 0);
-      }
+      // Note: stock_quantity field removed from schema
+      // if (in_stock) {
+      //   query = query.gt('stock_quantity', 0);
+      // }
 
       // Apply sorting
       query = query.order(sort_by, { ascending: sort_order === 'asc' });
@@ -109,6 +116,8 @@ export class ProductModel {
         .from(TABLES.PRODUCTS)
         .insert([{
           ...productData,
+          image_onZoom: null, // Temporary: field will be removed from database
+          image_product_info: null, // Temporary: field will be removed from database
           is_active: productData.is_active ?? true,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
@@ -178,29 +187,10 @@ export class ProductModel {
   }
 
   /**
-   * Update product stock quantity
+   * Update product stock quantity - DEPRECATED: stock_quantity field removed
    */
   static async updateStock(id: string, quantity: number): Promise<Product> {
-    try {
-      const { data, error } = await supabase
-        .from(TABLES.PRODUCTS)
-        .update({
-          stock_quantity: quantity,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', id)
-        .select()
-        .single();
-
-      if (error) {
-        handleSupabaseError(error, 'updating product stock');
-      }
-
-      return data;
-    } catch (error) {
-      console.error('Error updating product stock:', error);
-      throw error;
-    }
+    throw new Error('Stock management is no longer supported - stock_quantity field has been removed from the schema');
   }
 
   /**
@@ -213,7 +203,7 @@ export class ProductModel {
         .select('*')
         .eq('category', category)
         .eq('is_active', true)
-        .gt('stock_quantity', 0)
+        // .gt('stock_quantity', 0) // stock_quantity field removed
         .order('created_at', { ascending: false })
         .limit(limit);
 
@@ -238,7 +228,7 @@ export class ProductModel {
         .select('*')
         .or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,ingredients.cs.{${searchTerm}}`)
         .eq('is_active', true)
-        .gt('stock_quantity', 0)
+        // .gt('stock_quantity', 0) // stock_quantity field removed
         .order('created_at', { ascending: false })
         .limit(limit);
 
