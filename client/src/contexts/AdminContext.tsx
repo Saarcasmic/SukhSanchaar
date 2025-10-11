@@ -105,7 +105,7 @@ const apiCall = async (endpoint: string, options: RequestInit = {}) => {
 };
 
 // Hardcoded admin password - in production, this should be stored securely
-const ADMIN_PASSWORD = "admin123";
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_KEY;
 
 export const AdminProvider: React.FC<{ children: ReactNode }> = ({
   children,
