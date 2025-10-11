@@ -59,7 +59,7 @@ class EmailService {
         try {
             const mailOptions = {
                 from: {
-                    name: 'SukhSanchaar',
+                    name: 'Sukh Sancharak Company',
                     address: process.env.GMAIL_USER_EMAIL
                 },
                 to: [order.customer_email, "agrawalsaar16@gmail.com"],
@@ -88,7 +88,7 @@ class EmailService {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Order Confirmation - SukhSanchaar</title>
+        <title>Order Confirmation - Sukh Sancharak Company</title>
         <style>
             * {
                 margin: 0;
@@ -532,7 +532,7 @@ class EmailService {
         <div class="email-container">
             <!-- Header -->
             <div class="header">
-                <div class="logo">SukhSanchar</div>
+                <div class="logo">Sukh Sancharak Company</div>
                 <div class="header-subtitle">Ayurvedic Wellness</div>
             </div>
             
@@ -611,7 +611,7 @@ class EmailService {
                     <p><strong>Questions? Contact Us</strong></p>
                     <p>Email: <a href="mailto:${process.env.ADMIN_EMAIL || 'support@sukhsanchaar.com'}">${process.env.ADMIN_EMAIL || 'support@sukhsanchaar.com'}</a></p>
                     <p>Phone: ${process.env.ADMIN_PHONE || '+91-XXXXXXXXXX'}</p>
-                    <p><a href="https://sukhsanchaar.com">www.sukhsanchaar.com</a></p>
+                    <p><a href="https://www.sukhsancharak.com/">www.sukhsancharak.com</a></p>
                 </div>
             </div>
         </div>

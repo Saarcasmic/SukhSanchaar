@@ -100,7 +100,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({
           {/* Footer */}
           <div className="mt-8 text-center">
             <p className="font-noto text-xs text-gray-500">
-              Sanchaaar Heritage Admin Portal
+              Sukh Sancharak Co. Heritage Admin Portal
             </p>
           </div>
         </div>

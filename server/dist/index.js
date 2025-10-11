@@ -53,7 +53,7 @@ app.use((0, morgan_1.default)(process.env.NODE_ENV === 'production' ? 'combined'
 app.get('/health', (req, res) => {
     res.json({
         success: true,
-        message: 'SukhSanchaar API is running',
+        message: 'Sukh Sancharak Company API is running',
         timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV || 'development'
     });
@@ -66,7 +66,7 @@ app.use('/api/notifications', notifications_1.default);
 app.use(notFound_1.notFound);
 app.use(errorHandler_1.errorHandler);
 app.listen(PORT, () => {
-    console.log(`🚀 SukhSanchaar API server running on port ${PORT}`);
+    console.log(`🚀 Sukh Sancharak Company API server running on port ${PORT}`);
     console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`🔗 Health check: http://localhost:${PORT}/health`);
 });

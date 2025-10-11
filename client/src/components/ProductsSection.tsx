@@ -90,12 +90,12 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({
           <div className="text-center mb-12">
             {/* Mobile: Show only "Bestsellers" */}
             <h1
-              className="text-3xl sm:hidden font-medium text-amber-900 mb-4"
+              className="text-2xl sm:hidden font-medium text-amber-900 mb-4"
               style={{
                 fontFamily: '"Playfair Display", "Times New Roman", serif',
               }}
             >
-              Bestsellers
+              Premium Ayurvedic Collection
             </h1>
 
             {/* Desktop: Show full title and subtitle */}

@@ -37,10 +37,10 @@ export class EmailService {
     try {
       const mailOptions = {
         from: {
-          name: 'SukhSanchaar',
+          name: 'Sukh Sancharak Co.',
           address: process.env.GMAIL_USER_EMAIL!
         },
-        to: [order.customer_email, "agrawalsaar16@gmail.com"],
+        to: [order.customer_email, "sukhsancharak1890@gmail.com"],
         subject: `Order Confirmation - ${order.order_number}`,
         html: this.generateOrderConfirmationHTML(order)
       };
@@ -71,7 +71,7 @@ export class EmailService {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Order Confirmation - SukhSanchaar</title>
+        <title>Order Confirmation - Sukh Sancharak Co.</title>
         <style>
             * {
                 margin: 0;
@@ -515,7 +515,7 @@ export class EmailService {
         <div class="email-container">
             <!-- Header -->
             <div class="header">
-                <div class="logo">SukhSanchar</div>
+                <div class="logo">Sukh Sancharak Co.</div>
                 <div class="header-subtitle">Ayurvedic Wellness</div>
             </div>
             
@@ -592,8 +592,8 @@ export class EmailService {
                 
                 <div class="contact-info">
                     <p><strong>Questions? Contact Us</strong></p>
-                    <p>Email: <a href="mailto:${process.env.ADMIN_EMAIL || 'support@sukhsanchaar.com'}">${process.env.ADMIN_EMAIL || 'support@sukhsanchaar.com'}</a></p>
-                    <p>Phone: ${process.env.ADMIN_PHONE || '+91-XXXXXXXXXX'}</p>
+                    <p>Email: <a href="mailto:${process.env.ADMIN_EMAIL || 'sukhsancharak1890@gmail.com'}">${process.env.ADMIN_EMAIL || 'sukhsancharak1890@gmail.com'}</a></p>
+                    <p>Phone: ${process.env.ADMIN_PHONE || '+91-8218304730'}</p>
                     <p><a href="https://sukhsanchaar.com">www.sukhsanchaar.com</a></p>
                 </div>
             </div>

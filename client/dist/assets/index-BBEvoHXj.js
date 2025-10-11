@@ -13007,7 +13007,7 @@ const $v = ({ onClose: r }) => {
                         className: "flex items-center space-x-2",
                         children: h.jsx("span", {
                           className: "font-playfair text-2xl font-bold",
-                          children: "Sukh Sanchaarak",
+                          children: "Sukh Sancharak Company",
                         }),
                       }),
                       h.jsx("p", {
@@ -13168,7 +13168,7 @@ const $v = ({ onClose: r }) => {
                     h.jsx("p", {
                       className: "font-noto text-cream-200 text-sm",
                       children:
-                        "© 2024 Sukh Sanchaarak. All rights reserved. Crafted with love and ancient wisdom.",
+                        "© 2024 Sukh Sancharak Company. All rights reserved. Crafted with love and ancient wisdom.",
                     }),
                     h.jsxs("div", {
                       className:
@@ -15988,22 +15988,22 @@ const p1 = ({ showFilters: r = !1 }) => {
       n = [
         {
           src: "/company_1.jpg",
-          alt: "Sukh Sanchaarak Manufacturing Facility",
+          alt: "Sukh Sancharak Company Manufacturing Facility",
           caption: "Our GMP-certified manufacturing facility in Mathura",
         },
         {
           src: "/company_6.jpeg",
-          alt: "Sukh Sanchaarak Manufacturing Facility",
+          alt: "Sukh Sancharak Company Manufacturing Facility",
           caption: "Our GMP-certified manufacturing facility in Mathura",
         },
         {
           src: "/company_7.jpeg",
-          alt: "Sukh Sanchaarak Manufacturing Facility",
+          alt: "Sukh Sancharak Company Manufacturing Facility",
           caption: "Our GMP-certified manufacturing facility in Mathura",
         },
         {
           src: "/company_8.jpeg",
-          alt: "Sukh Sanchaarak Manufacturing Facility",
+          alt: "Sukh Sancharak Company Manufacturing Facility",
           caption: "Our GMP-certified manufacturing facility in Mathura",
         },
       ],

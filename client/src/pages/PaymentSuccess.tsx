@@ -12,7 +12,7 @@ const PaymentSuccess: React.FC = () => {
     // Auto redirect to home after 10 seconds
     const timer = setTimeout(() => {
       navigate("/");
-    }, 10000);
+    }, 15000);
 
     return () => clearTimeout(timer);
   }, [navigate]);
@@ -118,31 +118,10 @@ const PaymentSuccess: React.FC = () => {
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 bg-ayur-red rounded-full mt-2 flex-shrink-0"></div>
               <p className="font-noto text-sm text-antique-brown/70">
-                <strong>Shipping details will be sent via WhatsApp</strong>{" "}
-                within 24 hours
-              </p>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-ayur-red rounded-full mt-2 flex-shrink-0"></div>
-              <p className="font-noto text-sm text-antique-brown/70">
                 Your Ayurvedic remedies will be carefully packaged and shipped
               </p>
             </div>
           </div>
-        </div>
-
-        {/* WhatsApp Notice */}
-        <div className="bg-green-50 p-4 rounded-xl border border-green-200 mb-6">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <MessageCircle className="w-5 h-5 text-green-600" />
-            <span className="font-noto font-semibold text-green-800">
-              WhatsApp Updates
-            </span>
-          </div>
-          <p className="font-noto text-sm text-green-700">
-            We'll send shipping updates and tracking information directly to
-            your WhatsApp for convenience.
-          </p>
         </div>
 
         {/* Action Buttons */}
@@ -156,7 +135,7 @@ const PaymentSuccess: React.FC = () => {
           </button>
 
           <a
-            href="https://wa.me/919876543210"
+            href="https://wa.me/918218304730"
             target="_blank"
             rel="noopener noreferrer"
             className="w-full border-2 border-green-500 text-green-600 py-3 rounded-full font-noto font-semibold hover:bg-green-500 hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2"
@@ -168,14 +147,14 @@ const PaymentSuccess: React.FC = () => {
 
         {/* Auto redirect notice */}
         <p className="font-noto text-xs text-antique-brown/50 mt-6">
-          You'll be automatically redirected to the home page in 10 seconds
+          You'll be automatically redirected to the home page in 15 seconds
         </p>
 
         {/* Heritage Badge */}
         <div className="mt-6 pt-6 border-t border-cream-200">
           <p className="font-noto text-xs text-antique-brown/60">
-            ✨ Thank you for choosing Sanchaaar - 135 Years of Ayurvedic
-            Excellence
+            ✨ Thank you for choosing Sukh Sancharak Co. - 135 Years of
+            Ayurvedic Excellence
           </p>
         </div>
       </div>

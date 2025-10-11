@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
           <div className="space-y-6">
             <div className="flex items-center space-x-2">
               <span className="font-playfair text-2xl font-bold">
-                Sukh Sanchaarak
+                Sukh Sancharak Co.
               </span>
             </div>
             <p className="font-lora text-cream-100 leading-relaxed max-w-md">
@@ -53,10 +53,10 @@ const Footer: React.FC = () => {
                 <div className="space-y-1">
                   <p className="font-noto text-sm text-cream-200">Email us</p>
                   <a
-                    href="mailto:bhavyapalsharma@gmail.com"
+                    href="mailto:sukhsancharak1890@gmail.com"
                     className="font-lora hover:text-ayur-gold transition-colors block break-all"
                   >
-                    bhavyapalsharma@gmail.com
+                    sukhsancharak1890@gmail.com
                   </a>
                 </div>
               </div>
@@ -118,7 +118,7 @@ const Footer: React.FC = () => {
         <div className="border-t border-cream-200/20 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="font-noto text-cream-200 text-sm">
-              © 2024 Sukh Sanchaarak. All rights reserved. Crafted with love
+              © 2024 Sukh Sancharak Co. All rights reserved. Crafted with love
               and ancient wisdom.
             </p>
             <div className="flex flex-wrap gap-4 md:gap-6 mt-4 md:mt-0 font-noto text-sm">

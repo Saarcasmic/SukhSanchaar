@@ -44,13 +44,13 @@ export class RazorpayService {
     customerName: string,
     customerEmail: string,
     customerPhone: string,
-    description: string = "SukhSanchaar Ayurvedic Products",
+    description: string = "Sukh Sancharak Co. Ayurvedic Products",
   ): RazorpayOptions {
     return {
       key: RAZORPAY_KEY_ID,
       amount: amount, // Amount is already in paise from CheckoutModal
       currency,
-      name: "SukhSanchaar",
+      name: "Sukh Sancharak Co.",
       description,
       order_id: orderId,
       prefill: {
@@ -59,7 +59,7 @@ export class RazorpayService {
         contact: customerPhone,
       },
       notes: {
-        source: "sukhsanchaar_web",
+        source: "sukhsancharak_web",
         order_id: orderId,
       },
       theme: {

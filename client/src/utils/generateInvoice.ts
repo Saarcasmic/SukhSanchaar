@@ -127,15 +127,12 @@ export const generateInvoicePDF = async (order: Order) => {
 
   // Company Details (You can update these with actual company info)
   const companyDetails = {
-    name: "SukhSanchaar Ayurvedic Products",
-    address: "Plot No. 123, Industrial Area",
-    city: "New Delhi - 110001, India",
-    gstin: "07XXXXX1234X1ZX",
-    pan: "XXXXX1234X",
-    state: "Delhi",
-    stateCode: "07",
-    email: "info@sukhsanchaar.com",
-    phone: "+91-XXXXXXXXXX",
+    name: "Sukh Sancharak Co.",
+    address: "999,Chatta Bazar,",
+    city: "Mathura-281001",
+    gstin: "09ACDFS1769H1ZT",
+    state: "U.P",
+    stateCode: "09",
   };
 
   // Date formatting
@@ -154,18 +151,13 @@ export const generateInvoicePDF = async (order: Order) => {
   // Company Logo/Name (Left side)
   doc.setFontSize(20);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(214, 58, 44); // Ayur-red color
-  doc.text("SukhSanchaar", 15, currentY);
-
-  doc.setFontSize(8);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(0, 0, 0);
-  doc.text("Ayurvedic Products", 15, currentY + 5);
+  doc.setTextColor(0, 0, 0); // Black color
+  doc.text("Sukh Sancharak Co.", 15, currentY);
 
   // Title (Right side)
   doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
-  doc.text("Tax Invoice/Bill of Supply/Cash Memo", 210 - 15, currentY, {
+  doc.text("Tax Invoice", 210 - 15, currentY, {
     align: "right",
   });
 
@@ -190,7 +182,7 @@ export const generateInvoicePDF = async (order: Order) => {
     body: [
       [
         {
-          content: `Sold By:\n${companyDetails.name}\n${companyDetails.address}\n${companyDetails.city}\n\nGSTIN: ${companyDetails.gstin}\nPAN No: ${companyDetails.pan}\nState: ${companyDetails.state}, Code: ${companyDetails.stateCode}`,
+          content: `Sold By:\n${companyDetails.name}\n${companyDetails.address}\n${companyDetails.city}\n\nGSTIN: ${companyDetails.gstin}\nState: ${companyDetails.state}, Code: ${companyDetails.stateCode}`,
           styles: {
             fontSize: 8,
             cellPadding: 3,
@@ -270,12 +262,9 @@ export const generateInvoicePDF = async (order: Order) => {
     ];
 
     if (isUttarPradesh) {
-      row.push(
-        `2.5%\n₹${itemCgst.toFixed(2)}`,
-        `2.5%\n₹${itemSgst.toFixed(2)}`,
-      );
+      row.push(`₹${itemCgst.toFixed(2)}`, `₹${itemSgst.toFixed(2)}`);
     } else {
-      row.push(`5%\n₹${itemIgst.toFixed(2)}`);
+      row.push(`₹${itemIgst.toFixed(2)}`);
     }
 
     row.push(`₹${item.total_price.toFixed(2)}`);
@@ -292,9 +281,9 @@ export const generateInvoicePDF = async (order: Order) => {
   ];
 
   if (isUttarPradesh) {
-    tableHeaders.push("CGST", "SGST");
+    tableHeaders.push("CGST(2.5%)", "SGST(2.5%)");
   } else {
-    tableHeaders.push("IGST");
+    tableHeaders.push("IGST(5%)");
   }
 
   tableHeaders.push("Total Amount");
@@ -322,9 +311,9 @@ export const generateInvoicePDF = async (order: Order) => {
     },
     columnStyles: (() => {
       const baseStyles: any = {
-        0: { cellWidth: 15, halign: "center", valign: "middle" },
+        0: { cellWidth: 16, halign: "center", valign: "middle" },
         1: {
-          cellWidth: 48,
+          cellWidth: 40,
           halign: "left",
           valign: "middle",
           overflow: "linebreak",
@@ -412,8 +401,8 @@ export const generateInvoicePDF = async (order: Order) => {
     },
     columnStyles: (() => {
       const baseStyles: any = {
-        0: { cellWidth: 15, halign: "right", valign: "middle" },
-        1: { cellWidth: 48, valign: "middle" },
+        0: { cellWidth: 16, halign: "right", valign: "middle" },
+        1: { cellWidth: 40, valign: "middle" },
         2: { cellWidth: 12, valign: "middle" },
         3: { cellWidth: 25, valign: "middle" },
         4: { cellWidth: 25, valign: "middle" },
@@ -478,7 +467,7 @@ export const generateInvoicePDF = async (order: Order) => {
   doc.setFontSize(7);
   doc.setFont("helvetica", "italic");
   doc.setTextColor(100, 100, 100);
-  doc.text("Thank you for your business!", 105, pageHeight - 20, {
+  doc.text("Thank you for your Order!", 105, pageHeight - 20, {
     align: "center",
   });
   doc.text(
@@ -487,12 +476,12 @@ export const generateInvoicePDF = async (order: Order) => {
     pageHeight - 15,
     { align: "center" },
   );
-  doc.text(
-    `For queries, contact: ${companyDetails.email} | ${companyDetails.phone}`,
-    105,
-    pageHeight - 10,
-    { align: "center" },
-  );
+  // doc.text(
+  //   `For queries, contact: ${companyDetails.email} | ${companyDetails.phone}`,
+  //   105,
+  //   pageHeight - 10,
+  //   { align: "center" },
+  // );
 
   // Add page numbers
   const pageCount = doc.getNumberOfPages();

@@ -89,10 +89,10 @@ const ContactSection: React.FC = () => {
             </div>
             <h3 className="font-playfair text-xl font-bold mb-2">Email</h3>
             <a
-              href="mailto:info@sanchaaar.com"
+              href="mailto:sukhsancharak1890@gmail.com"
               className="font-lora hover:text-heritage-gold transition-colors"
             >
-              info@sanchaaar.com
+              sukhsancharak1890@gmail.com
             </a>
           </div>
 
@@ -103,10 +103,10 @@ const ContactSection: React.FC = () => {
             </div>
             <h3 className="font-playfair text-xl font-bold mb-2">Phone</h3>
             <a
-              href="tel:+919876543210"
+              href="tel:+918218304730"
               className="font-lora hover:text-heritage-gold transition-colors"
             >
-              +91 98765 43210
+              +91 8218304730
             </a>
           </div>
 
@@ -117,7 +117,7 @@ const ContactSection: React.FC = () => {
             </div>
             <h3 className="font-playfair text-xl font-bold mb-2">WhatsApp</h3>
             <a
-              href="https://wa.me/919876543210"
+              href="https://wa.me/918218304730"
               target="_blank"
               rel="noopener noreferrer"
               className="font-lora hover:text-heritage-gold transition-colors"
@@ -143,7 +143,8 @@ const ContactSection: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <p className="font-lora text-lg mb-2">
-                <strong>Sanchaaar</strong> - 135 Years of Ayurvedic Heritage
+                <strong>Sukh Sancharak Co.</strong> - 135 Years of Ayurvedic
+                Heritage
               </p>
               <p className="font-noto text-sm text-cream-200">
                 Since 1890 • Pure, Potent, Proven Remedies

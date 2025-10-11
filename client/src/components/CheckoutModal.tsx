@@ -130,7 +130,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
           product_id: item.id,
           quantity: item.quantity,
         })),
-        notes: `Order for ${state.items.length} item(s) - SukhSanchaar`,
+        notes: `Order for ${state.items.length} item(s) - Sukh Sancharak Co.`,
       };
 
       const API_BASE_URL =
@@ -206,7 +206,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
       const orderItemsDescription = state.items
         .map((item) => `${item.name} x${item.quantity}`)
         .join(", ");
-      const description = `SukhSanchaar Order - ${orderItemsDescription} | Address: ${fullAddress} | Total: ₹${totalWithShipping}`;
+      const description = `Sukh Sancharak Co. Order - ${orderItemsDescription} | Address: ${fullAddress} | Total: ₹${totalWithShipping}`;
 
       const checkoutOptions = RazorpayService.createCheckoutOptions(
         paymentData.order_id,
@@ -262,7 +262,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
           payment_status: "paid" as const,
           order_status: "confirmed" as const,
           payment_method: "razorpay",
-          notes: `Order for ${state.items.length} item(s) - SukhSanchaar`,
+          notes: `Order for ${state.items.length} item(s) - Sukh Sancharak Co.`,
         };
 
         addOrder(adminOrderData);

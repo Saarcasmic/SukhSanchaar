@@ -82,7 +82,11 @@ const Navbar: React.FC = () => {
               onClick={handleHomeClick}
               className="flex flex-col items-center hover:opacity-80 transition-opacity"
             >
-              <img src="/logoo.png" alt="Sanchaaar" className="h-8 w-auto" />
+              <img
+                src="/logoo.png"
+                alt="Sukh Sancharak Co."
+                className="h-8 w-auto"
+              />
               <div className="hidden sm:block">
                 <p className="text-xs text-gray-600 font-medium">Since 1890</p>
               </div>
@@ -226,16 +230,18 @@ const Navbar: React.FC = () => {
 
       {/* Floating Pay & Checkout Button */}
       {state.items.length > 0 && !state.isOpen && (
-        <button
-          onClick={toggleCart}
-          className="fixed bottom-0 z-50 bg-ayur-red text-white px-0 py-4 items-center justify-center font-semibold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 transition-all duration-300 flex items-center gap-3 w-full"
-        >
-          <ShoppingCart className="w-5 h-5" />
-          <span>Pay & Checkout</span>
-          <div className="bg-white text-ayur-red text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center">
-            {state.items.reduce((sum, item) => sum + item.quantity, 0)}
-          </div>
-        </button>
+        <div className="fixed bottom-0 sm:bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full sm:w-auto">
+          <button
+            onClick={toggleCart}
+            className="w-full sm:w-auto bg-ayur-red text-white px-6 py-4 items-center justify-center font-semibold text-lg shadow-2xl hover:shadow-3xl animate-zoom-slow transition-all duration-300 flex items-center gap-3 sm:rounded-full"
+          >
+            <ShoppingCart className="w-5 h-5" />
+            <span>Pay & Checkout</span>
+            <div className="bg-white text-ayur-red text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center">
+              {state.items.reduce((sum, item) => sum + item.quantity, 0)}
+            </div>
+          </button>
+        </div>
       )}
     </>
   );

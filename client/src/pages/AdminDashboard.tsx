@@ -265,7 +265,7 @@ const AdminDashboard: React.FC = () => {
                 Admin Dashboard
               </h1>
               <p className="font-noto text-xs sm:text-sm text-cream-200 mt-1">
-                Sanchaaar Heritage
+                Sukh Sancharak Co. Heritage
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -500,7 +500,7 @@ const AdminDashboard: React.FC = () => {
                       </label>
                       <input
                         type="text"
-                        value="Sanchaaar - Ayurvedic Heritage"
+                        value="Sukh Sancharak Co. - Ayurvedic Heritage"
                         className="w-full p-3 border border-cream-200 rounded-lg focus:ring-2 focus:ring-ayur-red focus:border-transparent text-sm sm:text-base"
                         readOnly
                       />
@@ -511,7 +511,7 @@ const AdminDashboard: React.FC = () => {
                       </label>
                       <input
                         type="email"
-                        value="info@sanchaaar.com"
+                        value="sukhsancharak1890@gmail.com"
                         className="w-full p-3 border border-cream-200 rounded-lg focus:ring-2 focus:ring-ayur-red focus:border-transparent text-sm sm:text-base"
                         readOnly
                       />
@@ -522,7 +522,7 @@ const AdminDashboard: React.FC = () => {
                       </label>
                       <input
                         type="tel"
-                        value="+91 98765 43210"
+                        value="+91 8218304730"
                         className="w-full p-3 border border-cream-200 rounded-lg focus:ring-2 focus:ring-ayur-red focus:border-transparent text-sm sm:text-base"
                         readOnly
                       />

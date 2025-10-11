@@ -11,22 +11,22 @@ const AboutUsPage: React.FC = () => {
   const companyImages = [
     {
       src: "/company_1.jpg",
-      alt: "Sukh Sanchaarak Manufacturing Facility",
+      alt: "Sukh Sancharak Co. Manufacturing Facility",
       caption: "Our GMP-certified manufacturing facility in Mathura",
     },
     {
       src: "/company_6.jpeg",
-      alt: "Sukh Sanchaarak Manufacturing Facility",
+      alt: "Sukh Sancharak Co. Manufacturing Facility",
       caption: "Our GMP-certified manufacturing facility in Mathura",
     },
     {
       src: "/company_7.jpeg",
-      alt: "Sukh Sanchaarak Manufacturing Facility",
+      alt: "Sukh Sancharak Co. Manufacturing Facility",
       caption: "Our GMP-certified manufacturing facility in Mathura",
     },
     {
       src: "/company_8.jpeg",
-      alt: "Sukh Sanchaarak Manufacturing Facility",
+      alt: "Sukh Sancharak Co. Manufacturing Facility",
       caption: "Our GMP-certified manufacturing facility in Mathura",
     },
   ];
@@ -67,7 +67,7 @@ const AboutUsPage: React.FC = () => {
   const fullText = [
     {
       content:
-        "Sukh Sancharak Company stands as the oldest manufacturing unit in Mathura and one of Northern India's most respected Ayurvedic production houses, with a continuous legacy dating back to 1890. Founded by Pandit Kshetra Pal Sharma, our company has safeguarded and nurtured the essence of Ayurveda for more than 130 years, remaining committed to pure, plant-based healing and authentic traditional knowledge.",
+        "Sukh Sancharak Co. stands as the oldest manufacturing unit in Mathura and one of Northern India's most respected Ayurvedic production houses, with a continuous legacy dating back to 1890. Founded by Pandit Kshetra Pal Sharma, our company has safeguarded and nurtured the essence of Ayurveda for more than 130 years, remaining committed to pure, plant-based healing and authentic traditional knowledge.",
     },
     {
       content:
@@ -75,7 +75,7 @@ const AboutUsPage: React.FC = () => {
     },
     {
       content:
-        "With deep roots in Northern India's Hindi-speaking heartland and a comprehensive distribution network, Sukh Sancharak Company now aspires to share India's ancient heritage with a broader audience. Our goal is to spread the true essence of Ayurveda throughout India, making authentic, natural healing accessible to all.",
+        "With deep roots in Northern India's Hindi-speaking heartland and a comprehensive distribution network, Sukh Sancharak Co. now aspires to share India's ancient heritage with a broader audience. Our goal is to spread the true essence of Ayurveda throughout India, making authentic, natural healing accessible to all.",
     },
     {
       content:
@@ -121,7 +121,7 @@ const AboutUsPage: React.FC = () => {
           <div className="flex justify-center mb-6 md:mb-8 mt-4 md:mt-6">
             <img
               src="/logoo.png"
-              alt="Sanchaaar"
+              alt="Sukh Sancharak Co."
               className="h-28 md:h-36 lg:h-40 w-auto"
             />
           </div>
@@ -354,7 +354,7 @@ const AboutUsPage: React.FC = () => {
       </section>
 
       {/* Company History Carousel */}
-      <section className="py-12 md:py-16 lg:py-20 bg-cream-50 relative overflow-hidden">
+      <section className="py-12 md:py-16 lg:py-28 bg-cream-50 relative overflow-hidden">
         <div className="relative w-full">
           {/* Section Header */}
           <div className="text-center mb-8 md:mb-12 px-4 sm:px-6 lg:px-8">
