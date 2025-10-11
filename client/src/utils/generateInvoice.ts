@@ -123,6 +123,8 @@ export const generateInvoicePDF = async (order: Order) => {
     orientation: "portrait",
     unit: "mm",
     format: "a4",
+    compress: true,
+    putOnlyUsedFonts: true,
   });
 
   // Company Details (You can update these with actual company info)
@@ -146,6 +148,10 @@ export const generateInvoicePDF = async (order: Order) => {
   };
 
   let currentY = 15;
+
+  // Set default font encoding for better cross-browser compatibility
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(0, 0, 0);
 
   // === HEADER SECTION ===
   // Company Logo/Name (Left side)
@@ -227,6 +233,8 @@ export const generateInvoicePDF = async (order: Order) => {
       lineWidth: 0.1,
       overflow: "linebreak",
       valign: "top",
+      font: "helvetica",
+      fontStyle: "normal",
     },
     columnStyles: {
       0: { cellWidth: 90 },
@@ -257,17 +265,17 @@ export const generateInvoicePDF = async (order: Order) => {
       (index + 1).toString(),
       item.product_name,
       item.quantity.toString(),
-      `₹${item.total_price.toFixed(2)}`,
-      `₹${itemTaxableValue.toFixed(2)}`,
+      `Rs. ${item.total_price.toFixed(2)}`,
+      `Rs. ${itemTaxableValue.toFixed(2)}`,
     ];
 
     if (isUttarPradesh) {
-      row.push(`₹${itemCgst.toFixed(2)}`, `₹${itemSgst.toFixed(2)}`);
+      row.push(`Rs. ${itemCgst.toFixed(2)}`, `Rs. ${itemSgst.toFixed(2)}`);
     } else {
-      row.push(`₹${itemIgst.toFixed(2)}`);
+      row.push(`Rs. ${itemIgst.toFixed(2)}`);
     }
 
-    row.push(`₹${item.total_price.toFixed(2)}`);
+    row.push(`Rs. ${item.total_price.toFixed(2)}`);
     return row;
   });
 
@@ -301,6 +309,8 @@ export const generateInvoicePDF = async (order: Order) => {
       overflow: "linebreak",
       valign: "middle",
       minCellHeight: 8,
+      font: "helvetica",
+      fontStyle: "normal",
     },
     headStyles: {
       fillColor: [240, 240, 240],
@@ -365,7 +375,7 @@ export const generateInvoicePDF = async (order: Order) => {
 
   // === SUMMARY SECTION ===
   const summaryData = [
-    ["Subtotal:", "", "", "", "", "", `₹${order.subtotal.toFixed(2)}`],
+    ["Subtotal:", "", "", "", "", "", `Rs. ${order.subtotal.toFixed(2)}`],
     [
       "Shipping Charges:",
       "",
@@ -373,9 +383,9 @@ export const generateInvoicePDF = async (order: Order) => {
       "",
       "",
       "",
-      `₹${order.shipping_amount.toFixed(2)}`,
+      `Rs. ${order.shipping_amount.toFixed(2)}`,
     ],
-    ["TOTAL:", "", "", "", "", "", `₹${order.total_amount.toFixed(2)}`],
+    ["TOTAL:", "", "", "", "", "", `Rs. ${order.total_amount.toFixed(2)}`],
   ];
 
   // Add empty cells for GST columns if needed
@@ -398,6 +408,7 @@ export const generateInvoicePDF = async (order: Order) => {
       overflow: "linebreak",
       valign: "middle",
       minCellHeight: 6,
+      font: "helvetica",
     },
     columnStyles: (() => {
       const baseStyles: any = {
