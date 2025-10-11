@@ -594,7 +594,7 @@ export class EmailService {
                     <p><strong>Questions? Contact Us</strong></p>
                     <p>Email: <a href="mailto:${process.env.ADMIN_EMAIL || 'sukhsancharak1890@gmail.com'}">${process.env.ADMIN_EMAIL || 'sukhsancharak1890@gmail.com'}</a></p>
                     <p>Phone: ${process.env.ADMIN_PHONE || '+91-8218304730'}</p>
-                    <p><a href="https://sukhsanchaar.com">www.sukhsanchaar.com</a></p>
+                    <p><a href="https://www.sukhsancharak.com/">www.sukhsancharak.com</a></p>
                 </div>
             </div>
         </div>
