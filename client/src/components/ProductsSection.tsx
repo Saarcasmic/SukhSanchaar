@@ -82,6 +82,7 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({
             backgroundPosition: "center",
             opacity: 0.3,
           }}
+          aria-hidden="true"
         ></div>
 
         {/* Content */}

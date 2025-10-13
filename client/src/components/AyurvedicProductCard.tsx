@@ -30,7 +30,7 @@ export function AyurvedicProductCard({
       <div className="relative aspect-square bg-gradient-to-br from-blue-50 to-indigo-50 overflow-hidden">
         <ImageWithFallback
           src={image}
-          alt={name}
+          alt={`${name} - Authentic Ayurvedic Product by Sukh Sancharak Co.`}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
         />
 

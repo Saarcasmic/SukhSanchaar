@@ -3,9 +3,17 @@ import { Award, Users, Heart, ChevronDown } from "lucide-react";
 import CompanyCarousel from "../components/CompanyCarousel";
 import CenteredCarousel from "../components/CenteredCarousel";
 import OrnamentalDivider from "../components/OrnamentalDivider";
+import SEO from "../components/SEO";
+import { organizationSchema, aboutPageSchema } from "../utils/structuredData";
 
 const AboutUsPage: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // Combine structured data schemas for About page
+  const structuredData = [
+    organizationSchema,
+    aboutPageSchema
+  ];
 
   // Company images for carousel
   const companyImages = [
@@ -90,7 +98,18 @@ const AboutUsPage: React.FC = () => {
   const displayedText = isExpanded ? fullText : fullText.slice(0, 2);
 
   return (
-    <div className="min-h-screen bg-cream-50 animate-fade-in">
+    <>
+      <SEO
+        title="About Us - 135 Years of Ayurvedic Excellence | Sukh Sancharak"
+        description="Discover our 135-year heritage of authentic Ayurvedic medicine manufacturing. Learn about Sukh Sancharak Co.'s GMP certified facility in Mathura, quality commitments, and traditional manufacturing processes since 1890."
+        keywords="about Sukh Sancharak, ayurvedic company history, traditional medicine manufacturer, GMP certified ayurvedic company, Mathura manufacturing facility, 135 years heritage, ayurvedic medicine quality, traditional ayurvedic knowledge"
+        canonicalUrl="https://www.sukhsancharak.com/about"
+        ogTitle="About Sukh Sancharak Co. - 135 Years of Ayurvedic Excellence"
+        ogDescription="Learn about our heritage of authentic Ayurvedic medicine manufacturing since 1890. GMP certified facility in Mathura with traditional knowledge."
+        ogImage="https://www.sukhsancharak.com/company_1.jpg"
+        structuredData={structuredData}
+      />
+      <div className="min-h-screen bg-cream-50 animate-fade-in">
       {/* Hero Banner */}
       <section className="relative py-16 md:py-20 lg:py-24 overflow-hidden">
         {/* Background image with opacity, isolated from content */}
@@ -377,6 +396,7 @@ const AboutUsPage: React.FC = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

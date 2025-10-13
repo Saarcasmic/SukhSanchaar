@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Block admin routes from indexing
+Disallow: /admin
+Disallow: /payment-success
+Disallow: /payment-failed
+
+# Sitemap location
+Sitemap: https://www.sukhsancharak.com/sitemap.xml

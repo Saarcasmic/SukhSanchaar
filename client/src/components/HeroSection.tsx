@@ -117,7 +117,7 @@ const HeroSection: React.FC = () => {
                   {/* Fallback for browsers without WebP support */}
                   <img
                     src={responsiveUrls.original}
-                    alt={slide.title || `Hero banner ${index + 1}`}
+                    alt={slide.title || `Sukh Sancharak Co. Ayurvedic Medicine Banner ${index + 1} - Traditional Herbal Remedies`}
                     className="w-full h-full object-contain"
                     style={{
                       objectPosition: slide.imagePosition || "center center",
