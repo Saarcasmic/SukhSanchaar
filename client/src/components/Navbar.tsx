@@ -58,6 +58,18 @@ const Navbar: React.FC = () => {
     }, 100);
   };
 
+  const handleProductsClick = () => {
+    // Close mobile menu if open
+    setIsMobileMenuOpen(false);
+
+    // Navigate to products page and scroll to top
+    navigate("/products");
+    // Scroll to top after navigation
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 100);
+  };
+
   // Don't show navbar on admin page
   if (location.pathname === "/admin") return null;
 
@@ -110,14 +122,14 @@ const Navbar: React.FC = () => {
               >
                 About Us
               </button>
-              <Link
-                to="/products"
+              <button
+                onClick={handleProductsClick}
                 className={`font-medium transition-colors text-gray-700 hover:text-ayur-red ${
                   location.pathname === "/products" ? "text-ayur-red" : ""
                 }`}
               >
                 All Products
-              </Link>
+              </button>
               <button
                 onClick={handleContactClick}
                 className="font-medium transition-colors text-gray-700 hover:text-ayur-red"
@@ -193,13 +205,12 @@ const Navbar: React.FC = () => {
                 >
                   About Us
                 </button>
-                <Link
-                  to="/products"
-                  className="block font-medium text-gray-700 hover:text-ayur-red transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                <button
+                  onClick={handleProductsClick}
+                  className="block font-medium text-gray-700 hover:text-ayur-red transition-colors w-full text-left"
                 >
                   All Products
-                </Link>
+                </button>
                 <button
                   onClick={handleContactClick}
                   className="block font-medium text-gray-700 hover:text-ayur-red transition-colors w-full text-left"
