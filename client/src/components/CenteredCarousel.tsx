@@ -24,29 +24,35 @@ const CenteredCarousel: React.FC<CenteredCarouselProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Auto-play functionality
+  // Ensure transition duration matches animation duration (ms)
+  const TRANSITION_DURATION = 600;
+
+  // Auto-play functionality: advances slide every autoPlayInterval milliseconds CONTINUOUSLY
   useEffect(() => {
     if (!autoPlay || images.length <= 1) return;
 
     const timer = setInterval(() => {
-      handleNext();
+      setIsTransitioning(true);
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+      setTimeout(() => setIsTransitioning(false), TRANSITION_DURATION);
     }, autoPlayInterval);
 
     return () => clearInterval(timer);
-  }, [autoPlay, autoPlayInterval, images.length, currentIndex]);
+    // Only depend on autoPlay, autoPlayInterval, images.length to ensure consistent interval (not on currentIndex)
+  }, [autoPlay, autoPlayInterval, images.length]);
 
   const handleNext = useCallback(() => {
     if (isTransitioning) return;
     setIsTransitioning(true);
     setCurrentIndex((prev) => (prev + 1) % images.length);
-    setTimeout(() => setIsTransitioning(false), 600);
+    setTimeout(() => setIsTransitioning(false), TRANSITION_DURATION);
   }, [isTransitioning, images.length]);
 
   const handlePrevious = useCallback(() => {
     if (isTransitioning) return;
     setIsTransitioning(true);
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-    setTimeout(() => setIsTransitioning(false), 600);
+    setTimeout(() => setIsTransitioning(false), TRANSITION_DURATION);
   }, [isTransitioning, images.length]);
 
   if (images.length === 0) return null;
@@ -66,7 +72,7 @@ const CenteredCarousel: React.FC<CenteredCarouselProps> = ({
       {/* Carousel Container */}
       <div className="relative w-full overflow-hidden py-4 md:py-6 lg:py-8">
         {/* Images Grid */}
-        <div className="flex items-start justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10">
+        <div className="flex items-start justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10" style={{ minHeight: 0, paddingTop: "0.5rem", paddingBottom: "0.5rem" }}>
           {/* Previous Image */}
           <div
             className="relative flex-shrink-0 transition-all duration-700 ease-in-out cursor-pointer"
@@ -77,10 +83,10 @@ const CenteredCarousel: React.FC<CenteredCarouselProps> = ({
             }}
             onClick={handlePrevious}
           >
-            <div className="space-y-2 md:space-y-3">
+            <div className="space-y-1 md:space-y-2">
               <div
                 className="relative w-full rounded-lg md:rounded-xl overflow-hidden shadow-lg opacity-60 hover:opacity-80 transition-opacity duration-300"
-                style={{ paddingBottom: "133.33%" }}
+                style={{ paddingBottom: "122%" }}
               >
                 <img
                   src={previousImage.src}
@@ -117,10 +123,10 @@ const CenteredCarousel: React.FC<CenteredCarouselProps> = ({
               minWidth: "180px",
             }}
           >
-            <div className="space-y-3 md:space-y-4">
+            <div className="space-y-2 md:space-y-3">
               <div
                 className="relative w-full rounded-xl md:rounded-2xl overflow-hidden shadow-2xl"
-                style={{ paddingBottom: "133.33%" }}
+                style={{ paddingBottom: "122%" }}
               >
                 <img
                   src={currentImage.src}
@@ -161,10 +167,10 @@ const CenteredCarousel: React.FC<CenteredCarouselProps> = ({
             }}
             onClick={handleNext}
           >
-            <div className="space-y-2 md:space-y-3">
+            <div className="space-y-1 md:space-y-2">
               <div
                 className="relative w-full rounded-lg md:rounded-xl overflow-hidden shadow-lg opacity-60 hover:opacity-80 transition-opacity duration-300"
-                style={{ paddingBottom: "133.33%" }}
+                style={{ paddingBottom: "122%" }}
               >
                 <img
                   src={nextImage.src}
@@ -194,7 +200,7 @@ const CenteredCarousel: React.FC<CenteredCarouselProps> = ({
         </div>
 
         {/* Progress Indicators */}
-        <div className="flex justify-center gap-2 md:gap-3 mt-6 md:mt-8 lg:mt-10">
+        <div className="flex justify-center gap-2 md:gap-3 mt-4 md:mt-6 lg:mt-7">
           {images.map((_, index) => (
             <button
               key={index}
@@ -202,7 +208,7 @@ const CenteredCarousel: React.FC<CenteredCarouselProps> = ({
                 if (!isTransitioning) {
                   setIsTransitioning(true);
                   setCurrentIndex(index);
-                  setTimeout(() => setIsTransitioning(false), 600);
+                  setTimeout(() => setIsTransitioning(false), TRANSITION_DURATION);
                 }
               }}
               className={`transition-all duration-500 rounded-full ${

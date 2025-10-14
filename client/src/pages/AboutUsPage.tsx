@@ -44,30 +44,30 @@ const AboutUsPage: React.FC = () => {
     {
       id: 1,
       src: "company_2.jpeg",
-      alt: "Traditional Ayurvedic Medicine Preparation",
-      caption: "Traditional Medicine Preparation",
-      year: "1890s",
+      alt: "Exhibition at Sukh Sancharak",
+      caption: "Exhibition event, Sukh Sancharak Company",
+      year: "1942",
     },
     {
       id: 2,
       src: "company_3.jpeg",
-      alt: "Herbal Garden and Plant Collection",
-      caption: "Herbal Garden Collection",
-      year: "1920s",
+      alt: "Inaugration of the current manufacturing facility",
+      caption: "Current Showroom Inaugration",
+      year: "1929",
     },
     {
       id: 3,
       src: "company_4.jpeg",
-      alt: "Ancient Ayurvedic Texts and Manuscripts",
-      caption: "Ancient Ayurvedic Knowledge",
-      year: "1950s",
+      alt: "Retail Showroom Outlet",
+      caption: "Retail Showroom Outlet",
+      year: "1945",
     },
     {
       id: 4,
       src: "company_5.jpeg",
-      alt: "Traditional Grinding and Processing",
-      caption: "Traditional Processing Methods",
-      year: "1970s",
+      alt: "Product Testing Lab",
+      caption: "Product Testing Lab",
+      year: "1920",
     },
   ];
 
@@ -123,7 +123,7 @@ const AboutUsPage: React.FC = () => {
             opacity: 0.4,
           }}
         />
-        <div className="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 opacity-5 rotate-180 z-10">
+        {/* <div className="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 opacity-5 rotate-180 z-10">
           <svg
             viewBox="0 0 200 200"
             className="w-full h-full text-botanical-green"
@@ -133,7 +133,7 @@ const AboutUsPage: React.FC = () => {
               fill="currentColor"
             />
           </svg>
-        </div>
+        </div> */}
 
         <div className="relative max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 text-center z-10">
           {/* Logo */}
@@ -251,7 +251,7 @@ const AboutUsPage: React.FC = () => {
               rigorous competition by never compromising on the purity and
               efficacy of our products. We hold steadfast to Ayurvedic
               principles, crafting medicines that are 100% natural and free from
-              synthetic chemicals, alcohol, and artificial colors. This
+              synthetic chemicals, alcohols, and other additives. This
               dedication ensures our products are not only highly effective but
               also safe, with no side effects, allowing our customers to truly
               experience the profound benefits of Ayurveda.
@@ -298,8 +298,7 @@ const AboutUsPage: React.FC = () => {
                 Trust
               </h3>
               <p className="font-lora text-sm md:text-base text-antique-brown/70 leading-relaxed text-justify">
-                We reject shortcuts such as synthetic additives, maintaining the
-                holistic integrity of Ayurveda in every product we offer.
+              Established in 1890, our enduring presence in Ayurvedic healthcare reflects more than a century of trust. We take pride in serving millions with products that embody authenticity, safety, and efficacy.
               </p>
             </div>
           </div>
@@ -319,9 +318,8 @@ const AboutUsPage: React.FC = () => {
                   For over 135 years, Sukh Sancharak has stood firm in its
                   dedication to uncompromising quality and safety. Our
                   manufacturing unit, nestled in the historic city of Mathura,
-                  is a testament to this commitment—equipped with dedicated
-                  sections for powder processing, liquids, capsuling, filling,
-                  and extracts. Each segment operates under stringent protocols
+                  is a testament to this commitment—equipped with dedicated syrup, powder, oil, capsule, ointment & tablet
+                  sections. Each segment operates under stringent protocols
                   to maintain the highest standards throughout every stage of
                   production. Holding GMP certification along with Ayurvedic
                   licenses under Form 25D and Form 26 E-1, we operate fully
@@ -337,25 +335,8 @@ const AboutUsPage: React.FC = () => {
                   experience—delivering authentic Ayurvedic medicines that meet
                   stringent standards without compromise
                 </p>
-                <p>
-                  Holding GMP certification along with Ayurvedic licenses under
-                  Form 25D and Form 26 E-1, we operate fully within regulatory
-                  frameworks, demonstrating our commitment to compliance and
-                  best practices in Ayurvedic medicine production. Our dedicated
-                  quality control and quality assurance departments meticulously
-                  monitor raw materials, in-process formulations, and finished
-                  products to uphold consistent safety and efficacy.
-                </p>
-                <p>
-                  Over 135 years of enduring presence in a highly competitive
-                  market speaks to the trust our consumers place in us. Our
-                  products are the result of systematic quality protocols
-                  combined with deep-rooted experience—delivering authentic
-                  Ayurvedic medicines that meet stringent standards without
-                  compromise.
-                </p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-6 md:gap-8 mt-6 md:mt-8 justify-center items-center">
+              <div className="flex flex-row sm:flex-row gap-6 md:gap-8 mt-6 md:mt-8 justify-center items-center">
                 <img
                   src="/gmp_logo.png"
                   alt="GMP Certified"
@@ -373,10 +354,10 @@ const AboutUsPage: React.FC = () => {
       </section>
 
       {/* Company History Carousel */}
-      <section className="py-12 md:py-16 lg:py-28 bg-cream-50 relative overflow-hidden">
+      <section className="pb-12 pt-6 md:py-16 lg:pb-28 bg-cream-50 relative overflow-hidden">
         <div className="relative w-full">
           {/* Section Header */}
-          <div className="text-center mb-8 md:mb-12 px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-2 md:mb-3 px-4 sm:px-6 lg:px-8">
             <h2 className="font-playfair text-3xl md:text-4xl lg:text-5xl font-bold text-botanical-green mb-4 md:mb-6">
               Through the Decades
             </h2>
@@ -391,7 +372,7 @@ const AboutUsPage: React.FC = () => {
           <CenteredCarousel
             images={historicalImages}
             autoPlay={true}
-            autoPlayInterval={5000}
+            autoPlayInterval={4000}
           />
         </div>
       </section>

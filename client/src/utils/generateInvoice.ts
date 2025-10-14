@@ -154,20 +154,28 @@ export const generateInvoicePDF = async (order: Order) => {
   doc.setTextColor(0, 0, 0);
 
   // === HEADER SECTION ===
-  // Company Logo/Name (Left side)
-  doc.setFontSize(20);
+  // Determine correct font sizes
+  const taxInvoiceFontSize = 10; // Size for "Tax Invoice"
+  const originalForRecipientFontSize = 7; // Size for "(Original for Recipient)"
+  const companyTitleFontSize = taxInvoiceFontSize + originalForRecipientFontSize + 6; // Sum, as per instructions (17)
+
+  // Company Name (Left-Aligned) and Title (Right-Aligned) on the same line
+  doc.setFontSize(companyTitleFontSize);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(0, 0, 0); // Black color
-  doc.text("Sukh Sancharak Co.", 15, currentY);
+  doc.text("Sukh Sancharak Company", 15, currentY + 3.5, {
+    align: "left",
+  });
 
-  // Title (Right side)
-  doc.setFontSize(14);
+  // "Tax Invoice" (right), using taxInvoiceFontSize
+  doc.setFontSize(taxInvoiceFontSize);
   doc.setFont("helvetica", "bold");
   doc.text("Tax Invoice", 210 - 15, currentY, {
     align: "right",
   });
 
-  doc.setFontSize(7);
+  // "(Original for Recipient)" (right below "Tax Invoice")
+  doc.setFontSize(originalForRecipientFontSize);
   doc.setFont("helvetica", "normal");
   doc.text("(Original for Recipient)", 210 - 15, currentY + 5, {
     align: "right",
@@ -281,7 +289,7 @@ export const generateInvoicePDF = async (order: Order) => {
 
   // Create conditional headers based on state
   const tableHeaders = [
-    "Sl. No",
+    "S. No",
     "Description",
     "Qty",
     "Gross Amount",
