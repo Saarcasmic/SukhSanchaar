@@ -157,7 +157,8 @@ export const generateInvoicePDF = async (order: Order) => {
   // Determine correct font sizes
   const taxInvoiceFontSize = 10; // Size for "Tax Invoice"
   const originalForRecipientFontSize = 7; // Size for "(Original for Recipient)"
-  const companyTitleFontSize = taxInvoiceFontSize + originalForRecipientFontSize + 6; // Sum, as per instructions (17)
+  const companyTitleFontSize =
+    taxInvoiceFontSize + originalForRecipientFontSize + 6; // Sum, as per instructions (17)
 
   // Company Name (Left-Aligned) and Title (Right-Aligned) on the same line
   doc.setFontSize(companyTitleFontSize);

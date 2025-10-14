@@ -11,6 +11,7 @@ import ProductsPage from "./pages/ProductsPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailed from "./pages/PaymentFailed";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 
 function App() {
   return (
@@ -28,6 +29,10 @@ function App() {
                   <Route path="/admin" element={<AdminDashboard />} />
                   <Route path="/payment-success" element={<PaymentSuccess />} />
                   <Route path="/payment-failed" element={<PaymentFailed />} />
+                  <Route
+                    path="/privacy-policy"
+                    element={<PrivacyPolicyPage />}
+                  />
                 </Routes>
                 <Footer />
               </div>

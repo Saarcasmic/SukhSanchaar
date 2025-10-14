@@ -3,14 +3,18 @@ import HeroSection from "../components/HeroSection";
 import IntroductionSection from "../components/IntroductionSection";
 import ProductsSection from "../components/ProductsSection";
 import SEO from "../components/SEO";
-import { organizationSchema, localBusinessSchema, webSiteSchema } from "../utils/structuredData";
+import {
+  organizationSchema,
+  localBusinessSchema,
+  webSiteSchema,
+} from "../utils/structuredData";
 
 const HomePage: React.FC = () => {
   // Combine multiple structured data schemas
   const structuredData = [
     organizationSchema,
     localBusinessSchema,
-    webSiteSchema
+    webSiteSchema,
   ];
 
   return (

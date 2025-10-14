@@ -1,5 +1,5 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import React from "react";
+import { Helmet } from "react-helmet-async";
 
 interface SEOProps {
   title?: string;
@@ -32,7 +32,7 @@ const SEO: React.FC<SEOProps> = ({
   twitterDescription,
   twitterImage,
   structuredData,
-  noIndex = false
+  noIndex = false,
 }) => {
   const finalOgTitle = ogTitle || title;
   const finalOgDescription = ogDescription || description;
@@ -46,11 +46,14 @@ const SEO: React.FC<SEOProps> = ({
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
-      <meta name="robots" content={noIndex ? "noindex, nofollow" : "index, follow"} />
-      
+      <meta
+        name="robots"
+        content={noIndex ? "noindex, nofollow" : "index, follow"}
+      />
+
       {/* Canonical URL */}
       <link rel="canonical" href={canonicalUrl} />
-      
+
       {/* Open Graph Meta Tags */}
       <meta property="og:title" content={finalOgTitle} />
       <meta property="og:description" content={finalOgDescription} />
@@ -59,18 +62,18 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="og:type" content={ogType} />
       <meta property="og:site_name" content="Sukh Sancharak Co." />
       <meta property="og:locale" content="en_US" />
-      
+
       {/* Twitter Card Meta Tags */}
       <meta name="twitter:card" content={twitterCard} />
       <meta name="twitter:title" content={finalTwitterTitle} />
       <meta name="twitter:description" content={finalTwitterDescription} />
       <meta name="twitter:image" content={finalTwitterImage} />
-      
+
       {/* Additional Meta Tags */}
       <meta name="author" content="Sukh Sancharak Co." />
       <meta name="language" content="en" />
       <meta name="theme-color" content="#8B4513" />
-      
+
       {/* Structured Data */}
       {structuredData && (
         <script type="application/ld+json">

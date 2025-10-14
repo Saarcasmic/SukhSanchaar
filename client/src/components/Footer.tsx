@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Phone,
-  Mail,
-  MessageCircle,
-  Facebook,
-  Instagram,
-  Leaf,
-} from "lucide-react";
+import { Phone, Mail, MessageCircle, Facebook, Instagram } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
 const Footer: React.FC = () => {
@@ -122,6 +115,12 @@ const Footer: React.FC = () => {
               and ancient wisdom.
             </p>
             <div className="flex flex-wrap gap-4 md:gap-6 mt-4 md:mt-0 font-noto text-sm">
+              <a
+                href="/privacy-policy"
+                className="text-cream-200 hover:text-ayur-gold transition-colors"
+              >
+                Privacy Policy
+              </a>
               <a
                 href="https://merchant.razorpay.com/policy/RIKuq9uRIGD4Nz/terms"
                 target="_blank"

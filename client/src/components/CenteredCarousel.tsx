@@ -72,7 +72,14 @@ const CenteredCarousel: React.FC<CenteredCarouselProps> = ({
       {/* Carousel Container */}
       <div className="relative w-full overflow-hidden py-4 md:py-6 lg:py-8">
         {/* Images Grid */}
-        <div className="flex items-start justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10" style={{ minHeight: 0, paddingTop: "0.5rem", paddingBottom: "0.5rem" }}>
+        <div
+          className="flex items-start justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10"
+          style={{
+            minHeight: 0,
+            paddingTop: "0.5rem",
+            paddingBottom: "0.5rem",
+          }}
+        >
           {/* Previous Image */}
           <div
             className="relative flex-shrink-0 transition-all duration-700 ease-in-out cursor-pointer"
@@ -208,7 +215,10 @@ const CenteredCarousel: React.FC<CenteredCarouselProps> = ({
                 if (!isTransitioning) {
                   setIsTransitioning(true);
                   setCurrentIndex(index);
-                  setTimeout(() => setIsTransitioning(false), TRANSITION_DURATION);
+                  setTimeout(
+                    () => setIsTransitioning(false),
+                    TRANSITION_DURATION,
+                  );
                 }
               }}
               className={`transition-all duration-500 rounded-full ${
