@@ -1,7 +1,8 @@
 import { RazorpayOptions, RazorpayResponse } from "../types/razorpay";
 
 // Razorpay configuration
-const RAZORPAY_KEY_ID = "rzp_test_RIfIBUXi654lRw"; // Replace with your actual key
+const RAZORPAY_KEY_ID = (import.meta as any).env?.VITE_RAZORPAY_KEY_ID; // Replace with your actual key
+
 
 export class RazorpayService {
   /**
