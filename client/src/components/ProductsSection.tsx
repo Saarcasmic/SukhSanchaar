@@ -32,7 +32,7 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({
 
   // Filter products based on search query and category
   const filteredProducts = useMemo(() => {
-    // If filters are not shown (home page), return all products
+    // If filters are not shown (home page), return all products (already sorted by updated_at from context)
     if (!showFilters) {
       return products;
     }
@@ -62,7 +62,12 @@ const ProductsSection: React.FC<ProductsSectionProps> = ({
       );
     }
 
-    return filtered;
+    // Ensure filtered results are also sorted by updated_at (most recent first)
+    return filtered.sort((a, b) => {
+      const dateA = new Date(a.updated_at).getTime();
+      const dateB = new Date(b.updated_at).getTime();
+      return dateB - dateA; // Descending order (newest first)
+    });
   }, [products, searchQuery, selectedCategory, showFilters]);
 
   const clearFilters = () => {

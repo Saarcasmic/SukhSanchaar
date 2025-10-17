@@ -162,7 +162,16 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({
       setLoading(true);
       setError(null);
       const response = await apiCall("/products");
-      setProducts(response.data.data || []);
+      const products = response.data.data || [];
+
+      // Sort products by updated_at in descending order (most recent first)
+      const sortedProducts = products.sort((a: Product, b: Product) => {
+        const dateA = new Date(a.updated_at).getTime();
+        const dateB = new Date(b.updated_at).getTime();
+        return dateB - dateA; // Descending order (newest first)
+      });
+
+      setProducts(sortedProducts);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch products");
       console.error("Error fetching products:", err);

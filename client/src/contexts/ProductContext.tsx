@@ -54,7 +54,16 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
       setLoading(true);
       setError(null);
       const response = await apiCall("/products?limit=50"); // Get more products for display
-      setProducts(response.data.data || []);
+      const products = response.data.data || [];
+
+      // Sort products by updated_at in descending order (most recent first)
+      const sortedProducts = products.sort((a: Product, b: Product) => {
+        const dateA = new Date(a.updated_at).getTime();
+        const dateB = new Date(b.updated_at).getTime();
+        return dateB - dateA; // Descending order (newest first)
+      });
+
+      setProducts(sortedProducts);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch products");
       console.error("Error fetching products:", err);
@@ -74,7 +83,14 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
       const response = await apiCall(
         `/products/search?q=${encodeURIComponent(query)}`,
       );
-      return response.data || [];
+      const products = response.data || [];
+
+      // Sort search results by updated_at in descending order (most recent first)
+      return products.sort((a: Product, b: Product) => {
+        const dateA = new Date(a.updated_at).getTime();
+        const dateB = new Date(b.updated_at).getTime();
+        return dateB - dateA; // Descending order (newest first)
+      });
     } catch (err) {
       console.error("Error searching products:", err);
       return [];
@@ -89,7 +105,14 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
       const response = await apiCall(
         `/products/category/${encodeURIComponent(category)}`,
       );
-      return response.data || [];
+      const products = response.data || [];
+
+      // Sort category results by updated_at in descending order (most recent first)
+      return products.sort((a: Product, b: Product) => {
+        const dateA = new Date(a.updated_at).getTime();
+        const dateB = new Date(b.updated_at).getTime();
+        return dateB - dateA; // Descending order (newest first)
+      });
     } catch (err) {
       console.error("Error fetching products by category:", err);
       return [];
