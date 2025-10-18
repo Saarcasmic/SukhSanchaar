@@ -22,7 +22,7 @@ export function AyurvedicProductCard({
   pack_details,
   onBuyNow,
 }: AyurvedicProductCardProps) {
-  const hasDiscount = mrp && mrp > price;
+  const hasDiscount = Boolean(mrp && Number(mrp) > Number(price));
 
   return (
     <div className="group bg-white px-1 pt-1 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden relative border border-gray-100 flex flex-col h-full ">

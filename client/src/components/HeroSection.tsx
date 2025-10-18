@@ -47,14 +47,14 @@ const HeroSection: React.FC = () => {
       id: 1,
       // Full design image with text and products baked in
       backgroundImage:
-        "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Posters/Poster_check.jpg",
+        "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Product%20Images/Sudha%20Sindhu%20(1440%20x%20468%20px)%20(100%20x%2046%20px)%20(423%20x%20187%20px)%20(2400%20x%201000%20px)%20(2).png",
       imagePosition: "center center",
       useFullImage: true, // Full image, no text overlay
     },
     {
       id: 2,
       backgroundImage:
-        "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Posters/generate.png",
+        "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Product%20Images/about%20us%20banner.png",
       imagePosition: "center center",
       useFullImage: true, // Full image, no text overlay
     },
