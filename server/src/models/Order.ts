@@ -399,47 +399,10 @@ export class OrderModel {
     const getShippingCharges = (state: string) => {
       switch (state) {
         case "Delhi":
-          return 50;
-        case "Rajasthan":
-          return 100;
         case "Uttar Pradesh":
-          return 30;
-        case "Andhra Pradesh":
-        case "Arunachal Pradesh":
-        case "Assam":
-        case "Bihar":
-        case "Chhattisgarh":
-        case "Goa":
-        case "Gujarat":
-        case "Haryana":
-        case "Himachal Pradesh":
-        case "Jharkhand":
-        case "Karnataka":
-        case "Kerala":
-        case "Madhya Pradesh":
-        case "Maharashtra":
-        case "Manipur":
-        case "Meghalaya":
-        case "Mizoram":
-        case "Nagaland":
-        case "Odisha":
-        case "Punjab":
-        case "Sikkim":
-        case "Tamil Nadu":
-        case "Telangana":
-        case "Tripura":
-        case "Uttarakhand":
-        case "West Bengal":
-        case "Andaman and Nicobar Islands":
-        case "Chandigarh":
-        case "Dadra and Nagar Haveli and Daman and Diu":
-        case "Lakshadweep":
-        case "Puducherry":
-        case "Ladakh":
-        case "Jammu and Kashmir":
           return 0;
         default:
-          return 0;
+          return 30;
       }
     };
 
