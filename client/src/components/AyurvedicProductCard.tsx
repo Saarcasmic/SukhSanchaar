@@ -41,14 +41,14 @@ export function AyurvedicProductCard({
         {/* Discount Badge */}
         {hasDiscount && discountPercentage > 0 && (
           <div
-            className="absolute top-1.5 left-1.5 lg:top-2 lg:left-2 flex items-center justify-center px-1.5 py-0.5 lg:px-3 lg:py-1 rounded-md lg:rounded-lg shadow-lg lg:shadow-xl z-10 border border-white/30 lg:border-2"
+            className="absolute top-2 left-2 lg:top-2.5 lg:left-2.5 flex items-center justify-center px-2 py-1 lg:px-3 lg:py-1.5 rounded-md lg:rounded-lg shadow-lg lg:shadow-xl z-10 border border-white/30 lg:border-2"
             style={{
               backgroundColor: "#DC2626",
               backgroundImage:
                 "linear-gradient(135deg, #DC2626 0%, #EF4444 100%)",
             }}
           >
-            <span className="text-[9px] lg:text-[10px] font-bold text-white tracking-tight lg:tracking-wide text-center whitespace-nowrap leading-tight">
+            <span className="text-[10px] lg:text-[11px] font-bold text-white tracking-tight lg:tracking-wide text-center whitespace-nowrap leading-tight">
               FLAT {discountPercentage}% OFF
             </span>
           </div>

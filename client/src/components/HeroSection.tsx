@@ -91,43 +91,50 @@ const HeroSection: React.FC = () => {
                 key={slide.id}
                 className="w-full h-full flex-shrink-0 relative"
               >
-                {/* Responsive Image using Picture Element */}
-                <picture className="absolute inset-0">
-                  {/* Mobile: 600x800 (portrait) */}
-                  <source
-                    media="(max-width: 640px)"
-                    srcSet={responsiveUrls.mobile}
-                    type="image/webp"
-                  />
+                {/* Wrap picture element in a Link to /about */}
+                <a
+                  href="/about"
+                  tabIndex={0}
+                  aria-label="Go to About Page"
+                  className="block absolute inset-0 z-10"
+                >
+                  <picture className="w-full h-full">
+                    {/* Mobile: 600x800 (portrait) */}
+                    <source
+                      media="(max-width: 640px)"
+                      srcSet={responsiveUrls.mobile}
+                      type="image/webp"
+                    />
 
-                  {/* Tablet: 1024x768 (landscape) */}
-                  <source
-                    media="(max-width: 1024px)"
-                    srcSet={responsiveUrls.tablet}
-                    type="image/webp"
-                  />
+                    {/* Tablet: 1024x768 (landscape) */}
+                    <source
+                      media="(max-width: 1024px)"
+                      srcSet={responsiveUrls.tablet}
+                      type="image/webp"
+                    />
 
-                  {/* Desktop: 1920x800 (wide) */}
-                  <source
-                    media="(min-width: 1025px)"
-                    srcSet={responsiveUrls.desktop}
-                    type="image/webp"
-                  />
+                    {/* Desktop: 1920x800 (wide) */}
+                    <source
+                      media="(min-width: 1025px)"
+                      srcSet={responsiveUrls.desktop}
+                      type="image/webp"
+                    />
 
-                  {/* Fallback for browsers without WebP support */}
-                  <img
-                    src={responsiveUrls.original}
-                    alt={
-                      slide.title ||
-                      `Sukh Sancharak Co. Ayurvedic Medicine Banner ${index + 1} - Traditional Herbal Remedies`
-                    }
-                    className="w-full h-full object-contain"
-                    style={{
-                      objectPosition: slide.imagePosition || "center center",
-                    }}
-                    loading={index === 0 ? "eager" : "lazy"}
-                  />
-                </picture>
+                    {/* Fallback for browsers without WebP support */}
+                    <img
+                      src={responsiveUrls.original}
+                      alt={
+                        slide.title ||
+                        `Sukh Sancharak Co. Ayurvedic Medicine Banner ${index + 1} - Traditional Herbal Remedies`
+                      }
+                      className="w-full h-full object-contain"
+                      style={{
+                        objectPosition: slide.imagePosition || "center center",
+                      }}
+                      loading={index === 0 ? "eager" : "lazy"}
+                    />
+                  </picture>
+                </a>
               </div>
             );
           })}
