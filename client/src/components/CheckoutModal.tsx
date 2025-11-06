@@ -36,6 +36,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
         return 0;
       default:
         return 30;
+    }
   };
 
   const shippingCharges = getShippingCharges(formData.state);
