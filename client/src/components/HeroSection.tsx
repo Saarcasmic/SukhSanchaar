@@ -50,6 +50,7 @@ const HeroSection: React.FC = () => {
         "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Product%20Images/Sudha%20Sindhu%20(1440%20x%20468%20px)%20(100%20x%2046%20px)%20(423%20x%20187%20px)%20(2400%20x%201000%20px)%20(2).png",
       imagePosition: "center center",
       useFullImage: true, // Full image, no text overlay
+      buttonLink: "/products",
     },
     {
       id: 2,
@@ -57,6 +58,7 @@ const HeroSection: React.FC = () => {
         "https://ypdtaswsurcjhfvnqdvo.supabase.co/storage/v1/object/public/SukhSanchaar%20Content/Product%20Images/about%20us%20banner.png",
       imagePosition: "center center",
       useFullImage: true, // Full image, no text overlay
+      buttonLink: "/about",
     },
   ];
 
@@ -91,11 +93,15 @@ const HeroSection: React.FC = () => {
                 key={slide.id}
                 className="w-full h-full flex-shrink-0 relative"
               >
-                {/* Wrap picture element in a Link to /about */}
+                {/* Wrap picture element in a Link with slide-specific link */}
                 <a
-                  href="/about"
+                  href={slide.buttonLink}
                   tabIndex={0}
-                  aria-label="Go to About Page"
+                  aria-label={
+                    slide.buttonLink === "/products"
+                      ? "Go to Products Page"
+                      : "Go to About Page"
+                  }
                   className="block absolute inset-0 z-10"
                 >
                   <picture className="w-full h-full">

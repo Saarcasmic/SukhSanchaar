@@ -30,6 +30,22 @@ export function AyurvedicProductCard({
 
   return (
     <div className="group bg-white px-1 pt-1 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden relative border border-gray-100 flex flex-col h-full ">
+      {/* Discount Badge */}
+      {hasDiscount && discountPercentage > 0 && (
+        <div
+          className="absolute top-2 left-0 lg:top-2.5 lg:left-0 xl:top-3 xl:left-0 flex items-center justify-center px-2 py-1 lg:px-3 lg:py-1.5 xl:px-4 xl:py-2 rounded-md lg:rounded-lg xl:rounded-lg shadow-lg lg:shadow-xl xl:shadow-xl z-10 border border-white/30 lg:border-2 xl:border-2"
+          style={{
+            backgroundColor: "#DC2626",
+            backgroundImage:
+              "linear-gradient(135deg, #DC2626 0%, #EF4444 100%)",
+          }}
+        >
+          <span className="text-[10px] lg:text-[11px] xl:text-xs font-bold text-white tracking-tight lg:tracking-wide xl:tracking-wide text-center whitespace-nowrap leading-tight">
+            FLAT {discountPercentage}% OFF
+          </span>
+        </div>
+      )}
+
       {/* Product Image */}
       <div className="relative aspect-square bg-gradient-to-br from-blue-50 to-indigo-50 overflow-hidden">
         <ImageWithFallback
@@ -37,22 +53,6 @@ export function AyurvedicProductCard({
           alt={`${name} - Authentic Ayurvedic Product by Sukh Sancharak Co.`}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
         />
-
-        {/* Discount Badge */}
-        {hasDiscount && discountPercentage > 0 && (
-          <div
-            className="absolute top-2 left-2 lg:top-2.5 lg:left-2.5 flex items-center justify-center px-2 py-1 lg:px-3 lg:py-1.5 rounded-md lg:rounded-lg shadow-lg lg:shadow-xl z-10 border border-white/30 lg:border-2"
-            style={{
-              backgroundColor: "#DC2626",
-              backgroundImage:
-                "linear-gradient(135deg, #DC2626 0%, #EF4444 100%)",
-            }}
-          >
-            <span className="text-[10px] lg:text-[11px] font-bold text-white tracking-tight lg:tracking-wide text-center whitespace-nowrap leading-tight">
-              FLAT {discountPercentage}% OFF
-            </span>
-          </div>
-        )}
       </div>
 
       {/* <div className="w-full h-px bg-black my-2 "></div> */}
