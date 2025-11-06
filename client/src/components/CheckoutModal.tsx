@@ -37,7 +37,40 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
         return 100;
       case "Uttar Pradesh":
         return 30;
-      case "Others":
+      // All other recognized Indian states and union territories (except Delhi, Rajasthan, Uttar Pradesh) get 0
+      case "Andhra Pradesh":
+      case "Arunachal Pradesh":
+      case "Assam":
+      case "Bihar":
+      case "Chhattisgarh":
+      case "Goa":
+      case "Gujarat":
+      case "Haryana":
+      case "Himachal Pradesh":
+      case "Jharkhand":
+      case "Karnataka":
+      case "Kerala":
+      case "Madhya Pradesh":
+      case "Maharashtra":
+      case "Manipur":
+      case "Meghalaya":
+      case "Mizoram":
+      case "Nagaland":
+      case "Odisha":
+      case "Punjab":
+      case "Sikkim":
+      case "Tamil Nadu":
+      case "Telangana":
+      case "Tripura":
+      case "Uttarakhand":
+      case "West Bengal":
+      case "Andaman and Nicobar Islands":
+      case "Chandigarh":
+      case "Dadra and Nagar Haveli and Daman and Diu":
+      case "Lakshadweep":
+      case "Puducherry":
+      case "Ladakh":
+      case "Jammu and Kashmir":
         return 0;
       default:
         return 0;
@@ -402,10 +435,46 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
                 className="w-full p-3 border border-cream-200 rounded-lg focus:ring-2 focus:ring-ayur-red focus:border-transparent"
               >
                 <option value="">Select State</option>
+                <option value="Andaman and Nicobar Islands">
+                  Andaman and Nicobar Islands
+                </option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                <option value="Assam">Assam</option>
+                <option value="Bihar">Bihar</option>
+                <option value="Chandigarh">Chandigarh</option>
+                <option value="Chhattisgarh">Chhattisgarh</option>
+                <option value="Dadra and Nagar Haveli and Daman and Diu">
+                  Dadra and Nagar Haveli and Daman and Diu
+                </option>
                 <option value="Delhi">Delhi</option>
+                <option value="Goa">Goa</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Haryana">Haryana</option>
+                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                <option value="Jharkhand">Jharkhand</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Ladakh">Ladakh</option>
+                <option value="Lakshadweep">Lakshadweep</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Meghalaya">Meghalaya</option>
+                <option value="Mizoram">Mizoram</option>
+                <option value="Nagaland">Nagaland</option>
+                <option value="Odisha">Odisha</option>
+                <option value="Puducherry">Puducherry</option>
+                <option value="Punjab">Punjab</option>
                 <option value="Rajasthan">Rajasthan</option>
+                <option value="Sikkim">Sikkim</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Tripura">Tripura</option>
                 <option value="Uttar Pradesh">Uttar Pradesh</option>
-                <option value="Others">Others</option>
+                <option value="Uttarakhand">Uttarakhand</option>
+                <option value="West Bengal">West Bengal</option>
               </select>
             </div>
           </div>
@@ -448,12 +517,16 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
                   <span>₹{subtotal}</span>
                 </div>
               </div>
-              {shippingCharges > 0 && (
-                <div className="flex justify-between font-noto text-sm">
-                  <span>Shipping Charges</span>
-                  <span>₹{shippingCharges}</span>
-                </div>
-              )}
+              <div className="flex justify-between font-noto text-sm">
+                <span>Shipping Charges</span>
+                <span>
+                  {shippingCharges === 0 ? (
+                    <span className="text-green-600 font-semibold">FREE!</span>
+                  ) : (
+                    <>₹{shippingCharges}</>
+                  )}
+                </span>
+              </div>
               <div className="border-t border-cream-300 pt-2 flex justify-between font-semibold">
                 <span>Total</span>
                 <span className="text-ayur-red">₹{totalWithShipping}</span>

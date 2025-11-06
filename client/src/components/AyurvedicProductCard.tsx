@@ -23,6 +23,10 @@ export function AyurvedicProductCard({
   onBuyNow,
 }: AyurvedicProductCardProps) {
   const hasDiscount = Boolean(mrp && Number(mrp) > Number(price));
+  const discountPercentage =
+    hasDiscount && mrp
+      ? Math.round(((Number(mrp) - Number(price)) / Number(mrp)) * 100)
+      : 0;
 
   return (
     <div className="group bg-white px-1 pt-1 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden relative border border-gray-100 flex flex-col h-full ">
@@ -34,7 +38,21 @@ export function AyurvedicProductCard({
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
         />
 
-        {/* Rating Badge */}
+        {/* Discount Badge */}
+        {hasDiscount && discountPercentage > 0 && (
+          <div
+            className="absolute top-1.5 left-1.5 lg:top-2 lg:left-2 flex items-center justify-center px-1.5 py-0.5 lg:px-3 lg:py-1 rounded-md lg:rounded-lg shadow-lg lg:shadow-xl z-10 border border-white/30 lg:border-2"
+            style={{
+              backgroundColor: "#DC2626",
+              backgroundImage:
+                "linear-gradient(135deg, #DC2626 0%, #EF4444 100%)",
+            }}
+          >
+            <span className="text-[9px] lg:text-[10px] font-bold text-white tracking-tight lg:tracking-wide text-center whitespace-nowrap leading-tight">
+              FLAT {discountPercentage}% OFF
+            </span>
+          </div>
+        )}
       </div>
 
       {/* <div className="w-full h-px bg-black my-2 "></div> */}
