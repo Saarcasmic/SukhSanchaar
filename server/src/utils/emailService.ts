@@ -57,12 +57,13 @@ export class EmailService {
    */
   private generateOrderConfirmationHTML(order: Order): string {
     const formatCurrency = (amount: number) => `₹${amount.toFixed(2)}`;
-    const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('en-IN', {
+    const formatDate = (dateString: string) => new Date(dateString).toLocaleString('en-IN', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'Asia/Kolkata'
     });
 
     return `
