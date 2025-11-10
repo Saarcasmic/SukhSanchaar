@@ -23,6 +23,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
     addressLine2: "",
     city: "",
     state: "",
+    pincode: "",
     country: "India",
   });
 
@@ -68,6 +69,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
         ...prev,
         [name]: formattedPhone,
       }));
+    } else if (name === "pincode") {
+      // Remove any non-digit characters and limit to 6 digits
+      const digitsOnly = value.replace(/\D/g, "").substring(0, 6);
+      setFormData((prev) => ({
+        ...prev,
+        [name]: digitsOnly,
+      }));
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -83,7 +91,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
       !formData.phone ||
       !formData.addressLine1 ||
       !formData.city ||
-      !formData.state
+      !formData.state ||
+      !formData.pincode
     ) {
       alert("Please fill in all required fields");
       return;
@@ -92,6 +101,12 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
     // Validate phone number is exactly 10 digits
     if (formData.phone.length !== 10) {
       alert("Please enter a valid 10-digit phone number");
+      return;
+    }
+
+    // Validate pincode is exactly 6 digits
+    if (!/^\d{6}$/.test(formData.pincode)) {
+      alert("Please enter a valid 6-digit pincode");
       return;
     }
 
@@ -118,7 +133,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
             (formData.addressLine2 ? `, ${formData.addressLine2}` : ""),
           city: formData.city,
           state: formData.state,
-          pincode: "", // You might want to add pincode field
+          pincode: formData.pincode,
           country: formData.country,
         },
         items: state.items.map((item) => ({
@@ -197,7 +212,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
       };
 
       // Step 3: Create Razorpay checkout options
-      const fullAddress = `${formData.addressLine1}${formData.addressLine2 ? ", " + formData.addressLine2 : ""}, ${formData.city}, ${formData.state}, ${formData.country}`;
+      const fullAddress = `${formData.addressLine1}${formData.addressLine2 ? ", " + formData.addressLine2 : ""}, ${formData.city}, ${formData.state} ${formData.pincode}, ${formData.country}`;
       const orderItemsDescription = state.items
         .map((item) => `${item.name} x${item.quantity}`)
         .join(", ");
@@ -239,7 +254,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
               (formData.addressLine2 ? `, ${formData.addressLine2}` : ""),
             city: formData.city,
             state: formData.state,
-            pincode: "",
+            pincode: formData.pincode,
             country: formData.country,
           },
           items: state.items.map((item) => ({
@@ -439,6 +454,21 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
                 <option value="West Bengal">West Bengal</option>
               </select>
             </div>
+          </div>
+
+          <div>
+            <label className="block font-noto font-semibold text-antique-brown mb-2">
+              Pincode *
+            </label>
+            <input
+              type="text"
+              name="pincode"
+              value={formData.pincode}
+              onChange={handleInputChange}
+              className="w-full p-3 border border-cream-200 rounded-lg focus:ring-2 focus:ring-ayur-red focus:border-transparent"
+              placeholder="Enter 6-digit pincode"
+              maxLength={6}
+            />
           </div>
 
           <div>

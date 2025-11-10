@@ -147,6 +147,31 @@ export class OrderController {
         throw new ValidationError('Invalid phone number format');
       }
 
+      // Validate shipping address
+      if (!orderData.shipping_address.street || !orderData.shipping_address.city || 
+          !orderData.shipping_address.state || !orderData.shipping_address.pincode || 
+          !orderData.shipping_address.country) {
+        throw new ValidationError('Shipping address must include street, city, state, pincode, and country');
+      }
+
+      // Validate pincode format (6 digits)
+      const pincodeRegex = /^\d{6}$/;
+      if (!pincodeRegex.test(orderData.shipping_address.pincode)) {
+        throw new ValidationError('Pincode must be exactly 6 digits');
+      }
+
+      // Validate billing address if provided
+      if (orderData.billing_address) {
+        if (!orderData.billing_address.street || !orderData.billing_address.city || 
+            !orderData.billing_address.state || !orderData.billing_address.pincode || 
+            !orderData.billing_address.country) {
+          throw new ValidationError('Billing address must include street, city, state, pincode, and country');
+        }
+        if (!pincodeRegex.test(orderData.billing_address.pincode)) {
+          throw new ValidationError('Billing address pincode must be exactly 6 digits');
+        }
+      }
+
       const order = await OrderModel.create(orderData);
 
       const response: ApiResponse = {
