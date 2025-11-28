@@ -395,18 +395,26 @@ export class OrderModel {
     // Tax is already included in product prices, so tax_amount = 0
     const tax_amount = 0;
 
-    // Calculate shipping based on state (matching frontend logic)
-    const getShippingCharges = (state: string) => {
-      switch (state) {
-        case "Delhi":
-        case "Uttar Pradesh":
-          return 0;
-        default:
-          return 30;
-      }
-    };
-
-    const shipping_amount = shippingAddress?.state ? getShippingCharges(shippingAddress.state) : 0;
+    // Calculate shipping based on subtotal and state (matching frontend logic)
+    // Priority: 1. Free shipping for orders ₹1000+ 2. State-based shipping for orders < ₹1000
+    let shipping_amount = 0;
+    
+    if (subtotal >= 1000) {
+      // Free shipping for orders ₹1000 and above
+      shipping_amount = 0;
+    } else if (shippingAddress?.state) {
+      // State-based shipping for orders below ₹1000
+      const getShippingCharges = (state: string) => {
+        switch (state) {
+          case "Delhi":
+          case "Uttar Pradesh":
+            return 0;
+          default:
+            return 30;
+        }
+      };
+      shipping_amount = getShippingCharges(shippingAddress.state);
+    }
 
     // Total = subtotal + shipping (tax already included in product prices)
     const total_amount = subtotal + shipping_amount;
