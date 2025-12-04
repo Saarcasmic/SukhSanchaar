@@ -532,17 +532,22 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ onClose }) => {
           </div>
 
           {/* Free Shipping Banner - Only show when subtotal < 1000 and state is not Delhi/UP (they already get free shipping) */}
-          {subtotal < 1000 && formData.state && formData.state !== "Delhi" && formData.state !== "Uttar Pradesh" && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
-              <p className="text-sm font-noto text-center text-green-800">
-                <span className="font-semibold">Add items worth ₹1000 & above & get FREE shipping</span>
-                <br />
-                <span className="text-xs mt-1 block">
-                  Add ₹{1000 - subtotal} more to get FREE shipping
-                </span>
-              </p>
-            </div>
-          )}
+          {subtotal < 1000 &&
+            formData.state &&
+            formData.state !== "Delhi" &&
+            formData.state !== "Uttar Pradesh" && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
+                <p className="text-sm font-noto text-center text-green-800">
+                  <span className="font-semibold">
+                    Get FREE Shipping on orders above ₹1000
+                  </span>
+                  <br />
+                  <span className="text-xs mt-1 block">
+                    Add ₹{1000 - subtotal} more to unlock FREE shipping
+                  </span>
+                </p>
+              </div>
+            )}
 
           <p className="text-xs text-gray-500 text-center font-noto">
             Your payment is secured by Razorpay. Shipping details will be sent
