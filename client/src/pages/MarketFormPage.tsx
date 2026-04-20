@@ -290,15 +290,31 @@ const MarketFormPage: React.FC = () => {
           </div>
 
           <div className="border-t border-gray-200 pt-6">
-            <label className="flex items-center gap-3 font-medium text-gray-900 cursor-pointer mb-4">
-              <input
-                type="checkbox"
-                checked={orderTaken}
-                onChange={(e) => setOrderTaken(e.target.checked)}
-                className="w-5 h-5 rounded text-ayur-red focus:ring-ayur-red"
-              />
-              Order Taken
-            </label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-3">Did you take an order? *</label>
+              <div className="flex bg-gray-100/80 p-1.5 rounded-xl border border-gray-200 shadow-inner">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOrderTaken(false);
+                    setOrderDetails([]); // clear order details if they switch to No
+                  }}
+                  className={`flex-1 py-3 px-4 rounded-lg font-bold text-[15px] transition-all duration-200 flex items-center justify-center gap-2 ${!orderTaken ? 'bg-white text-gray-800 shadow-sm border border-gray-200/50' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'}`}
+                >
+                  No Order
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOrderTaken(true);
+                    if (orderDetails.length === 0) setOrderDetails([{ product_name: "", quantity: 1 }]);
+                  }}
+                  className={`flex-1 py-3 px-4 rounded-lg font-bold text-[15px] transition-all duration-200 flex items-center justify-center gap-2 ${orderTaken ? 'bg-green-500 text-white shadow ring-2 ring-green-500/20' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'}`}
+                >
+                  Yes, Order Taken
+                </button>
+              </div>
+            </div>
 
             {orderTaken && (
               <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
