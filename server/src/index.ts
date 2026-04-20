@@ -11,6 +11,7 @@ import orderRoutes from './routes/orders';
 import adminRoutes from './routes/admin';
 import paymentRoutes from './routes/payment';
 import notificationRoutes from './routes/notifications';
+import marketingRoutes from './routes/marketing';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler';
@@ -78,6 +79,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/marketing', marketingRoutes);
 
 // 404 handler
 app.use(notFound);

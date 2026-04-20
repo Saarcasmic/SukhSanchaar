@@ -7,6 +7,24 @@ import React, {
   ReactNode,
 } from "react";
 import { Product } from "../types/product";
+import { MarketingProduct } from "../pages/MarketFormPage";
+
+export interface MarketingResponse {
+  id: string;
+  date: string;
+  time_of_visit: string;
+  marketing_person_name: string;
+  doctor_shop_name: string;
+  area: string;
+  products_discussed: string[];
+  samples_given: string;
+  order_taken: boolean;
+  order_details: { product_name: string; quantity: number }[];
+  photo_proof_url: string | null;
+  location: { latitude: number; longitude: number } | null;
+  status: string;
+  created_at: string;
+}
 
 interface Order {
   id: string;
@@ -76,6 +94,20 @@ interface AdminContextType {
     order: Omit<Order, "id" | "order_number" | "created_at" | "updated_at">,
   ) => void;
   updateOrderStatus: (id: string, status: Order["order_status"]) => void;
+
+  // Marketing Data
+  marketingProducts: MarketingProduct[];
+  marketingResponses: MarketingResponse[];
+  marketingTeam: { id: string; name: string; is_active: boolean; created_at: string }[];
+  fetchMarketingProducts: () => Promise<void>;
+  addMarketingProduct: (name: string) => Promise<void>;
+  deleteMarketingProduct: (id: string) => Promise<void>;
+  fetchMarketingResponses: () => Promise<void>;
+  updateMarketingResponseStatus: (id: string, status: string) => Promise<void>;
+  deleteMarketingResponse: (id: string) => Promise<void>;
+  fetchMarketingTeam: () => Promise<void>;
+  addMarketingTeamMember: (name: string) => Promise<void>;
+  deleteMarketingTeamMember: (id: string) => Promise<void>;
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
@@ -118,6 +150,9 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({
   // Data state
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [marketingProducts, setMarketingProducts] = useState<MarketingProduct[]>([]);
+  const [marketingResponses, setMarketingResponses] = useState<MarketingResponse[]>([]);
+  const [marketingTeam, setMarketingTeam] = useState<{ id: string; name: string; is_active: boolean; created_at: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -295,11 +330,111 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({
     [],
   );
 
+  // Marketing functions
+  const fetchMarketingProducts = useCallback(async () => {
+    try {
+      const response = await apiCall('/marketing/products');
+      setMarketingProducts(response.data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  const addMarketingProduct = async (name: string) => {
+    try {
+      const response = await apiCall('/marketing/products', {
+        method: 'POST',
+        body: JSON.stringify({ name, is_active: true })
+      });
+      setMarketingProducts(prev => [response.data, ...prev]);
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const deleteMarketingProduct = async (id: string) => {
+    try {
+      await apiCall(`/marketing/products/${id}`, { method: 'DELETE' });
+      setMarketingProducts(prev => prev.filter(p => p.id !== id));
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const fetchMarketingResponses = useCallback(async () => {
+    try {
+      const response = await apiCall('/marketing/responses');
+      setMarketingResponses(response.data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  const updateMarketingResponseStatus = async (id: string, status: string) => {
+    try {
+      const response = await apiCall(`/marketing/responses/${id}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status })
+      });
+      setMarketingResponses(prev => prev.map(r => r.id === id ? response.data : r));
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const deleteMarketingResponse = async (id: string) => {
+    try {
+      await apiCall(`/marketing/responses/${id}`, { method: 'DELETE' });
+      setMarketingResponses(prev => prev.filter(r => r.id !== id));
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const fetchMarketingTeam = useCallback(async () => {
+    try {
+      const response = await apiCall('/marketing/team');
+      setMarketingTeam(response.data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  const addMarketingTeamMember = async (name: string) => {
+    try {
+      const response = await apiCall('/marketing/team', {
+        method: 'POST',
+        body: JSON.stringify({ name, is_active: true })
+      });
+      setMarketingTeam(prev => [response.data, ...prev]);
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const deleteMarketingTeamMember = async (id: string) => {
+    try {
+      await apiCall(`/marketing/team/${id}`, { method: 'DELETE' });
+      setMarketingTeam(prev => prev.filter(p => p.id !== id));
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
   // Fetch products and orders on component mount
   useEffect(() => {
     fetchProducts();
     fetchOrders();
-  }, [fetchProducts, fetchOrders]);
+    fetchMarketingProducts();
+    fetchMarketingResponses();
+    fetchMarketingTeam();
+  }, [fetchProducts, fetchOrders, fetchMarketingProducts, fetchMarketingResponses, fetchMarketingTeam]);
 
   // Legacy functions for orders (keeping for now)
   const addOrder = (
@@ -346,6 +481,20 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({
         updateOrder,
         addOrder,
         updateOrderStatus,
+        
+        // Marketing
+        marketingProducts,
+        marketingResponses,
+        fetchMarketingProducts,
+        addMarketingProduct,
+        deleteMarketingProduct,
+        fetchMarketingResponses,
+        updateMarketingResponseStatus,
+        deleteMarketingResponse,
+        fetchMarketingTeam,
+        addMarketingTeamMember,
+        deleteMarketingTeamMember,
+        marketingTeam,
       }}
     >
       {children}

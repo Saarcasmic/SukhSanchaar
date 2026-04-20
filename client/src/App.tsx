@@ -12,10 +12,12 @@ import AdminDashboard from "./pages/AdminDashboard";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailed from "./pages/PaymentFailed";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import MarketFormPage from "./pages/MarketFormPage";
 
 function App() {
+  const Provider = HelmetProvider as any;
   return (
-    <HelmetProvider>
+    <Provider>
       <AdminProvider>
         <CartProvider>
           <ProductProvider>
@@ -33,6 +35,7 @@ function App() {
                     path="/privacy-policy"
                     element={<PrivacyPolicyPage />}
                   />
+                  <Route path="/market" element={<MarketFormPage />} />
                 </Routes>
                 <Footer />
               </div>
@@ -40,7 +43,7 @@ function App() {
           </ProductProvider>
         </CartProvider>
       </AdminProvider>
-    </HelmetProvider>
+    </Provider>
   );
 }
 

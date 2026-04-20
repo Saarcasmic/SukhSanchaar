@@ -9,10 +9,14 @@ import {
   Menu,
   X,
   LogOut,
+  Database,
+  ListChecks,
 } from "lucide-react";
 import { useAdmin } from "../contexts/AdminContext";
 import { OrdersPage } from "./admin/Orders";
 import AdminLogin from "../components/AdminLogin";
+import { MarketingData } from "./admin/Marketing/MarketingData";
+import { MarketingResponses } from "./admin/Marketing/MarketingResponses";
 
 const AdminDashboard: React.FC = () => {
   const {
@@ -29,7 +33,7 @@ const AdminDashboard: React.FC = () => {
     deleteProduct,
   } = useAdmin();
   const [activeTab, setActiveTab] = useState<
-    "orders" | "products" | "settings"
+    "orders" | "products" | "settings" | "marketing-data" | "marketing-responses"
   >("orders");
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [editingProduct, setEditingProduct] = useState<string | null>(null);
@@ -321,6 +325,36 @@ const AdminDashboard: React.FC = () => {
 
           <button
             onClick={() => {
+              setActiveTab("marketing-data");
+              setSidebarOpen(false);
+            }}
+            className={`w-full flex items-center px-4 sm:px-6 py-3 text-left font-noto transition-colors ${
+              activeTab === "marketing-data"
+                ? "bg-ayur-red text-white"
+                : "hover:bg-antique-brown/80"
+            }`}
+          >
+            <Database className="w-5 h-5 mr-3" />
+            <span className="text-sm sm:text-base">Marketing Data</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab("marketing-responses");
+              setSidebarOpen(false);
+            }}
+            className={`w-full flex items-center px-4 sm:px-6 py-3 text-left font-noto transition-colors ${
+              activeTab === "marketing-responses"
+                ? "bg-ayur-red text-white"
+                : "hover:bg-antique-brown/80"
+            }`}
+          >
+            <ListChecks className="w-5 h-5 mr-3" />
+            <span className="text-sm sm:text-base">Marketing Responses</span>
+          </button>
+
+          <button
+            onClick={() => {
               setActiveTab("settings");
               setSidebarOpen(false);
             }}
@@ -349,6 +383,8 @@ const AdminDashboard: React.FC = () => {
           <h2 className="font-playfair text-lg font-bold text-antique-brown">
             {activeTab === "orders" && "Orders Management"}
             {activeTab === "products" && "Products Management"}
+            {activeTab === "marketing-data" && "Marketing Data"}
+            {activeTab === "marketing-responses" && "Marketing Responses"}
             {activeTab === "settings" && "Settings"}
           </h2>
           <div className="w-10" /> {/* Spacer for centering */}
@@ -482,6 +518,12 @@ const AdminDashboard: React.FC = () => {
                 )}
               </div>
             )}
+
+            {/* Marketing Data Tab */}
+            {activeTab === "marketing-data" && <MarketingData />}
+
+            {/* Marketing Responses Tab */}
+            {activeTab === "marketing-responses" && <MarketingResponses />}
 
             {/* Settings Tab */}
             {activeTab === "settings" && (
