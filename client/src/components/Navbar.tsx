@@ -70,8 +70,9 @@ const Navbar: React.FC = () => {
     }, 100);
   };
 
-  // Don't show navbar on admin page
-  if (location.pathname === "/admin") return null;
+  // Don't show navbar on admin page (handle trailing slash and case insensitivity)
+  const path = location.pathname.toLowerCase();
+  if (path === "/admin" || path.startsWith("/admin/")) return null;
 
   return (
     <>

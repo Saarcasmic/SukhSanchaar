@@ -141,6 +141,11 @@ const MarketFormPage: React.FC = () => {
       setOrderDetails([]);
       setPhotoProofBase64("");
       if (fileInputRef.current) fileInputRef.current.value = "";
+
+      // Automatically refresh the page after 2 seconds
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -171,7 +176,7 @@ const MarketFormPage: React.FC = () => {
           <h2 className="text-2xl font-bold font-playfair text-antique-brown mb-2">Form Submitted</h2>
           <p className="text-gray-600 mb-6">Your marketing response was successfully recorded.</p>
           <button
-            onClick={() => setSubmitSuccess(false)}
+            onClick={() => window.location.reload()}
             className="bg-ayur-red text-white px-6 py-2 rounded-lg font-medium hover:bg-ayur-red/90 transition-colors w-full"
           >
             Submit Another
@@ -189,7 +194,22 @@ const MarketFormPage: React.FC = () => {
           <p className="text-cream-200 mt-2 font-noto">Log your daily visits and orders.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6">
+        <form 
+          onSubmit={handleSubmit} 
+          onInvalid={(e) => {
+            const form = e.currentTarget;
+            const firstInvalid = form.querySelector(':invalid') as HTMLElement;
+            if (firstInvalid && firstInvalid === e.target) {
+              if (firstInvalid.type === 'file') {
+                firstInvalid.parentElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              } else {
+                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+              firstInvalid.focus();
+            }
+          }}
+          className="p-6 sm:p-8 space-y-6"
+        >
           {error && (
             <div className="p-4 bg-red-50 text-red-700 rounded-lg text-sm">{error}</div>
           )}
@@ -262,7 +282,7 @@ const MarketFormPage: React.FC = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">Products Discussed</label>
             <div className="flex flex-wrap gap-2 text-sm">
               {productsList.filter(p => p.is_active).map(product => (
-                <label key={product.id} className="flex items-center gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50">
+                <label key={product.id} className={`flex items-center gap-2 p-2 border rounded-lg cursor-pointer transition-all ${productsDiscussed.includes(product.name) ? 'bg-ayur-red text-white border-ayur-red shadow-md font-medium' : 'hover:bg-gray-50 bg-white text-gray-700 border-gray-300'}`}>
                   <input
                     type="checkbox"
                     checked={productsDiscussed.includes(product.name)}
@@ -270,7 +290,7 @@ const MarketFormPage: React.FC = () => {
                       if (e.target.checked) setProductsDiscussed([...productsDiscussed, product.name]);
                       else setProductsDiscussed(productsDiscussed.filter(p => p !== product.name));
                     }}
-                    className="rounded text-ayur-red focus:ring-ayur-red"
+                    className="hidden"
                   />
                   <span>{product.name}</span>
                 </label>
