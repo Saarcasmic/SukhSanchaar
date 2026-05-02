@@ -10,103 +10,132 @@ const handleError = (res: Response, error: any, message: string) => {
   });
 };
 
+/* ------------------------------------------------------------------ */
+/*  Generic CRUD factory for marketing entities (products/areas/team) */
+/* ------------------------------------------------------------------ */
+
+interface CrudOptions {
+  tableName: string;
+  entityName: string;
+  orderBy?: { column: string; ascending: boolean }[];
+}
+
+const createCrudHandlers = ({ tableName, entityName, orderBy }: CrudOptions) => ({
+  getAll: async (req: Request, res: Response): Promise<void> => {
+    try {
+      let query = (supabase.from as any)(tableName).select('*');
+
+      // Apply ordering
+      if (orderBy && orderBy.length > 0) {
+        for (const o of orderBy) {
+          query = query.order(o.column, { ascending: o.ascending });
+        }
+      } else {
+        query = query.order('created_at', { ascending: false });
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+      res.status(200).json({ success: true, data });
+    } catch (error) {
+      handleError(res, error, `Failed to fetch ${entityName}s`);
+    }
+  },
+
+  add: async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { name, is_active } = req.body;
+      if (!name) {
+        res.status(400).json({ success: false, error: 'Name is required' });
+        return;
+      }
+
+      const { data, error } = await (supabase.from as any)(tableName)
+        .insert([{ name, is_active: is_active ?? true }])
+        .select()
+        .single();
+
+      if (error) throw error;
+      res.status(201).json({ success: true, data });
+    } catch (error) {
+      handleError(res, error, `Failed to add ${entityName}`);
+    }
+  },
+
+  remove: async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const { error } = await (supabase.from as any)(tableName)
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      res.status(200).json({ success: true, message: 'Deleted successfully' });
+    } catch (error) {
+      handleError(res, error, `Failed to delete ${entityName}`);
+    }
+  },
+});
+
 /* --- Marketing Products --- */
 
-export const getMarketingProducts = async (req: Request, res: Response) => {
+const productHandlers = createCrudHandlers({
+  tableName: 'marketing_products',
+  entityName: 'marketing product',
+  orderBy: [
+    { column: 'sequence', ascending: true },
+    { column: 'created_at', ascending: false },
+  ],
+});
+
+export const getMarketingProducts = productHandlers.getAll;
+export const addMarketingProduct = productHandlers.add;
+export const deleteMarketingProduct = productHandlers.remove;
+
+// Opt 1: Batch reorder using a single Supabase RPC call instead of N individual updates
+export const reorderMarketingProducts = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { data, error } = await supabase
-      .from('marketing_products')
-      .select('*')
-      .order('created_at', { ascending: false });
+    const { items } = req.body; // Array of { id, sequence }
+    
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      res.status(400).json({ success: false, error: 'Items array is required' });
+      return;
+    }
+
+    const ids = items.map((item: any) => item.id);
+    const sequences = items.map((item: any) => item.sequence);
+
+    const { error } = await (supabase.rpc as any)('reorder_marketing_products', { ids, sequences });
 
     if (error) throw error;
-    res.status(200).json({ success: true, data });
+
+    res.status(200).json({ success: true, message: 'Reordered successfully' });
   } catch (error) {
-    handleError(res, error, 'Failed to fetch marketing products');
+    handleError(res, error, 'Failed to reorder marketing products');
   }
 };
 
-export const addMarketingProduct = async (req: Request, res: Response) => {
-  try {
-    const { name, is_active } = req.body;
-    if (!name) return res.status(400).json({ success: false, error: 'Name is required' });
+/* --- Marketing Areas --- */
 
-    const { data, error } = await supabase
-      .from('marketing_products')
-      .insert([{ name, is_active: is_active ?? true }])
-      .select()
-      .single();
+const areaHandlers = createCrudHandlers({
+  tableName: 'marketing_areas',
+  entityName: 'marketing area',
+});
 
-    if (error) throw error;
-    res.status(201).json({ success: true, data });
-  } catch (error) {
-    handleError(res, error, 'Failed to add marketing product');
-  }
-};
-
-export const deleteMarketingProduct = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const { error } = await supabase
-      .from('marketing_products')
-      .delete()
-      .eq('id', id);
-
-    if (error) throw error;
-    res.status(200).json({ success: true, message: 'Deleted successfully' });
-  } catch (error) {
-    handleError(res, error, 'Failed to delete marketing product');
-  }
-};
+export const getMarketingAreas = areaHandlers.getAll;
+export const addMarketingArea = areaHandlers.add;
+export const deleteMarketingArea = areaHandlers.remove;
 
 /* --- Marketing Team --- */
 
-export const getMarketingTeam = async (req: Request, res: Response) => {
-  try {
-    const { data, error } = await supabase
-      .from('marketing_team')
-      .select('*')
-      .order('created_at', { ascending: false });
+const teamHandlers = createCrudHandlers({
+  tableName: 'marketing_team',
+  entityName: 'marketing team member',
+});
 
-    if (error) throw error;
-    res.status(200).json({ success: true, data });
-  } catch (error) {
-    handleError(res, error, 'Failed to fetch marketing team');
-  }
-};
-
-export const addMarketingTeamMember = async (req: Request, res: Response) => {
-  try {
-    const { name, is_active } = req.body;
-    if (!name) return res.status(400).json({ success: false, error: 'Name is required' });
-
-    const { data, error } = await supabase
-      .from('marketing_team')
-      .insert([{ name, is_active: is_active ?? true }])
-      .select()
-      .single();
-
-    if (error) throw error;
-    res.status(201).json({ success: true, data });
-  } catch (error) {
-    handleError(res, error, 'Failed to add marketing team member');
-  }
-};
-
-export const deleteMarketingTeamMember = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const { error } = await supabase
-      .from('marketing_team')
-      .delete()
-      .eq('id', id);
-
-    if (error) throw error;
-    res.status(200).json({ success: true, message: 'Deleted successfully' });
-  } catch (error) {
-    handleError(res, error, 'Failed to delete marketing team member');
-  }
-};
+export const getMarketingTeam = teamHandlers.getAll;
+export const addMarketingTeamMember = teamHandlers.add;
+export const deleteMarketingTeamMember = teamHandlers.remove;
 
 /* --- Marketing Responses --- */
 
@@ -124,7 +153,7 @@ export const getMarketingResponses = async (req: Request, res: Response) => {
   }
 };
 
-export const submitMarketingResponse = async (req: Request, res: Response) => {
+export const submitMarketingResponse = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
       date,
@@ -159,7 +188,6 @@ export const submitMarketingResponse = async (req: Request, res: Response) => {
 
         if (uploadError) {
           console.error("Storage upload error:", uploadError);
-          // don't fail entire request, just proceed without url or throw - better throw if photo is mandatory
           throw new Error(`Failed to upload photo: ${uploadError.message}`);
         }
 
@@ -171,12 +199,12 @@ export const submitMarketingResponse = async (req: Request, res: Response) => {
         photo_proof_url = publicUrl;
       } catch (err: any) {
         console.error("Image upload failed", err);
-        return res.status(400).json({ success: false, error: err.message });
+        res.status(400).json({ success: false, error: err.message });
+        return;
       }
     }
 
-    const { data, error } = await supabase
-      .from('marketing_responses')
+    const { data, error } = await (supabase.from as any)('marketing_responses')
       .insert([{
         date,
         time_of_visit,
@@ -201,15 +229,17 @@ export const submitMarketingResponse = async (req: Request, res: Response) => {
   }
 };
 
-export const updateMarketingResponseStatus = async (req: Request, res: Response) => {
+export const updateMarketingResponseStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const { status } = req.body;
 
-    if (!status) return res.status(400).json({ success: false, error: 'Status is required' });
+    if (!status) {
+      res.status(400).json({ success: false, error: 'Status is required' });
+      return;
+    }
 
-    const { data, error } = await supabase
-      .from('marketing_responses')
+    const { data, error } = await (supabase.from as any)('marketing_responses')
       .update({ status })
       .eq('id', id)
       .select()

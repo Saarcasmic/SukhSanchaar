@@ -3,6 +3,10 @@ import {
   getMarketingProducts,
   addMarketingProduct,
   deleteMarketingProduct,
+  reorderMarketingProducts,
+  getMarketingAreas,
+  addMarketingArea,
+  deleteMarketingArea,
   getMarketingTeam,
   addMarketingTeamMember,
   deleteMarketingTeamMember,
@@ -17,7 +21,13 @@ const router = express.Router();
 // Marketing Products
 router.get('/products', getMarketingProducts);
 router.post('/products', addMarketingProduct);
+router.put('/products/reorder', reorderMarketingProducts);
 router.delete('/products/:id', deleteMarketingProduct);
+
+// Marketing Areas
+router.get('/areas', getMarketingAreas);
+router.post('/areas', addMarketingArea);
+router.delete('/areas/:id', deleteMarketingArea);
 
 // Marketing Team
 router.get('/team', getMarketingTeam);

@@ -1,10 +1,40 @@
-import React, { useState } from "react";
-import { Search, Filter, MapPin, Eye, ExternalLink, Trash2, X } from "lucide-react";
+import React, { useState, useEffect, useCallback } from "react";
+import { Search, Filter, MapPin, Eye, ExternalLink, Trash2, X, CheckCircle, AlertCircle } from "lucide-react";
 import { useAdmin } from "../../../contexts/AdminContext";
 import { MarketingResponse } from "../../../contexts/AdminContext";
 
+// Inline Toast component
+const Toast: React.FC<{ message: string; type: 'success' | 'error'; onDismiss: () => void }> = ({ message, type, onDismiss }) => {
+  useEffect(() => {
+    const timer = setTimeout(onDismiss, 3000);
+    return () => clearTimeout(timer);
+  }, [onDismiss]);
+
+  return (
+    <div className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg border animate-[slideIn_0.3s_ease-out] ${
+      type === 'error' 
+        ? 'bg-red-50 border-red-200 text-red-800' 
+        : 'bg-green-50 border-green-200 text-green-800'
+    }`}>
+      {type === 'error' ? <AlertCircle className="w-5 h-5 shrink-0" /> : <CheckCircle className="w-5 h-5 shrink-0" />}
+      <span className="text-sm font-medium">{message}</span>
+    </div>
+  );
+};
+
 export const MarketingResponses: React.FC = () => {
-  const { marketingResponses, updateMarketingResponseStatus, deleteMarketingResponse, loading } = useAdmin();
+  const { marketingResponses, updateMarketingResponseStatus, deleteMarketingResponse, fetchMarketingResponses, loading } = useAdmin();
+
+  // Opt 7: Inline toast state
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const showToast = useCallback((message: string, type: 'success' | 'error') => {
+    setToast({ message, type });
+  }, []);
+
+  // Opt 3: Lazy-load marketing responses when this admin page mounts
+  useEffect(() => {
+    fetchMarketingResponses();
+  }, []);
   
   // Basic Search
   const [searchTerm, setSearchTerm] = useState("");
@@ -63,8 +93,9 @@ export const MarketingResponses: React.FC = () => {
       if (selectedResponse?.id === id) {
         setSelectedResponse(prev => prev ? { ...prev, status } : null);
       }
+      showToast(`Status updated to "${status}"`, "success");
     } catch (err) {
-      alert("Failed to update status");
+      showToast("Failed to update status", "error");
     }
   };
 
@@ -75,8 +106,9 @@ export const MarketingResponses: React.FC = () => {
         if (selectedResponse?.id === id) {
           setSelectedResponse(null);
         }
+        showToast("Response deleted", "success");
       } catch (err) {
-        alert("Failed to delete response");
+        showToast("Failed to delete response", "error");
       }
     }
   };
@@ -94,6 +126,8 @@ export const MarketingResponses: React.FC = () => {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
+      {/* Opt 7: Inline Toast */}
+      {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
       <div className="flex justify-between items-center mb-6 sm:mb-8">
         <h2 className="font-playfair text-2xl sm:text-3xl font-bold text-antique-brown">
           Marketing Responses
