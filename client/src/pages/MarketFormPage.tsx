@@ -13,6 +13,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3001
 const MarketFormPage: React.FC = () => {
   const [productsList, setProductsList] = useState<MarketingProduct[]>([]);
   const [teamList, setTeamList] = useState<{id: string; name: string; is_active: boolean}[]>([]);
+  const [areaList, setAreaList] = useState<{id: string; name: string; is_active: boolean}[]>([]);
   
   // Form State
   const [date, setDate] = useState<string>(new Date().toISOString().split("T")[0]);
@@ -38,6 +39,7 @@ const MarketFormPage: React.FC = () => {
   useEffect(() => {
     fetchProducts();
     fetchTeam();
+    fetchAreas();
     getLocation();
   }, []);
 
@@ -65,6 +67,18 @@ const MarketFormPage: React.FC = () => {
     }
   };
 
+  const fetchAreas = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/marketing/areas`);
+      if (response.ok) {
+        const data = await response.json();
+        setAreaList(data.data || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch marketing areas", err);
+    }
+  };
+
   const getLocation = () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -86,7 +100,40 @@ const MarketFormPage: React.FC = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPhotoProofBase64(reader.result as string);
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+          // Opt 6: Reduced from 1200 to 800 for smaller payloads over mobile networks
+          const maxDimension = 800;
+
+          if (width > height) {
+            if (width > maxDimension) {
+              height = Math.round((height * maxDimension) / width);
+              width = maxDimension;
+            }
+          } else {
+            if (height > maxDimension) {
+              width = Math.round((width * maxDimension) / height);
+              height = maxDimension;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx?.drawImage(img, 0, 0, width, height);
+          
+          // Opt 6: Adaptive quality — start at 0.7, drop to 0.5 if result > ~500KB
+          let compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+          if (compressedBase64.length > 680000) {
+            compressedBase64 = canvas.toDataURL("image/jpeg", 0.5);
+          }
+          
+          setPhotoProofBase64(compressedBase64);
+        };
+        img.src = reader.result as string;
       };
       reader.readAsDataURL(file);
     }
@@ -131,7 +178,7 @@ const MarketFormPage: React.FC = () => {
       }
 
       setSubmitSuccess(true);
-      // Reset form
+      // Reset form fields
       setMarketingPersonName("");
       setDoctorShopName("");
       setArea("");
@@ -142,9 +189,17 @@ const MarketFormPage: React.FC = () => {
       setPhotoProofBase64("");
       if (fileInputRef.current) fileInputRef.current.value = "";
 
-      // Automatically refresh the page after 2 seconds
+      // Opt 4: Instead of a full page reload, reset state in-place after showing success
       setTimeout(() => {
-        window.location.reload();
+        setSubmitSuccess(false);
+        // Reset date/time to current values for the next report
+        setDate(new Date().toISOString().split("T")[0]);
+        setTimeOfVisit(new Date().toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" }));
+        // Re-fetch dynamic data and location
+        fetchProducts();
+        fetchTeam();
+        fetchAreas();
+        getLocation();
       }, 2000);
     } catch (err: any) {
       setError(err.message);
@@ -153,18 +208,7 @@ const MarketFormPage: React.FC = () => {
     }
   };
 
-  const areaOptions = [
-    "Mathura City",
-    "Vrindavan",
-    "Kosi Kalan",
-    "Goverdhan, Ading, Jajampatti",
-    "Raya, Maat, Tentigaon",
-    "Chaumua, Chaata, Shergadh",
-    "Sonkh, sonkh road, Panchawar",
-    "Baldev, Mahawan",
-    "Farah",
-    "Other"
-  ];
+
 
   if (submitSuccess) {
     return (
@@ -176,7 +220,15 @@ const MarketFormPage: React.FC = () => {
           <h2 className="text-2xl font-bold font-playfair text-antique-brown mb-2">Form Submitted</h2>
           <p className="text-gray-600 mb-6">Your marketing response was successfully recorded.</p>
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => {
+              setSubmitSuccess(false);
+              setDate(new Date().toISOString().split("T")[0]);
+              setTimeOfVisit(new Date().toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" }));
+              fetchProducts();
+              fetchTeam();
+              fetchAreas();
+              getLocation();
+            }}
             className="bg-ayur-red text-white px-6 py-2 rounded-lg font-medium hover:bg-ayur-red/90 transition-colors w-full"
           >
             Submit Another
@@ -198,7 +250,7 @@ const MarketFormPage: React.FC = () => {
           onSubmit={handleSubmit} 
           onInvalid={(e) => {
             const form = e.currentTarget;
-            const firstInvalid = form.querySelector(':invalid') as HTMLElement;
+            const firstInvalid = form.querySelector(':invalid') as HTMLInputElement;
             if (firstInvalid && firstInvalid === e.target) {
               if (firstInvalid.type === 'file') {
                 firstInvalid.parentElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -274,7 +326,7 @@ const MarketFormPage: React.FC = () => {
               className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ayur-red"
             >
               <option value="">Select Area</option>
-              {areaOptions.map(a => <option key={a} value={a}>{a}</option>)}
+              {areaList.filter(a => a.is_active).map(a => <option key={a.id} value={a.name}>{a.name}</option>)}
             </select>
           </div>
 

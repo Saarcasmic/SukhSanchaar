@@ -9,6 +9,13 @@ import React, {
 import { Product } from "../types/product";
 import { MarketingProduct } from "../pages/MarketFormPage";
 
+export interface MarketingArea {
+  id: string;
+  name: string;
+  is_active: boolean;
+  created_at: string;
+}
+
 export interface MarketingResponse {
   id: string;
   date: string;
@@ -99,15 +106,20 @@ interface AdminContextType {
   marketingProducts: MarketingProduct[];
   marketingResponses: MarketingResponse[];
   marketingTeam: { id: string; name: string; is_active: boolean; created_at: string }[];
+  marketingAreas: MarketingArea[];
   fetchMarketingProducts: () => Promise<void>;
   addMarketingProduct: (name: string) => Promise<void>;
   deleteMarketingProduct: (id: string) => Promise<void>;
+  reorderMarketingProducts: (items: { id: string; sequence: number }[]) => Promise<void>;
   fetchMarketingResponses: () => Promise<void>;
   updateMarketingResponseStatus: (id: string, status: string) => Promise<void>;
   deleteMarketingResponse: (id: string) => Promise<void>;
   fetchMarketingTeam: () => Promise<void>;
   addMarketingTeamMember: (name: string) => Promise<void>;
   deleteMarketingTeamMember: (id: string) => Promise<void>;
+  fetchMarketingAreas: () => Promise<void>;
+  addMarketingArea: (name: string) => Promise<void>;
+  deleteMarketingArea: (id: string) => Promise<void>;
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
@@ -153,6 +165,7 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({
   const [marketingProducts, setMarketingProducts] = useState<MarketingProduct[]>([]);
   const [marketingResponses, setMarketingResponses] = useState<MarketingResponse[]>([]);
   const [marketingTeam, setMarketingTeam] = useState<{ id: string; name: string; is_active: boolean; created_at: string }[]>([]);
+  const [marketingAreas, setMarketingAreas] = useState<MarketingArea[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -363,6 +376,19 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const reorderMarketingProducts = async (items: { id: string; sequence: number }[]) => {
+    try {
+      await apiCall(`/marketing/products/reorder`, {
+        method: 'PUT',
+        body: JSON.stringify({ items })
+      });
+      // Optionally re-fetch or assume frontend sorted it
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
   const fetchMarketingResponses = useCallback(async () => {
     try {
       const response = await apiCall('/marketing/responses');
@@ -427,14 +453,44 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  // Fetch products and orders on component mount
+  const fetchMarketingAreas = useCallback(async () => {
+    try {
+      const response = await apiCall('/marketing/areas');
+      setMarketingAreas(response.data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  const addMarketingArea = async (name: string) => {
+    try {
+      const response = await apiCall('/marketing/areas', {
+        method: 'POST',
+        body: JSON.stringify({ name, is_active: true })
+      });
+      setMarketingAreas(prev => [response.data, ...prev]);
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const deleteMarketingArea = async (id: string) => {
+    try {
+      await apiCall(`/marketing/areas/${id}`, { method: 'DELETE' });
+      setMarketingAreas(prev => prev.filter(p => p.id !== id));
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  // Only fetch core e-commerce data globally.
+  // Marketing data is lazy-loaded by the admin marketing pages when they mount.
   useEffect(() => {
     fetchProducts();
     fetchOrders();
-    fetchMarketingProducts();
-    fetchMarketingResponses();
-    fetchMarketingTeam();
-  }, [fetchProducts, fetchOrders, fetchMarketingProducts, fetchMarketingResponses, fetchMarketingTeam]);
+  }, [fetchProducts, fetchOrders]);
 
   // Legacy functions for orders (keeping for now)
   const addOrder = (
@@ -488,6 +544,7 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({
         fetchMarketingProducts,
         addMarketingProduct,
         deleteMarketingProduct,
+        reorderMarketingProducts,
         fetchMarketingResponses,
         updateMarketingResponseStatus,
         deleteMarketingResponse,
@@ -495,6 +552,10 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({
         addMarketingTeamMember,
         deleteMarketingTeamMember,
         marketingTeam,
+        marketingAreas,
+        fetchMarketingAreas,
+        addMarketingArea,
+        deleteMarketingArea,
       }}
     >
       {children}
