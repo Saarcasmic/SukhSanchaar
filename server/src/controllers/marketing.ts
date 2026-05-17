@@ -217,7 +217,9 @@ export const submitMarketingResponse = async (req: Request, res: Response): Prom
         order_details,
         photo_proof_url,
         location,
-        status: 'pending'
+        status: 'pending',
+        pay_status: order_taken ? 'pay_pending' : null,
+        advance_amount: null
       }])
       .select()
       .single();
@@ -249,6 +251,45 @@ export const updateMarketingResponseStatus = async (req: Request, res: Response)
     res.status(200).json({ success: true, data });
   } catch (error) {
     handleError(res, error, 'Failed to update response status');
+  }
+};
+
+export const updateMarketingPayStatus = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { pay_status, advance_amount } = req.body;
+
+    if (!pay_status) {
+      res.status(400).json({ success: false, error: 'pay_status is required' });
+      return;
+    }
+
+    const validStatuses = ['pay_pending', 'completed', 'advance'];
+    if (!validStatuses.includes(pay_status)) {
+      res.status(400).json({ success: false, error: `pay_status must be one of: ${validStatuses.join(', ')}` });
+      return;
+    }
+
+    if (pay_status === 'advance' && (!advance_amount || advance_amount <= 0)) {
+      res.status(400).json({ success: false, error: 'advance_amount must be a positive number when pay_status is advance' });
+      return;
+    }
+
+    const updateData: any = {
+      pay_status,
+      advance_amount: pay_status === 'advance' ? advance_amount : null
+    };
+
+    const { data, error } = await (supabase.from as any)('marketing_responses')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    handleError(res, error, 'Failed to update pay status');
   }
 };
 

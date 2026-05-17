@@ -13,6 +13,7 @@ import {
   getMarketingResponses,
   submitMarketingResponse,
   updateMarketingResponseStatus,
+  updateMarketingPayStatus,
   deleteMarketingResponse
 } from '../controllers/marketing';
 
@@ -38,6 +39,7 @@ router.delete('/team/:id', deleteMarketingTeamMember);
 router.get('/responses', getMarketingResponses);
 router.post('/responses', submitMarketingResponse);
 router.patch('/responses/:id/status', updateMarketingResponseStatus);
+router.patch('/responses/:id/pay-status', updateMarketingPayStatus);
 router.delete('/responses/:id', deleteMarketingResponse);
 
 export default router;

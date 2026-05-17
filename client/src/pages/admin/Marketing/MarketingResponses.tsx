@@ -23,7 +23,7 @@ const Toast: React.FC<{ message: string; type: 'success' | 'error'; onDismiss: (
 };
 
 export const MarketingResponses: React.FC = () => {
-  const { marketingResponses, updateMarketingResponseStatus, deleteMarketingResponse, fetchMarketingResponses, loading } = useAdmin();
+  const { marketingResponses, updateMarketingPayStatus, deleteMarketingResponse, fetchMarketingResponses, loading } = useAdmin();
 
   // Opt 7: Inline toast state
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
@@ -43,6 +43,7 @@ export const MarketingResponses: React.FC = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [advancedFilters, setAdvancedFilters] = useState({
     status: "all",
+    payStatus: "all",
     area: [] as string[],
     person: [] as string[],
     location: [] as string[],
@@ -57,7 +58,9 @@ export const MarketingResponses: React.FC = () => {
     const matchesSearch = r.doctor_shop_name.toLowerCase().includes(searchTerm.toLowerCase());
     
     // Advanced filters
-    const matchesStatus = advancedFilters.status === "all" || r.status === advancedFilters.status;
+    const derivedStatus = r.order_taken ? "order_pending" : "response";
+    const matchesStatus = advancedFilters.status === "all" || derivedStatus === advancedFilters.status;
+    const matchesPayStatus = advancedFilters.payStatus === "all" || (r.pay_status || '') === advancedFilters.payStatus;
     const matchesArea = advancedFilters.area.length === 0 || (r.area && advancedFilters.area.includes(r.area));
     const matchesPerson = advancedFilters.person.length === 0 || (r.marketing_person_name && advancedFilters.person.includes(r.marketing_person_name));
     
@@ -73,29 +76,63 @@ export const MarketingResponses: React.FC = () => {
       matchesDate = rDate >= sDate && rDate <= eDate;
     }
 
-    return matchesSearch && matchesStatus && matchesArea && matchesPerson && matchesLocation && matchesDate;
+    return matchesSearch && matchesStatus && matchesPayStatus && matchesArea && matchesPerson && matchesLocation && matchesDate;
   });
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "delivered": return "bg-green-100 text-green-800";
-      case "shipped": return "bg-blue-100 text-blue-800";
-      case "processing": return "bg-purple-100 text-purple-800";
-      case "cancelled": return "bg-red-100 text-red-800";
-      case "pending":
-      default: return "bg-yellow-100 text-yellow-800";
+  const [advanceInputId, setAdvanceInputId] = useState<string | null>(null);
+  const [advanceValue, setAdvanceValue] = useState<string>("");
+
+  const handlePayStatusUpdate = async (id: string, pay_status: string, advance_amount?: number) => {
+    if (pay_status === 'advance') {
+      setAdvanceInputId(id);
+      setAdvanceValue("");
+      return;
+    }
+    try {
+      await updateMarketingPayStatus(id, pay_status, advance_amount);
+      if (selectedResponse?.id === id) {
+        setSelectedResponse(prev => prev ? { ...prev, pay_status, advance_amount: advance_amount ?? null } : null);
+      }
+      showToast(`Pay status updated to "${pay_status}"`, "success");
+    } catch (err) {
+      showToast("Failed to update pay status", "error");
     }
   };
 
-  const handleStatusUpdate = async (id: string, status: string) => {
+  const handleAdvanceSubmit = async (id: string) => {
+    const amount = parseFloat(advanceValue);
+    if (!amount || amount <= 0) {
+      showToast("Please enter a valid advance amount", "error");
+      return;
+    }
     try {
-      await updateMarketingResponseStatus(id, status);
+      await updateMarketingPayStatus(id, 'advance', amount);
       if (selectedResponse?.id === id) {
-        setSelectedResponse(prev => prev ? { ...prev, status } : null);
+        setSelectedResponse(prev => prev ? { ...prev, pay_status: 'advance', advance_amount: amount } : null);
       }
-      showToast(`Status updated to "${status}"`, "success");
+      setAdvanceInputId(null);
+      setAdvanceValue("");
+      showToast(`Advance of ₹${amount} recorded`, "success");
     } catch (err) {
-      showToast("Failed to update status", "error");
+      showToast("Failed to update pay status", "error");
+    }
+  };
+
+  const getPayStatusDisplay = (r: MarketingResponse) => {
+    if (!r.order_taken) return '-';
+    if (!r.pay_status || r.pay_status === 'pay_pending') return 'Pay Pending';
+    if (r.pay_status === 'completed') return 'Completed';
+    if (r.pay_status === 'advance') return `Advance ₹${r.advance_amount ?? 0}`;
+    return r.pay_status;
+  };
+
+  const getPayStatusColor = (r: MarketingResponse) => {
+    if (!r.order_taken || !r.pay_status) return 'bg-gray-100 text-gray-500';
+    switch (r.pay_status) {
+      case 'completed': return 'bg-green-100 text-green-700 border border-green-200';
+      case 'advance': return 'bg-blue-100 text-blue-700 border border-blue-200';
+      case 'pay_pending':
+      default: return 'bg-yellow-100 text-yellow-700 border border-yellow-200';
     }
   };
 
@@ -117,10 +154,11 @@ export const MarketingResponses: React.FC = () => {
   const uniquePersons = Array.from(new Set(marketingResponses.map(r => r.marketing_person_name).filter(Boolean) as string[])).sort();
   const uniqueLocations = Array.from(new Set(marketingResponses.map(r => r.location ? `${r.location.latitude.toFixed(6)}, ${r.location.longitude.toFixed(6)}` : null).filter(Boolean) as string[])).sort();
 
-  const activeFiltersCount = (advancedFilters.status !== "all" ? 1 : 0) + 
-    (advancedFilters.startDate ? 1 : 0) + 
-    (advancedFilters.endDate ? 1 : 0) + 
-    advancedFilters.area.length + 
+  const activeFiltersCount = (advancedFilters.status !== "all" ? 1 : 0) +
+    (advancedFilters.payStatus !== "all" ? 1 : 0) +
+    (advancedFilters.startDate ? 1 : 0) +
+    (advancedFilters.endDate ? 1 : 0) +
+    advancedFilters.area.length +
     advancedFilters.person.length +
     advancedFilters.location.length;
 
@@ -184,11 +222,21 @@ export const MarketingResponses: React.FC = () => {
                   className="w-full p-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-ayur-red"
                 >
                   <option value="all">All Statuses</option>
-                  <option value="pending">Pending</option>
-                  <option value="processing">Processing</option>
-                  <option value="shipped">Shipped</option>
-                  <option value="delivered">Delivered</option>
-                  <option value="cancelled">Cancelled</option>
+                  <option value="order_pending">Order Pending</option>
+                  <option value="response">Response</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Pay Status</label>
+                <select
+                  value={advancedFilters.payStatus}
+                  onChange={e => setAdvancedFilters({...advancedFilters, payStatus: e.target.value})}
+                  className="w-full p-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-ayur-red"
+                >
+                  <option value="all">All Pay Statuses</option>
+                  <option value="pay_pending">Pay Pending</option>
+                  <option value="completed">Completed</option>
+                  <option value="advance">Advance</option>
                 </select>
               </div>
               <div>
@@ -274,7 +322,7 @@ export const MarketingResponses: React.FC = () => {
             </div>
             <div className="px-6 py-5 border-t border-gray-100 flex justify-end gap-3 bg-gray-50 shrink-0">
               <button 
-                onClick={() => setAdvancedFilters({ status: "all", area: [], person: [], location: [], startDate: "", endDate: "" })}
+                onClick={() => setAdvancedFilters({ status: "all", payStatus: "all", area: [], person: [], location: [], startDate: "", endDate: "" })}
                 className="px-6 py-2 bg-white border border-gray-200 hover:bg-gray-100 text-gray-800 rounded-lg font-medium transition-colors"
               >
                 Clear
@@ -301,14 +349,15 @@ export const MarketingResponses: React.FC = () => {
               <th className="p-4 font-medium">Area</th>
               <th className="p-4 font-medium">Order Taken</th>
               <th className="p-4 font-medium">Status</th>
+              <th className="p-4 font-medium">Pay Status</th>
               <th className="p-4 font-medium text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {loading && marketingResponses.length === 0 ? (
-              <tr><td colSpan={7} className="p-8 text-center text-gray-500">Loading...</td></tr>
+              <tr><td colSpan={8} className="p-8 text-center text-gray-500">Loading...</td></tr>
             ) : filteredResponses.length === 0 ? (
-              <tr><td colSpan={7} className="p-8 text-center text-gray-500">No responses found match your filters.</td></tr>
+              <tr><td colSpan={8} className="p-8 text-center text-gray-500">No responses found match your filters.</td></tr>
             ) : (
               filteredResponses.map((r) => (
                 <tr key={r.id} className="hover:bg-gray-50 transition-colors">
@@ -327,9 +376,41 @@ export const MarketingResponses: React.FC = () => {
                     )}
                   </td>
                   <td className="p-4">
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full capitalize ${getStatusColor(r.status)}`}>
-                      {r.status}
+                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${r.order_taken ? 'bg-orange-100 text-orange-700 border border-orange-200' : 'bg-gray-100 text-gray-600 border border-gray-200'}`}>
+                      {r.order_taken ? 'Order Pending' : 'Response'}
                     </span>
+                  </td>
+                  <td className="p-4">
+                    {r.order_taken ? (
+                      <div className="flex items-center gap-1">
+                        {advanceInputId === r.id ? (
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              value={advanceValue}
+                              onChange={e => setAdvanceValue(e.target.value)}
+                              placeholder="₹ Amount"
+                              className="w-24 px-2 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-ayur-red"
+                              autoFocus
+                            />
+                            <button onClick={() => handleAdvanceSubmit(r.id)} className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">✓</button>
+                            <button onClick={() => setAdvanceInputId(null)} className="px-2 py-1 text-xs bg-gray-300 text-gray-700 rounded hover:bg-gray-400">✕</button>
+                          </div>
+                        ) : (
+                          <select
+                            value={r.pay_status || 'pay_pending'}
+                            onChange={e => handlePayStatusUpdate(r.id, e.target.value)}
+                            className={`px-2 py-1 text-xs font-semibold rounded-full cursor-pointer ${getPayStatusColor(r)}`}
+                          >
+                            <option value="pay_pending">Pay Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="advance">Advance</option>
+                          </select>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="px-2 py-1 text-xs text-gray-400">-</span>
+                    )}
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-1">
@@ -392,25 +473,50 @@ export const MarketingResponses: React.FC = () => {
                 </div>
               </div>
 
-              {/* Status Management */}
-              <div className="bg-gray-50 p-4 rounded-lg flex items-center justify-between border border-gray-200">
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">Current Status</p>
-                  <select 
-                    value={selectedResponse.status}
-                    onChange={(e) => handleStatusUpdate(selectedResponse.id, e.target.value)}
-                    className="p-2 border border-gray-300 rounded font-medium focus:ring-2 focus:ring-ayur-red capitalize bg-white"
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="processing">Processing</option>
-                    <option value="shipped">Shipped</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
+              {/* Status & Pay Status */}
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-700 mb-1">Status</p>
+                    <span className={`px-3 py-1.5 text-sm font-semibold rounded-full ${selectedResponse.order_taken ? 'bg-orange-100 text-orange-700 border border-orange-200' : 'bg-gray-100 text-gray-600 border border-gray-200'}`}>
+                      {selectedResponse.order_taken ? 'Order Pending' : 'Response'}
+                    </span>
+                  </div>
                 </div>
-                <div className={`px-4 py-2 rounded-full font-semibold capitalize ${getStatusColor(selectedResponse.status)}`}>
-                  {selectedResponse.status}
-                </div>
+                {selectedResponse.order_taken && (
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-200">
+                    <div>
+                      <p className="text-sm font-medium text-gray-700 mb-1">Pay Status</p>
+                      {advanceInputId === selectedResponse.id ? (
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="number"
+                            value={advanceValue}
+                            onChange={e => setAdvanceValue(e.target.value)}
+                            placeholder="₹ Amount"
+                            className="w-28 p-2 border border-gray-300 rounded font-medium focus:ring-2 focus:ring-ayur-red bg-white"
+                            autoFocus
+                          />
+                          <button onClick={() => handleAdvanceSubmit(selectedResponse.id)} className="px-3 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 font-medium">Save</button>
+                          <button onClick={() => setAdvanceInputId(null)} className="px-3 py-2 text-sm bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-medium">Cancel</button>
+                        </div>
+                      ) : (
+                        <select
+                          value={selectedResponse.pay_status || 'pay_pending'}
+                          onChange={(e) => handlePayStatusUpdate(selectedResponse.id, e.target.value)}
+                          className={`p-2 border border-gray-300 rounded font-medium focus:ring-2 focus:ring-ayur-red bg-white`}
+                        >
+                          <option value="pay_pending">Pay Pending</option>
+                          <option value="completed">Completed</option>
+                          <option value="advance">Advance</option>
+                        </select>
+                      )}
+                    </div>
+                    <div className={`px-4 py-2 rounded-full font-semibold ${getPayStatusColor(selectedResponse)}`}>
+                      {getPayStatusDisplay(selectedResponse)}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Order Info */}

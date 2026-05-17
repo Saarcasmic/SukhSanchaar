@@ -30,6 +30,8 @@ export interface MarketingResponse {
   photo_proof_url: string | null;
   location: { latitude: number; longitude: number } | null;
   status: string;
+  pay_status: string | null;
+  advance_amount: number | null;
   created_at: string;
 }
 
@@ -113,6 +115,7 @@ interface AdminContextType {
   reorderMarketingProducts: (items: { id: string; sequence: number }[]) => Promise<void>;
   fetchMarketingResponses: () => Promise<void>;
   updateMarketingResponseStatus: (id: string, status: string) => Promise<void>;
+  updateMarketingPayStatus: (id: string, pay_status: string, advance_amount?: number) => Promise<void>;
   deleteMarketingResponse: (id: string) => Promise<void>;
   fetchMarketingTeam: () => Promise<void>;
   addMarketingTeamMember: (name: string) => Promise<void>;
@@ -411,6 +414,19 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const updateMarketingPayStatus = async (id: string, pay_status: string, advance_amount?: number) => {
+    try {
+      const response = await apiCall(`/marketing/responses/${id}/pay-status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ pay_status, advance_amount })
+      });
+      setMarketingResponses(prev => prev.map(r => r.id === id ? response.data : r));
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
   const deleteMarketingResponse = async (id: string) => {
     try {
       await apiCall(`/marketing/responses/${id}`, { method: 'DELETE' });
@@ -547,6 +563,7 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({
         reorderMarketingProducts,
         fetchMarketingResponses,
         updateMarketingResponseStatus,
+        updateMarketingPayStatus,
         deleteMarketingResponse,
         fetchMarketingTeam,
         addMarketingTeamMember,
