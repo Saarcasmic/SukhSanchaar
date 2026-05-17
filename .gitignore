@@ -1,6 +1,5 @@
 /.cursor
 node_modules
-.env
 /server/.env
 /client/.env
 /server/dist
@@ -10,3 +9,5 @@ node_modules
 /client/.bolt
 temp_auto_push.bat
 temp_interactive_push.bat
+config.bat
+branch_structure.json
